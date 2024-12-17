@@ -1,0 +1,11 @@
+@extends('frontend.layouts.applayout')
+@section('main')
+    @include('frontend.sections.mainsection')
+    @include('frontend.sections.form-pad')
+    @include('frontend.sections.process-section')
+    @include('frontend.sections.bg-blue')
+    @include('frontend.sections.why-choose')
+    @include('frontend.sections.bg-pinkish')
+    @include('frontend.sections.faqd')
+    @include('frontend.sections.bg-blue-pic')
+@endsection

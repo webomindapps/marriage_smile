@@ -1,0 +1,114 @@
+.bg-white-search {
+   background-color: #fff;
+    padding: 34px 82px 40px 82px;
+    border-radius: 7px;
+    border: 1px solid #cccccc59;
+    overflow-y: scroll;
+    max-height: 695px;
+}
+
+
+.tab-class ul#ex1 {
+    border-bottom: 1px solid #ababab63;
+    justify-content: center;
+    align-items: center;
+    text-align: unset;
+}
+
+.tab-class .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+   color: var(--bs-nav-tabs-link-active-color);
+    background-color: var(--bs-nav-tabs-link-active-bg);
+    border-color: #fff;
+    border-bottom: 3px solid #d21a77;
+}
+
+
+label.form-label.heig-h4 {
+    font-size: 17px;
+    margin-bottom: -9px;
+    margin-top: 15px;
+}
+
+.form-select.heigh-p {
+    font-size: 13px;
+    font-size: 13px;
+    color: #908f8f;
+    margin-top: -4px;
+    padding-left: 1px !important;
+}
+
+.new-s .form-select {
+    border: 0px;
+    border-right: none !important;
+    background-size: 15px 34px !important;
+}
+
+hr.hf {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+
+button.btn.btn-outline-secondary.mb-3 {
+    font-size: 12px;
+    margin-bottom: 9px !important;
+    margin-left: 0px;
+    border: 1px solid #d21a7782;
+    border-radius: 30px;
+}
+
+.btn:hover {
+    color: #fff;
+    background-color: #d21a77;
+    border-color: var(--bs-btn-hover-border-color);
+}
+
+
+.ne-id-search .form-control {
+    font-size: 15px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+    padding-left: 1px;
+    margin-top: 24px;
+}
+
+
+button.btn.bt-register {
+    background: linear-gradient(to right, #0D006A, #ED1E79);
+    padding: 11px 76px;
+    color: #fff;
+    border: 0px;
+    border-radius: 5px;
+    margin-top: 23px;
+}
+
+
+
+.bg-white-search::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 6px;
+}
+
+/* Track */
+.bg-white-search::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+.bg-white-search::-webkit-scrollbar-thumb {
+  background: #be1876; 
+}
+
+.bg-white-search/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+
+.page-header {
+    background-color: #fff;
+    z-index: 999;
+    position: relative;
+    box-shadow: 2px -1px 12px -2px #ccc;
+}
