@@ -24,12 +24,10 @@
                         <hr>
                         <!-- /////navigation vertical//// -->
                         <nav class="nav flex-column">
-                            <a class="nav-link active" aria-current="page" href="dashboard.php"> Matches <i
+                            <a class="nav-link active" aria-current="page" href="{{route('customer.matches')}}"> Profiles <i
                                     class="fa fa-chevron-right chev-icon"></i></a>
-
-                            <a class="nav-link" href="#">Activity <i class="fa fa-chevron-right chev-icon1"></i></a>
-                            <a class="nav-link" href="search.php">Search <i class="fa fa-chevron-right chev-icon2"></i></a>
-                            <a class="nav-link " href="#">Messenger <i class="fa fa-chevron-right chev-icon3"></i></a>
+                                    <a class="nav-link" href="#">Short Listed Matches <i
+                                        class="fa fa-chevron-right chev-icon4"></i></a>
                             <a class="nav-link" href="#">Upgrade <i class="fa fa-chevron-right chev-icon4"></i></a>
                         </nav>
                         <!-- //// -->
@@ -225,4 +223,5 @@
             </div>
         </div>
     </section>
+    
 @endsection

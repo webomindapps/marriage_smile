@@ -33,19 +33,20 @@ class CustomerController extends Controller
                 'nationality' => 'required|string',
                 'religion' => 'required|string',
                 'qualification' => 'required|string',
-                'dob' => 'required|date',
+                'dob' => 'required',
                 'mother_tongue' => 'required|string',
                 'caste' => 'required|string',
                 'sub_caste' => 'required|string',
                 'gotra' => 'required|string',
                 'sun_star' => 'required|string',
                 'birth_star' => 'required|string',
-                'annual-income' => 'required|numeric',
+                'annual_income' => 'required|numeric',
                 'company_name' => 'required|string',
                 'experience' => 'required|string',
                 'phone' => 'required|numeric',
                 'email' => 'required|email|unique:customers,email',
-                'password' => 'required|string|confirmed',
+                'password' => 'required|string|same:conf_password',
+                'conf_password'=>'required',
                 'aadhar_no' => 'required|numeric|digits:12',
                 'hobbies' => 'required|array',
                 'facebook_profile' => 'nullable|url',
@@ -55,13 +56,12 @@ class CustomerController extends Controller
                 'mother_name' => 'required|string',
                 'father_occupation' => 'required|string',
                 'mother_occupation' => 'required|string',
-                'siblings' => 'required|string',
+                'siblings' => 'required',
                 'locations' => 'required|string',
                 'permanent_locations' => 'required|string',
                 'house_status' => 'required|string',
                 'asset_value' => 'required|string',
                 'preferreday' => 'required|string',
-                'timings' => 'nullable|string',
                 'preferred_contact_no' => 'required|numeric',
                 'contact_related_to' => 'required|string',
             ]);
@@ -170,5 +170,8 @@ class CustomerController extends Controller
     {
         $customer = Customer::all();
         return view('frontend.customer.profile', compact('customer'));
+    }
+    public function matches(){
+        return view('frontend.customer.matches');
     }
 }

@@ -23,7 +23,7 @@ Route::post('forget-password', [CustomerPasswordResetController::class, 'forgetM
 Route::get('customer/{token}/password-reset', [CustomerPasswordResetController::class, 'resetView'])->name('customer.reset.view');
 Route::post('customer/password-reset', [CustomerPasswordResetController::class, 'resetPassword'])->name('customer.password.reset');
 Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
-
+Route::get('customer/matches',[CustomerController::class,'matches'])->name('customer.matches');
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');
