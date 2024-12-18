@@ -17,7 +17,7 @@
                         <span style="font-size: 13px;color:red;">{{ $message }}</span>
                     @enderror
                     <div class="col-auto text-center">
-                        <button type="submit" class="btn btn-outline-secondary login-btn w-100 mb-3">Send Password reset Email </button>
+                        <button type="submit" class="btn  forgot-btn w-100 mb-3">Send Password reset Email </button>
                     </div>
                 </form>
             </div>

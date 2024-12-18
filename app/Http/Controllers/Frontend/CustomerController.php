@@ -47,7 +47,7 @@ class CustomerController extends Controller
                 'email' => 'required|email|unique:customers,email',
                 'password' => 'required|string|confirmed',
                 'aadhar_no' => 'required|numeric|digits:12',
-                'hobbies' => 'required|array', 
+                'hobbies' => 'required|array',
                 'facebook_profile' => 'nullable|url',
                 'marritialstatus' => 'required|string',
                 'no_of_children' => 'nullable|integer',
@@ -83,11 +83,11 @@ class CustomerController extends Controller
 
             if ($request->hasFile('image_path')) {
                 $path = $request->file('image_path')->store('documents/horoscope', 'public');
-            
+
                 $customer->update(['image_path' => $path]);
             }
-            
-            
+
+
 
             DB::commit();
 
@@ -127,7 +127,6 @@ class CustomerController extends Controller
     public function authenticate(Request $request)
     {
         $request->validate([
-
             'password' => 'required'
         ]);
 
@@ -139,22 +138,26 @@ class CustomerController extends Controller
             return back()->with('danger', 'Account Not Found');
         }
 
+        if (is_null($cust->email_verified_at)) {
+            return back()->with('danger', 'Please verify your account first.');
+        }
 
-        $attempt = Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password]);
+        $attempt = Auth::guard('customer')->attempt([
+            'email' => $request->email,
+            'password' => $request->password
+        ]);
 
         if ($attempt) {
-            $customer = Auth::guard('customer')->user();
-
-
             return redirect()->route('customer.profile');
-        } else {
-            $attempt = Auth::guard('customer')->attempt(['customer_id' => $request->email, 'password' => $request->password]);
-            if ($attempt) {
-                $customer = Auth::guard('customer')->user();
+        }
 
+        $attempt = Auth::guard('customer')->attempt([
+            'customer_id' => $request->email,
+            'password' => $request->password
+        ]);
 
-                return redirect()->route('customer.profile');
-            }
+        if ($attempt) {
+            return redirect()->route('customer.profile');
         }
 
         return back()->with('danger', 'Invalid credentials.');
