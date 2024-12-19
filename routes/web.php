@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Frontend\MarriageController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/',[MarriageController::class,'index']);
+Route::get('/', [MarriageController::class, 'index']);
 
 Route::get('customer/register', [CustomerController::class, 'register'])->name('customer.register');
 Route::post('customer/store', [CustomerController::class, 'storecustomer'])->name('customer.store');
@@ -24,6 +24,8 @@ Route::post('forget-password', [CustomerPasswordResetController::class, 'forgetM
 Route::get('customer/{token}/password-reset', [CustomerPasswordResetController::class, 'resetView'])->name('customer.reset.view');
 Route::post('customer/password-reset', [CustomerPasswordResetController::class, 'resetPassword'])->name('customer.password.reset');
 Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
+Route::post('customer/{id}/edit', [CustomerController::class, 'update']);
 Route::get('customer/matches',[CustomerController::class,'matches'])->name('customer.matches');
 Route::get('customer/logout',[CustomerController::class,'logout'])->name('customer.logout');
 Route::get('customer/detail',[CustomerController::class,'detail'])->name('customer.details');
@@ -38,11 +40,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [LoginController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('testimonials');
-    Route::get('/testimonials/create',[TestimonialController::class,'create'])->name('testimonials.create');
-    Route::post('/testimonials/create',[TestimonialController::class,'store']);
-    Route::get('/testimonials/edit/{id}',[TestimonialController::class,'edit'])->name('testimonials.edit');
-    Route::post('/testimonials/edit/{id}',[TestimonialController::class,'update']);
-    Route::get('testimonial/delete/{id}',[TestimonialController::class,'delete'])->name('testimonials.delete');
+    Route::get('/testimonials/create', [TestimonialController::class, 'create'])->name('testimonials.create');
+    Route::post('/testimonials/create', [TestimonialController::class, 'store']);
+    Route::get('/testimonials/edit/{id}', [TestimonialController::class, 'edit'])->name('testimonials.edit');
+    Route::post('/testimonials/edit/{id}', [TestimonialController::class, 'update']);
+    Route::get('testimonial/delete/{id}', [TestimonialController::class, 'delete'])->name('testimonials.delete');
 
     //FAQ
     Route::get('/faq', [FaqController::class,'index'])->name('faq');

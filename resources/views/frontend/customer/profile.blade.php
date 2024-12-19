@@ -45,9 +45,9 @@
                                     <hr class="hf">
                                     <div class="row ">
                                         <!-- <div class="col-md-10">
-                        <h4 class="heig-h4"> Height</h4>
-                        <p class="heigh-p">4' 6" (1.37 mts) - 5' 5" (1.65 mts) </p>
-                          </div> -->
+                                                            <h4 class="heig-h4"> Height</h4>
+                                                            <p class="heigh-p">4' 6" (1.37 mts) - 5' 5" (1.65 mts) </p>
+                                                              </div> -->
 
                                     </div>
 
@@ -193,8 +193,8 @@
                 </div>
 
                 <div class="col-lg-2">
-                    <img src="{{asset('frontend/assets/images/advertise.jpg')}}" class="img-fluid clas-to1">
-                    <img src="{{asset('frontend/assets/images/advert2.jpg')}}" class="img-fluid clas-to1">
+                    <img src="{{ asset('frontend/assets/images/advertise.jpg') }}" class="img-fluid clas-to1">
+                    <img src="{{ asset('frontend/assets/images/advert2.jpg') }}" class="img-fluid clas-to1">
                 </div>
             </div>
         </div>

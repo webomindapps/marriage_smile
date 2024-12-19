@@ -25,6 +25,7 @@ class CustomerController extends Controller
 
     public function storecustomer(Request $request)
     {
+        // dd($request->all());
         DB::beginTransaction();
 
         try {
@@ -33,20 +34,19 @@ class CustomerController extends Controller
                 'nationality' => 'required|string',
                 'religion' => 'required|string',
                 'qualification' => 'required|string',
-                'dob' => 'required',
+                'dob' => 'required|date',
                 'mother_tongue' => 'required|string',
                 'caste' => 'required|string',
                 'sub_caste' => 'required|string',
                 'gotra' => 'required|string',
                 'sun_star' => 'required|string',
                 'birth_star' => 'required|string',
-                'annual_income' => 'required|numeric',
+                'annual-income' => 'required|numeric',
                 'company_name' => 'required|string',
                 'experience' => 'required|string',
                 'phone' => 'required|numeric',
                 'email' => 'required|email|unique:customers,email',
-                'password' => 'required|string|same:conf_password',
-                'conf_password' => 'required',
+                'password' => 'required|string|confirmed',
                 'aadhar_no' => 'required|numeric|digits:12',
                 'hobbies' => 'required|array',
                 'facebook_profile' => 'nullable|url',
@@ -56,12 +56,13 @@ class CustomerController extends Controller
                 'mother_name' => 'required|string',
                 'father_occupation' => 'required|string',
                 'mother_occupation' => 'required|string',
-                'siblings' => 'required',
+                'siblings' => 'required|string',
                 'locations' => 'required|string',
                 'permanent_locations' => 'required|string',
                 'house_status' => 'required|string',
                 'asset_value' => 'required|string',
                 'preferreday' => 'required|string',
+                'timings' => 'nullable|string',
                 'preferred_contact_no' => 'required|numeric',
                 'contact_related_to' => 'required|string',
             ]);
@@ -96,12 +97,84 @@ class CustomerController extends Controller
             return redirect()->route('customer.login')->with('verify', 'Customer registered successfully');
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e);
+            // dd($e);
             return back()->with('error', 'An error occurred while registering the customer: ' . $e->getMessage());
         }
     }
 
+    public function edit($id)
+    {
+        $customer = Customer::find($id);
+        // dd($customer);
+        // if (!$customer) {
+        //     return redirect()->route('admin.customer.index')->with('error', 'Customer not found.');
+        // }
 
+        return view('frontend.customer.update', compact('customer'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $customer = Customer::find($id);
+
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'nationality' => 'required|string',
+            'religion' => 'required|string',
+            'qualification' => 'required|string',
+            'dob' => 'required|date',
+            'mother_tongue' => 'required|string',
+            'caste' => 'required|string',
+            'sub_caste' => 'required|string',
+            'gotra' => 'required|string',
+            'sun_star' => 'required|string',
+            'birth_star' => 'required|string',
+            'annual-income' => 'required|numeric',
+            'company_name' => 'required|string',
+            'experience' => 'required|string',
+            'phone' => 'required|numeric',
+            'email' => 'required|email',
+            'password' => 'required|string|confirmed',
+            'aadhar_no' => 'required|numeric|digits:12',
+            'hobbies' => 'required|array',
+            'facebook_profile' => 'nullable|url',
+            'marritialstatus' => 'required|string',
+            'no_of_children' => 'nullable|integer',
+            'father_name' => 'required|string',
+            'mother_name' => 'required|string',
+            'father_occupation' => 'required|string',
+            'mother_occupation' => 'required|string',
+            'siblings' => 'required|string',
+            'locations' => 'required|string',
+            'permanent_locations' => 'required|string',
+            'house_status' => 'required|string',
+            'asset_value' => 'required|string',
+            'preferreday' => 'required|string',
+            'timings' => 'nullable|string',
+            'preferred_contact_no' => 'required|numeric',
+            'contact_related_to' => 'required|string',
+        ]);
+        DB::beginTransaction();
+
+        try {
+            // Update customer data
+            $customer->update($validatedData);
+
+            // Handle profile image if provided
+            if ($request->hasFile('image_path')) {
+                $path = $request->file('image_path')->store('documents/horoscope', 'public');
+                $customer->update(['image_path' => $path]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('customer.profile')->with('verify', 'Customer Data Updated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return back()->with('error', 'An error occurred while updating the customer: ' . $e->getMessage());
+        }
+    }
     public function login()
     {
         return view('frontend.auth.login');
@@ -127,6 +200,7 @@ class CustomerController extends Controller
     public function authenticate(Request $request)
     {
         $request->validate([
+
             'password' => 'required'
         ]);
 
@@ -138,26 +212,22 @@ class CustomerController extends Controller
             return back()->with('danger', 'Account Not Found');
         }
 
-        if (is_null($cust->email_verified_at)) {
-            return back()->with('danger', 'Please verify your account first.');
-        }
 
-        $attempt = Auth::guard('customer')->attempt([
-            'email' => $request->email,
-            'password' => $request->password
-        ]);
+        $attempt = Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password]);
 
         if ($attempt) {
-            return redirect()->route('customer.profile');
-        }
+            $customer = Auth::guard('customer')->user();
 
-        $attempt = Auth::guard('customer')->attempt([
-            'customer_id' => $request->email,
-            'password' => $request->password
-        ]);
 
-        if ($attempt) {
             return redirect()->route('customer.profile');
+        } else {
+            $attempt = Auth::guard('customer')->attempt(['customer_id' => $request->email, 'password' => $request->password]);
+            if ($attempt) {
+                $customer = Auth::guard('customer')->user();
+
+
+                return redirect()->route('customer.profile');
+            }
         }
 
         return back()->with('danger', 'Invalid credentials.');
