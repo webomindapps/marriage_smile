@@ -20,7 +20,8 @@
                     </div>
                     <div class="left-area col-lg-9">
                         <nav class="navbar" id="navbar">
-                            <a href="index.php" class="brand-nav" contenteditable="false" style="cursor: pointer;">
+                            <a href="{{ url('/') }}" class="brand-nav" contenteditable="false"
+                                style="cursor: pointer;">
                                 <img src="images/logo-byte-brust.png" class="img-fluid" alt="">
                             </a>
                             <div class="close" id="closeMenu">
@@ -30,7 +31,7 @@
 
 
                                 <li class="menu-item">
-                                    <a href="index.php" class="menu-link" contenteditable="false"
+                                    <a href="{{ url('/') }}" class="menu-link" contenteditable="false"
                                         style="cursor: pointer;">Home</a>
                                 </li>
 

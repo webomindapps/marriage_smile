@@ -7,36 +7,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <div class="profile-per">
-                        <div class="row">
-                            <div class="col-lg-4">
-
-
-                                <img src="{{ asset('frontend/assets/images/vishnu.jpg') }}" class="img-fluid img-radi">
-                            </div>
-                            <div class="col-lg-8">
-
-                                <h4 class="pro-hea">Hi Vishnu!</h4>
-                                <h6 class="profile-des">UXUA7681 <span class="co-editprofile">
-                                        {{-- {{ dd($customer->id) }} --}}
-                                        <a href="{{ route('admin.customer.edit', $customer->id) }}">Edit Profile</a>
-                                    </span></h6>
-
-                            </div>
-                        </div>
-                        <hr>
-                        <!-- /////navigation vertical//// -->
-                        <nav class="nav flex-column">
-                            <a class="nav-link active" aria-current="page" href="dashboard.php"> Matches <i
-                                    class="fa fa-chevron-right chev-icon"></i></a>
-
-                            <a class="nav-link" href="#">Activity <i class="fa fa-chevron-right chev-icon1"></i></a>
-                            <a class="nav-link" href="search.php">Search <i class="fa fa-chevron-right chev-icon2"></i></a>
-                            <a class="nav-link " href="#">Messenger <i class="fa fa-chevron-right chev-icon3"></i></a>
-                            <a class="nav-link" href="#">Upgrade <i class="fa fa-chevron-right chev-icon4"></i></a>
-                        </nav>
-                        <!-- //// -->
-                    </div>
+                    @include('components.profilelayout')
                 </div>
 
                 <div class="col-lg-7 new-gp">
@@ -228,4 +199,5 @@
             </div>
         </div>
     </section>
+    
 @endsection

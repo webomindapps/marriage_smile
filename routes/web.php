@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Frontend\CustomerController;
 use App\Http\Controllers\frontend\CustomerPasswordResetController;
 use App\Http\Controllers\Admin\TestimonialController;
@@ -25,6 +26,7 @@ Route::post('customer/password-reset', [CustomerPasswordResetController::class, 
 Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
 Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
 Route::post('customer/{id}/edit', [CustomerController::class, 'update']);
+Route::get('customer/matches',[CustomerController::class,'matches'])->name('customer.matches');
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');
@@ -43,11 +45,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('testimonial/delete/{id}', [TestimonialController::class, 'delete'])->name('testimonials.delete');
 
     //FAQ
-    Route::get('/faq', [FaqController::class, 'index'])->name('faq');
-    Route::get('/faq/create', [FaqController::class, 'create'])->name('faq.create');
-    Route::post('/faq/create', [FaqController::class, 'store']);
-    Route::get('/faq/edit/{id}', [FaqController::class, 'edit'])->name('faq.edit');
-    Route::post('/faq/edit/{id}', [FaqController::class, 'update']);
-    Route::get('/faq/delete/{id}', [FaqController::class, 'delete'])->name('faq.delete');
-    Route::post('faq/bulk', [FaqController::class, 'bulk'])->name('faq.bulk');
+    Route::get('/faq', [FaqController::class,'index'])->name('faq');
+    Route::get('/faq/create',[FaqController::class,'create'])->name('faq.create');
+    Route::post('/faq/create',[FaqController::class,'store']);
+    Route::get('/faq/edit/{id}',[FaqController::class,'edit'])->name('faq.edit');
+    Route::post('/faq/edit/{id}',[FaqController::class,'update']);
+    Route::get('/faq/delete/{id}',[FaqController::class,'delete'])->name('faq.delete');
+    Route::post('faq/bulk',[FaqController::class,'bulk'])->name('faq.bulk');
+
+    //Pages
+    Route::get('pages', [PageController::class, 'index'])->name('pages');
+    Route::post('pages/bulk_operation', [PageController::class, 'bulk'])->name('pages.bulk');
+    Route::get('pages/create', [PageController::class, 'create'])->name('pages.create');
+    Route::post('pages/create', [PageController::class, 'store'])->name('pages.create');
+    Route::get('pages/{id}/edit', [PageController::class, 'edit'])->name('pages.edit');
+    Route::post('pages/{id}/edit', [PageController::class, 'update']);
+    Route::get('pages/{id}/destroy', [PageController::class, 'destroy'])->name('pages.delete');    
 });
