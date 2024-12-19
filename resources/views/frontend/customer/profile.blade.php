@@ -12,12 +12,15 @@
                             <div class="col-lg-4">
 
 
-                                <img src="{{asset('frontend/assets/images/vishnu.jpg')}}" class="img-fluid img-radi">
+                                <img src="{{ asset('frontend/assets/images/vishnu.jpg') }}" class="img-fluid img-radi">
                             </div>
                             <div class="col-lg-8">
 
                                 <h4 class="pro-hea">Hi Vishnu!</h4>
-                                <h6 class="profile-des">UXUA7681 <span class="co-editprofile"> Edit Profile</span></h6>
+                                <h6 class="profile-des">UXUA7681 <span class="co-editprofile">
+                                        {{-- {{ dd($customer->id) }} --}}
+                                        <a href="{{ route('admin.customer.edit', $customer->id) }}">Edit Profile</a>
+                                    </span></h6>
 
                             </div>
                         </div>
@@ -71,9 +74,9 @@
                                     <hr class="hf">
                                     <div class="row ">
                                         <!-- <div class="col-md-10">
-                        <h4 class="heig-h4"> Height</h4>
-                        <p class="heigh-p">4' 6" (1.37 mts) - 5' 5" (1.65 mts) </p>
-                          </div> -->
+                                                            <h4 class="heig-h4"> Height</h4>
+                                                            <p class="heigh-p">4' 6" (1.37 mts) - 5' 5" (1.65 mts) </p>
+                                                              </div> -->
 
                                     </div>
 
@@ -219,8 +222,8 @@
                 </div>
 
                 <div class="col-lg-2">
-                    <img src="{{asset('frontend/assets/images/advertise.jpg')}}" class="img-fluid clas-to1">
-                    <img src="{{asset('frontend/assets/images/advert2.jpg')}}" class="img-fluid clas-to1">
+                    <img src="{{ asset('frontend/assets/images/advertise.jpg') }}" class="img-fluid clas-to1">
+                    <img src="{{ asset('frontend/assets/images/advert2.jpg') }}" class="img-fluid clas-to1">
                 </div>
             </div>
         </div>
