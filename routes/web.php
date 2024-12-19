@@ -25,6 +25,8 @@ Route::get('customer/{token}/password-reset', [CustomerPasswordResetController::
 Route::post('customer/password-reset', [CustomerPasswordResetController::class, 'resetPassword'])->name('customer.password.reset');
 Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
 Route::get('customer/matches',[CustomerController::class,'matches'])->name('customer.matches');
+Route::get('customer/logout',[CustomerController::class,'logout'])->name('customer.logout');
+Route::get('customer/detail',[CustomerController::class,'detail'])->name('customer.details');
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');

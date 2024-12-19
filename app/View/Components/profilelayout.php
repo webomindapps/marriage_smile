@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
-class profilelayout extends Component
+class Profilelayout extends Component
 {
     public $customer;
     /**
@@ -23,8 +23,7 @@ class profilelayout extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.profilelayout', [
-            'customer' => $this->customer,
-        ]);
+        $customer=$this->customer;
+        return view('components.profilelayout',compact('customer'));
     }
 }

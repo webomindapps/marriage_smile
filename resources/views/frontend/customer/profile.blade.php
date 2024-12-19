@@ -7,7 +7,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    @include('components.profilelayout')
+                    <x-profilelayout/>
                 </div>
 
                 <div class="col-lg-7 new-gp">
@@ -52,7 +52,7 @@
                                     </div>
 
                                     <hr class="hf">
-                                    <h4 class="heig-h4"> Merital Status</h4>
+                                    <h4 class="heig-h4"> Marrital Status</h4>
                                     <div class="byn">
                                         <button class="btn btn-outline-secondary  mb-3"> Doesn't Matter</button>
                                         <button class="btn btn-outline-secondary  mb-3"> Never Married</button>

@@ -166,14 +166,31 @@ class CustomerController extends Controller
     {
         return view('frontend.auth.forgot-password');
     }
-    public function profile()
-    {
-        $customer = Auth::guard('customer')->user();
-        return view('frontend.customer.profile', compact('customer'));
-    }
-    public function matches()
-    {
-        $customer = Auth::guard('customer')->user();
-        return view('frontend.customer.matches', compact('customer'));
-    }
+        public function profile()
+        {
+            $customer = Auth::guard('customer')->user();
+            return view('frontend.customer.profile', compact('customer'));
+        }
+        public function matches()
+        {
+            $customer = Auth::guard('customer')->user();
+        
+        
+        
+            $oppositeGender = $customer->gender === 'male' ? 'female' : 'male';
+        
+            $profiles = Customer::where('gender', $oppositeGender)->get();
+        
+            return view('frontend.customer.matches', compact('profiles'));
+        }
+
+        public function logout(){
+            Auth::guard('customer')->logout();
+            return redirect()->route('customer.login');
+        }
+
+        public function detail(){
+            return view('frontend.customer.profile-detail');
+        }
+    
 }

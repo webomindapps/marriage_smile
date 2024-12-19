@@ -46,6 +46,17 @@
                             @enderror
                         </div>
                         <div class="col-6">
+                            <select class="form-control" id="gender" name="gender" placeholder="Gender"
+                                required>
+                                <option value=""disabled selected>Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            @error('gender')
+                                <p class="validation-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="col-6">
                             <select class="form-control" id="qualification" name="qualification" placeholder="qualification"
                                 required>
                                 <option value=""disabled selected>Select Qualification</option>
