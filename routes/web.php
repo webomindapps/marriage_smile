@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Frontend\CustomerController;
 use App\Http\Controllers\frontend\CustomerPasswordResetController;
 use App\Http\Controllers\Admin\TestimonialController;
@@ -49,4 +50,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/faq/edit/{id}',[FaqController::class,'update']);
     Route::get('/faq/delete/{id}',[FaqController::class,'delete'])->name('faq.delete');
     Route::post('faq/bulk',[FaqController::class,'bulk'])->name('faq.bulk');
+
+    //Pages
+    Route::get('pages', [PageController::class, 'index'])->name('pages');
+    Route::post('pages/bulk_operation', [PageController::class, 'bulk'])->name('pages.bulk');
+    Route::get('pages/create', [PageController::class, 'create'])->name('pages.create');
+    Route::post('pages/create', [PageController::class, 'store'])->name('pages.create');
+    Route::get('pages/{id}/edit', [PageController::class, 'edit'])->name('pages.edit');
+    Route::post('pages/{id}/edit', [PageController::class, 'update']);
+    Route::get('pages/{id}/destroy', [PageController::class, 'destroy'])->name('pages.delete');    
 });

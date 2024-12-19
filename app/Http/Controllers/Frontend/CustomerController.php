@@ -46,7 +46,7 @@ class CustomerController extends Controller
                 'phone' => 'required|numeric',
                 'email' => 'required|email|unique:customers,email',
                 'password' => 'required|string|same:conf_password',
-                'conf_password'=>'required',
+                'conf_password' => 'required',
                 'aadhar_no' => 'required|numeric|digits:12',
                 'hobbies' => 'required|array',
                 'facebook_profile' => 'nullable|url',
@@ -168,10 +168,12 @@ class CustomerController extends Controller
     }
     public function profile()
     {
-        $customer = Customer::all();
+        $customer = Auth::guard('customer')->user();
         return view('frontend.customer.profile', compact('customer'));
     }
-    public function matches(){
-        return view('frontend.customer.matches');
+    public function matches()
+    {
+        $customer = Auth::guard('customer')->user();
+        return view('frontend.customer.matches', compact('customer'));
     }
 }

@@ -32,6 +32,11 @@ class SideBar extends Component
                     'icon'=>'bx bxchevron-right',
                     'route'=>'admin.faq',
                 ],
+                [
+                    'title'=>'Pages',
+                    'icon'=>'bx bxchevron-right',
+                    'route'=>'admin.pages',
+                ],
             ]
         ],
 

@@ -6,35 +6,10 @@
     <section class="dash-pad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="profile-per">
-                        <div class="row">
-                            <div class="col-lg-4">
-
-
-                                <img src="{{asset('frontend/assets/images/vishnu.jpg')}}" class="img-fluid img-radi">
-                            </div>
-                            <div class="col-lg-8">
-
-                                <h4 class="pro-hea">Hi Vishnu!</h4>
-                                <h6 class="profile-des">MS001 <span class="co-editprofile"> Edit Profile</span></h6>
-
-                            </div>
-                        </div>
-                        <hr>
-                        <!-- /////navigation vertical//// -->
-                        <nav class="nav flex-column">
-                            <a class="nav-link active" aria-current="page" href="dashboard.php"> Profiles <i
-                                    class="fa fa-chevron-right chev-icon"></i></a>
-
-                            
-                            <a class="nav-link" href="#">Short Listed Matches <i
-                                    class="fa fa-chevron-right chev-icon4"></i></a>
-                            <a class="nav-link" href="#">Upgrade <i class="fa fa-chevron-right chev-icon4"></i></a>
-                        </nav>
-                        <!-- //// -->
-                    </div>
+                <div class="col-lg-3">
+                    @include('components.profilelayout')
                 </div>
+
 
                 <div class="col-lg-8 new-gp">
                     <div class="row bo-filter">
@@ -56,7 +31,8 @@
                         <div class="row box-j ">
 
                             <div class="col-lg-4 p0">
-                                <img src="{{asset('frontend/assets/images/nandini.jpg')}}" class="img-fluid wid-testimoni">
+                                <img src="{{ asset('frontend/assets/images/nandini.jpg') }}"
+                                    class="img-fluid wid-testimoni">
                             </div>
                             <div class="col-lg-8 p0">
                                 <div class="test-main cls-for-all">
@@ -115,9 +91,8 @@
                                     <ul class="list-none col-li">
                                         <li>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                class="lucide lucide-send">
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send">
                                                 <path d="m22 2-7 20-4-9-9-4Z" />
                                                 <path d="M22 2 11 13" />
                                             </svg> <span>Send Request</span>
@@ -156,7 +131,7 @@
                     <div class="row box-j ">
 
                         <div class="col-lg-4 p0">
-                            <img src="{{asset('frontend/assets/images/lakshmi.jpg')}}" class="img-fluid wid-testimoni">
+                            <img src="{{ asset('frontend/assets/images/lakshmi.jpg') }}" class="img-fluid wid-testimoni">
                         </div>
                         <div class="col-lg-8 p0">
                             <div class="test-main cls-for-all">
@@ -252,7 +227,7 @@
                     <div class="row box-j ">
 
                         <div class="col-lg-4 p0">
-                            <img src="{{asset('frontend/assets/images/img-girl.jpg')}}" class="img-fluid wid-testimoni">
+                            <img src="{{ asset('frontend/assets/images/img-girl.jpg') }}" class="img-fluid wid-testimoni">
                         </div>
                         <div class="col-lg-8 p0">
                             <div class="test-main cls-for-all">
@@ -355,9 +330,9 @@
                     </div>
                 </div>
                 <!-- <div class="col-lg-2">
-                        <img src="img/advertise.jpg" class="img-fluid clas-to1">
-                         <img src="img/advert2.jpg" class="img-fluid clas-to1">
-                    </div> -->
+                                <img src="img/advertise.jpg" class="img-fluid clas-to1">
+                                 <img src="img/advert2.jpg" class="img-fluid clas-to1">
+                            </div> -->
             </div>
 
     </section>
