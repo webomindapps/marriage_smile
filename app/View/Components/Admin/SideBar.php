@@ -17,6 +17,13 @@ class SideBar extends Component
             'name' => 'dashboard',
         ],
         [
+            'title' => 'User List',
+            'icon' => 'bx bx-grid-alt',
+            'route' => 'admin.user',
+            'isSubMenu' => false,
+            'name' => 'user',
+        ],
+        [
             'title' => 'CMS',
             'icon' => 'fal fa-file-alt',
             'isSubMenu' => true,
@@ -28,14 +35,14 @@ class SideBar extends Component
                     'route' => 'admin.testimonials',
                 ],
                 [
-                    'title'=>'FAQ',
-                    'icon'=>'bx bxchevron-right',
-                    'route'=>'admin.faq',
+                    'title' => 'FAQ',
+                    'icon' => 'bx bxchevron-right',
+                    'route' => 'admin.faq',
                 ],
                 [
-                    'title'=>'Pages',
-                    'icon'=>'bx bxchevron-right',
-                    'route'=>'admin.pages',
+                    'title' => 'Pages',
+                    'icon' => 'bx bxchevron-right',
+                    'route' => 'admin.pages',
                 ],
             ]
         ],

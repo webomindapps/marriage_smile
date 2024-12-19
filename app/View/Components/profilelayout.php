@@ -23,8 +23,7 @@ class profilelayout extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.profilelayout', [
-            'customer' => $this->customer,
-        ]);
+        $customer = $this->customer;
+        return view('components.profilelayout', compact('customer'));
     }
 }

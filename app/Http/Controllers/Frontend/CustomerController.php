@@ -238,7 +238,13 @@ class CustomerController extends Controller
     }
     public function profile()
     {
-        $customer = auth('customer')->user();
+        $customer = Auth::guard('customer')->user();
         return view('frontend.customer.profile', compact('customer'));
+    }
+    public function matches()
+    {
+        $customer = Auth::guard('customer')->user();
+
+        return view('frontend.customer.matches', compact('customer'));
     }
 }

@@ -32,7 +32,8 @@ class TestimonialController extends Controller
         }
         if ($search != '')
             $query->where(function ($q) use ($search, $searchColumns) {
-                foreach ($searchColumns as $key => $value) ($key == 0) ? $q->where($value, 'LIKE', '%' . $search . '%') : $q->orWhere($value, 'LIKE', '%' . $search . '%');
+                foreach ($searchColumns as $key => $value)
+                    ($key == 0) ? $q->where($value, 'LIKE', '%' . $search . '%') : $q->orWhere($value, 'LIKE', '%' . $search . '%');
             });
 
         // sorting
@@ -56,7 +57,7 @@ class TestimonialController extends Controller
         DB::beginTransaction();
 
         try {
-            $testimonial = Testimonials::create([
+            $testimonial = $this->model()->create([
                 'name' => $request->name,
                 'comments' => $request->comments,
             ]);
@@ -77,7 +78,7 @@ class TestimonialController extends Controller
     }
     public function edit($id)
     {
-        $testimonials = Testimonials::find($id);
+        $testimonials = $this->model()->find($id);
         return view('admin.testimonial.update', compact('testimonials'));
     }
     public function update(Request $request, $id)
@@ -90,7 +91,7 @@ class TestimonialController extends Controller
 
         DB::beginTransaction();
         try {
-            $testimonials = Testimonials::findOrFail($id);
+            $testimonials = $this->model()->findOrFail($id);
 
             $testimonials->update([
                 'name' => $request->name,
@@ -120,8 +121,7 @@ class TestimonialController extends Controller
 
     public function delete($id)
     {
-        $testimonials = Testimonials::find($id);
-        $testimonials->delete();
+        $this->model()->destroy($id);
         return back()->with('success', 'testimonials deleted successfully');
     }
 }
