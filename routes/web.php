@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\LoginController;
-use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Frontend\CustomerController;
-use App\Http\Controllers\frontend\CustomerPasswordResetController;
-use App\Http\Controllers\Admin\TestimonialController;
-use App\Http\Controllers\Frontend\MarriageController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Frontend\CustomerController;
+use App\Http\Controllers\Frontend\MarriageController;
+use App\Http\Controllers\frontend\CustomerPasswordResetController;
 
 Route::get('/', [MarriageController::class, 'index']);
 
@@ -62,5 +63,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('pages/create', [PageController::class, 'store'])->name('pages.create');
     Route::get('pages/{id}/edit', [PageController::class, 'edit'])->name('pages.edit');
     Route::post('pages/{id}/edit', [PageController::class, 'update']);
-    Route::get('pages/{id}/destroy', [PageController::class, 'destroy'])->name('pages.delete');    
+    Route::get('pages/{id}/destroy', [PageController::class, 'destroy'])->name('pages.delete'); 
+    
+    //user
+    Route::get('user', [UserController::class, 'index'])->name('user');
+    Route::get('user/{id}/destroy', [UserController::class, 'destroy'])->name('user.delete'); 
+
 });

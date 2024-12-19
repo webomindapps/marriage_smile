@@ -30,10 +30,11 @@ class PageController extends Controller
         }
         if ($search != '')
             $query->where(function ($q) use ($search, $searchColumns) {
-                foreach ($searchColumns as $key => $value) ($key == 0) ? $q->where($value, 'LIKE', '%' . $search . '%') : $q->orWhere($value, 'LIKE', '%' . $search . '%');
+                foreach ($searchColumns as $key => $value)
+                    ($key == 0) ? $q->where($value, 'LIKE', '%' . $search . '%') : $q->orWhere($value, 'LIKE', '%' . $search . '%');
             });
 
-      
+
         ($order == '') ? $query->orderByDesc('id') : $query->orderBy($order, $orderBy);
 
         $pages = $paginate ? $query->paginate($paginate)->appends(request()->query()) : $query->paginate(10)->appends(request()->query());
@@ -46,7 +47,7 @@ class PageController extends Controller
         $status = $request->status;
 
         foreach ($selectedItems as $item) {
-            $category = Page::find($item);
+            $category = $this->model()->find($item);
             if ($type == 1) {
                 $category->delete();
             } else if ($type == 2) {
@@ -71,7 +72,7 @@ class PageController extends Controller
             'meta_description' => 'required',
             'keywords' => 'required',
         ]);
-        Page::create([
+        $this->model()->create([
             'name' => $request->name,
             'position' => $request->position,
             'slug' => Str::slug($request->name),
@@ -86,7 +87,7 @@ class PageController extends Controller
 
     public function edit(string $id)
     {
-        $page = Page::find($id);
+        $page = $this->model()->find($id);
         return view('admin.cms.pages.update', compact('page'));
     }
 
@@ -95,7 +96,7 @@ class PageController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $page = Page::find($id);
+        $page = $this->model()->find($id);
         $page->update([
             'name' => $request->name,
             'position' => $request->position,
@@ -114,7 +115,7 @@ class PageController extends Controller
      */
     public function destroy(string $id)
     {
-        Page::destroy($id);
+        $this->model()->destroy($id);
         return back()->with('success', 'Page removed successfully');
     }
 }

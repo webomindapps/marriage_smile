@@ -30,7 +30,8 @@ class FaqController extends Controller
         }
         if ($search != '')
             $query->where(function ($q) use ($search, $searchColumns) {
-                foreach ($searchColumns as $key => $value) ($key == 0) ? $q->where($value, 'LIKE', '%' . $search . '%') : $q->orWhere($value, 'LIKE', '%' . $search . '%');
+                foreach ($searchColumns as $key => $value)
+                    ($key == 0) ? $q->where($value, 'LIKE', '%' . $search . '%') : $q->orWhere($value, 'LIKE', '%' . $search . '%');
             });
 
         // sorting
@@ -53,7 +54,7 @@ class FaqController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            FAQ::create($request->all());
+            $this->model()->create($request->all());
             DB::commit();
             return redirect()->route('admin.faq')->with('success', 'FAQ created successfully');
         } catch (\Exception $e) {
@@ -64,7 +65,7 @@ class FaqController extends Controller
     }
     public function edit($id)
     {
-        $faq = FAQ::find($id);
+        $faq = $this->model()->find($id);
         return view('admin.faq.update', compact('faq'));
     }
     public function update(Request $request, $id)
@@ -76,7 +77,7 @@ class FaqController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            FAQ::find($id)->update($request->all());
+            $this->model()->find($id)->update($request->all());
             DB::commit();
             return redirect()->route('admin.faq')->with('success', 'FAQ updated successfully');
         } catch (\Exception $e) {
@@ -87,8 +88,7 @@ class FaqController extends Controller
     }
     public function delete($id)
     {
-        $faq = FAQ::find($id);
-        $faq->delete();
+        $this->model()->destroy($id);
         return redirect()->route('admin.faq')->with('success', 'FAQ deleted successfully');
     }
     public function bulk(Request $request)
@@ -98,7 +98,7 @@ class FaqController extends Controller
         $status = $request->status;
 
         foreach ($selectedItems as $item) {
-            $category = FAQ::find($item);
+            $category = $this->model()->find($item);
             if ($type == 1) {
                 $category->delete();
             } else if ($type == 2) {
