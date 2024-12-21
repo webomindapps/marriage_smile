@@ -352,7 +352,7 @@ class CustomerController extends Controller
     public function getCustomerById(Request $request)
     {
         $customerId = $request->input('customer_id');
-        $customer = Customer::where('customer_id', $customerId)->first();
+        $customer = Customer::with('details')->where('customer_id', $customerId)->first();
 
         if ($customer) {
             return response()->json(['success' => true, 'data' => $customer]);

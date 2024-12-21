@@ -9,7 +9,7 @@
             <div class="col-lg-8">
 
                 <h4 class="pro-hea">Hi {{$customer->name}}</h4>
-                <h6 class="profile-des">{{$customer->customer_id}} <span class="co-editprofile" > <a href="{{ route('admin.customer.edit', $customer->id) }}" style="color: red;">Edit Profile</a>
+                <h6 class="profile-des">{{$customer->customer_id}} <span class="co-editprofile" > <a href="{{ route('admin.customer.edit', $customer->id) }}" style="color: red;">View Dashboard</a>
                 </span></h6>
 
             </div>
