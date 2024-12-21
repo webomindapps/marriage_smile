@@ -19,6 +19,7 @@
     <link async href="{{ asset('frontend/assets/css/style.css') }}" rel="stylesheet">
     <!-- <link rel="stylesheet" href="css/locomotive-scrollbar.css"> -->
     @stack('styles')
+    @vite('resources/js/app.js')
 </head>
 
 <body>
