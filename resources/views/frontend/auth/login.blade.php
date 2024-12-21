@@ -49,8 +49,12 @@
                             <button type="submit" class="btn btn-outline-secondary login-btn w-100 mb-3">Login</button>
                             <div class="social-login mb-3 type--A">
                                 <h5 class="text-center mb-3">Social Login</h5>
-                                <button class="btn btn-outline-secondary  mb-3"> Sign With Google</button>
-                                <button class="btn btn-outline-secondary mb-3"> Sign With Facebook</button>
+                                <a href="{{ route('google.redirect') }}"
+                                    class="btn btn-outline-secondary mb-3 d-flex align-items-center">
+                                    <i class='bx bxl-google me-1'></i> Sign in with <b class="ms-1">Google</b>
+                                </a>
+
+                                {{-- <button class="btn btn-outline-secondary mb-3"> Sign With Facebook</button> --}}
                             </div>
                         </form>
 

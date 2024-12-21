@@ -1,7 +1,7 @@
 select.form-select {
-  background-color: white;
+    background-color: white;
     margin-top: 0px;
-     margin-bottom: 14px; 
+    margin-bottom: 14px;
     border: 1px solid #00000021 !important;
     padding-left: 12px !important;
     font-size: 15px;
@@ -9,17 +9,17 @@ select.form-select {
     color: #232323;
     background-size: 15px 34px !important;
 
-   
+
 }
 
 section.register-f {
     padding: 50px 0pc;
     background-image: url(../img/signup1.jpg);
-        background: linear-gradient(to right, #0D006A, #ED1E79);
+    background: linear-gradient(to right, #0D006A, #ED1E79);
 }
 
-.bg-col{
-   background: #f1f1f1;
+.bg-col {
+    background: #f1f1f1;
     padding: 50px 50px 41px 50px;
 }
 
@@ -30,8 +30,8 @@ label.form-label {
     margin-bottom: 8px;
 }
 
-.bt-register{
-        background: linear-gradient(to right, #0D006A, #ED1E79);
+.bt-register {
+    background: linear-gradient(to right, #0D006A, #ED1E79);
     padding: 8px 30px;
     text-decoration: none;
     padding: 10px 50px;
@@ -82,8 +82,8 @@ h2.register-h {
 }
 
 
-.bi-ftre{
-        background: #fff;
+.bi-ftre {
+    background: #fff;
     padding: 13px 10px;
     margin-left: 13px;
     margin-bottom: 16px;
@@ -103,7 +103,7 @@ h2.register-h {
 
 
 input::placeholder {
-    font-size: 15px!important;
+    font-size: 15px !important;
 }
 
 
@@ -117,6 +117,7 @@ input::placeholder {
     border-radius: 4px;
     margin-top: 5px;
 }
+
 .btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
@@ -125,20 +126,25 @@ input::placeholder {
 .hidden {
     display: none;
 }
+
 .position-relative {
     position: relative;
 }
 
 .toggle-password {
     position: absolute;
-    right: 21px; 
+    right: 21px;
     top: 40%;
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 1.2rem;
-    color: #6c757d; 
+    color: #6c757d;
 }
 
 .toggle-password:hover {
     color: #333;
+}
+
+#country-code {
+    height: 37%;
 }

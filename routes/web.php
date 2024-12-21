@@ -30,6 +30,11 @@ Route::post('customer/{id}/edit', [CustomerController::class, 'update']);
 Route::get('customer/matches',[CustomerController::class,'matches'])->name('customer.matches');
 Route::get('customer/logout',[CustomerController::class,'logout'])->name('customer.logout');
 Route::get('customer/detail',[CustomerController::class,'detail'])->name('customer.details');
+Route::post('/customer-details', [CustomerController::class, 'getCustomerById']);
+
+
+Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');

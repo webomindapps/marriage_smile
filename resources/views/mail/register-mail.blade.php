@@ -18,7 +18,7 @@
                         <tbody>
                             <tr>
                                 <td style="width: 25%; background: #ffffff; padding: 10px;">
-                                    <img style="width: 100%;" src="{{ asset('frontend/assets/images/logo.png') }}"
+                                    <img style="width: 100%;" src="{{ public_path('frontend/assets/images/logo.png') }}"
                                         width="120" height="113" />
                                 </td>
                             </tr>
@@ -31,7 +31,7 @@
                     <h3> Account Registered Successfully </h3>
                     <hr>
                     <h4> Dear {{ $customer->name }} ,,<br />Your Account with Marriage Smiles Has Been Created
-                        Sucessfully With customer id{{ $customer->customer_id }}
+                        Sucessfully With customer id {{ $customer->customer_id }}
                         <h5 class="">Please confirm that you want to use this as Marriage Smiles account email
                             address. Once
                             verified, you will be able to login to the account.</h5>
