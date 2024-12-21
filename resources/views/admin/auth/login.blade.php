@@ -23,7 +23,7 @@
                                 <input class="input" type="email" name="email" placeholder="Email" required>
                             </div>
                             @error('email')
-                                <p class="validation-error">{{ $message }}</p>
+                                <p class="text-danger">{{ $message }}</p>
                             @enderror
                             <div class="group">
                                 <svg stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
@@ -35,7 +35,7 @@
                                 <input class="input" type="password" name="password" placeholder="Password" required>
                             </div>
                             @error('password')
-                                <p class="validation-error">{{ $message }}</p>
+                                <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
 

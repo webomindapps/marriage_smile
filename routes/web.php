@@ -30,6 +30,8 @@ Route::post('customer/{id}/edit', [CustomerController::class, 'update']);
 Route::get('customer/matches',[CustomerController::class,'matches'])->name('customer.matches');
 Route::get('customer/logout',[CustomerController::class,'logout'])->name('customer.logout');
 Route::get('customer/detail',[CustomerController::class,'detail'])->name('customer.details');
+Route::post('/customer-details', [CustomerController::class, 'getCustomerById']);
+
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');
