@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers\Frontend;
 
-
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Mail\CustomerRegister;
 use App\Models\Customer;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\DB as FacadesDB;
+use Laravel\Socialite\Facades\Socialite;
 
 class CustomerController extends Controller
 {
@@ -37,8 +35,8 @@ class CustomerController extends Controller
             'mother_tongue' => 'required|string',
             'caste' => 'required|string',
             'gotra' => 'required|string',
-            'sun_star' => 'nullable|string',
-            'birth_star' => 'nullable|string',
+            'sun_star' => 'required|string',
+            'birth_star' => 'required|string',
             'annual_income' => 'required',
             'company_name' => 'required|string',
             'experience' => 'required|string',
@@ -138,9 +136,6 @@ class CustomerController extends Controller
                 'timings',
                 'preferred_contact_no',
                 'contact_related_to',
-                'no_of_children',
-                'other_mothertongue',
-                'other_qualification',
             ]);
 
             $customerDetailsData['customers_id'] = $customer->id;
@@ -180,19 +175,6 @@ class CustomerController extends Controller
 
 
             DB::commit();
-            // if ('req_rel_manager' === 'yes') {
-            // if ('req_rel_manager' === 'yes') {
-
-            //     Mail::send('emails.notify_admin', $data, function ($message) {
-            //         $message->to('admin@example.com')
-            //             ->subject('Relationship Manager Request');
-            //     });
-            // }
-            //     Mail::send('emails.notify_admin', $data, function ($message) {
-            //         $message->to('admin@example.com')
-            //             ->subject('Relationship Manager Request');
-            //     });
-            // }
             Mail::to($request->email)->send(new CustomerRegister($customer));
 
             return redirect()->route('customer.login')->with('verify', 'Customer registered successfully');
@@ -351,15 +333,16 @@ class CustomerController extends Controller
 
         $oppositeGender = $customer->gender === 'male' ? 'female' : 'male';
 
-        $profiles = Customer::where('gender', $oppositeGender)->get();
+        $profiles = Customer::with('details')->where('gender', $oppositeGender)->get();
 
         return view('frontend.customer.matches', compact('profiles'));
     }
 
-        public function logout(){
-            Auth::guard('customer')->logout();
-            return redirect()->route('customer.login');
-        }
+    public function logout()
+    {
+        Auth::guard('customer')->logout();
+        return redirect()->route('customer.login');
+    }
 
     public function detail()
     {

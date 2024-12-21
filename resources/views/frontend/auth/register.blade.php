@@ -14,38 +14,50 @@
                 <div class="col-md-8 bg-col">
 
 
-                    <form class="row" action="{{ route('customer.store') }}" method="POST" enctype="multipart/form-data">
+                    <form class="row" id="registrationForm" action="{{ route('customer.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <h5 class="h5-find pd-1">About Myself —In Detail </h5>
                         <div class="col-6 position-relative required-field">
-                            <select class="form-control" id="nationality" name="nationality" placeholder="nationality"
-                                value="{{ old('nationlaity') }}" required>
-                                <option value="" disabled selected>Select Nationality</option>
-                                <option value="Indian">Indian</option>
+                            <select class="form-control" id="nationality" name="nationality" placeholder="nationality">
+                                <option value="" disabled {{ old('nationality') ? '' : 'selected' }}>Select
+                                    Nationality</option>
+                                <option value="Indian" {{ old('nationality') == 'Indian' ? 'selected' : '' }}>Indian
+                                </option>
                             </select>
+                            <div id="nationalityError" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
+                                Please select your nationality.
+                            </div>
                             @error('nationality')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="col-6">
-                            <select class="form-control" id="religion" name="religion" placeholder="Religion"
-                                value="{{ old('religion') }}" required>
-                                <option value=""disabled selected>Select Religion</option>
-                                <option value="hindu">Hindu</option>
 
+                        <div class="col-6">
+                            <select class="form-control" id="religion" name="religion" placeholder="Religion">
+                                <option value="" disabled {{ old('religion') ? '' : 'selected' }}>Select Religion
+                                </option>
+                                <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
                             </select>
+                            <div id="religionerror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
+                                Please select your Religion.
+                            </div>
                             @error('religion')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <div class="col-6">
                             <select class="form-control" id="gender" name="gender" value="{{ old('gender') }}"
-                                placeholder="Gender" required>
+                                placeholder="Gender">
                                 <option value=""disabled selected>Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                                <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
                             </select>
+                            <div id="gendererror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
+                                Please select Gender
+                            </div>
                             @error('gender')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -73,51 +85,59 @@
                         </div>
 
                         <div class="col-6">
-                            <select class="form-control" id="qualification" name="qualification"
-                                value="{{ old('qualification') }}" placeholder="qualification" required>
-                                <option value=""disabled selected>Select Qualification</option>
-                                <option value="BE">BE</option>
-                                <option value="B Com">B Com</option>
-                                <option value="B Sc">B Sc</option>
-                                <option value="B Tech">B Tech</option>
-                                <option value="BBA">BBA</option>
-                                <option value="BCA">BCA</option>
-                                <option value="M Sc">M Sc</option>
-                                <option value="M Tech">M Tech</option>
-                                <option value="MBA">MBA</option>
-                                <option value="MCA">MCA</option>
-                                <option value="Diploma">Diploma</option>
-                                <option value="ITI">ITI</option>
-                                <option value="Others">Others</option>
-                                <option value="10th">10th</option>
-                                <option value="12th">12th</option>
-                                @error('qualification')
-                                    <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                                @enderror
+                            <select class="form-control" id="qualification" name="qualification" placeholder="qualification"
+                                required>
+                                <option value="" disabled {{ old('qualification') ? '' : 'selected' }}>Select
+                                    Qualification</option>
+                                <option value="BE" {{ old('qualification') == 'BE' ? 'selected' : '' }}>BE</option>
+                                <option value="B Com" {{ old('qualification') == 'B Com' ? 'selected' : '' }}>B Com
+                                </option>
+                                <option value="B Sc" {{ old('qualification') == 'B Sc' ? 'selected' : '' }}>B Sc</option>
+                                <option value="B Tech" {{ old('qualification') == 'B Tech' ? 'selected' : '' }}>B Tech
+                                </option>
+                                <option value="BBA" {{ old('qualification') == 'BBA' ? 'selected' : '' }}>BBA</option>
+                                <option value="BCA" {{ old('qualification') == 'BCA' ? 'selected' : '' }}>BCA</option>
+                                <option value="M Sc" {{ old('qualification') == 'M Sc' ? 'selected' : '' }}>M Sc</option>
+                                <option value="M Tech" {{ old('qualification') == 'M Tech' ? 'selected' : '' }}>M Tech
+                                </option>
+                                <option value="MBA" {{ old('qualification') == 'MBA' ? 'selected' : '' }}>MBA</option>
+                                <option value="MCA" {{ old('qualification') == 'MCA' ? 'selected' : '' }}>MCA</option>
+                                <option value="Diploma" {{ old('qualification') == 'Diploma' ? 'selected' : '' }}>Diploma
+                                </option>
+                                <option value="ITI" {{ old('qualification') == 'ITI' ? 'selected' : '' }}>ITI</option>
+                                <option value="Others" {{ old('qualification') == 'Others' ? 'selected' : '' }}>Others
+                                </option>
+                                <option value="10th" {{ old('qualification') == '10th' ? 'selected' : '' }}>10th</option>
+                                <option value="12th" {{ old('qualification') == '12th' ? 'selected' : '' }}>12th</option>
                             </select>
+                            <div id="qualificationerror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
+                                Please select Qualification
+                            </div>
+                            @error('qualification')
+                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                            @enderror
+
                         </div>
                         <div class="form-group" id="other-qualification-field" style="display: none;">
                             <label for="other_qualification">Please Specify</label>
-                            <input type="text" class="form-control" id="other_qualification" name="other_qualification"
-                                placeholder="Enter your qualification">
+                            <input type="text" class="form-control" id="other_qualification"
+                                name="other_qualification" placeholder="Enter your qualification">
                             @error('other_qualification')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-6 position-relative">
-                            <div class="form-floating mb-3">
-                                <input type="text" name="dob" class="form-control" value="{{ old('dob') }}"
-                                    placeholder="DOB" onfocus="(this.type='date')" onblur="(this.type='text')"
-                                    id="dob" autocomplete="off" required>
-                                <label for="dob">DOB</label>
-                                @error('dob')
-                                    <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <input type="text" name="dob" class="form-control" value="{{ old('dob') }}"
+                                placeholder="DOB" onfocus="(this.type='date')"
+                                onblur="if(this.value===''){this.type='text'}" id="dob" autocomplete="off"
+                                required>
+                            @error('dob')
+                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" value="{{ old('age') }}" placeholder="Age" name="age" id="age"
-                                readonly  required>
+                            <input type="text" class="form-control" value="{{ old('age') }}" placeholder="Age"
+                                name="age" id="age" readonly required>
                             @error('age')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -126,20 +146,29 @@
 
                         <div class="col-6">
                             <select class="form-control" id="mother_tongue" name="mother_tongue"
-                            value="{{ old('mother_tongue') }}"  placeholder="Mother Tongue"  required>
-                                <option value="" disabled selected>Select Mother Tongue</option>
-                                <option value="kannada">Kannada</option>
-                                <option value="tamil">Tamil</option>
-                                <option value="telugu">Telugu</option>
-                                <option value="malayalam">Malayalam</option>
-                                <option value="hindi">Hindi</option>
-                                <option value="others">Others</option>
+                                placeholder="Mother Tongue" required>
+                                <option value="" disabled {{ old('mother_tongue') ? '' : 'selected' }}>Select Mother
+                                    Tongue</option>
+                                <option value="kannada" {{ old('mother_tongue') == 'kannada' ? 'selected' : '' }}>Kannada
+                                </option>
+                                <option value="tamil" {{ old('mother_tongue') == 'tamil' ? 'selected' : '' }}>Tamil
+                                </option>
+                                <option value="telugu" {{ old('mother_tongue') == 'telugu' ? 'selected' : '' }}>Telugu
+                                </option>
+                                <option value="malayalam" {{ old('mother_tongue') == 'malayalam' ? 'selected' : '' }}>
+                                    Malayalam</option>
+                                <option value="hindi" {{ old('mother_tongue') == 'hindi' ? 'selected' : '' }}>Hindi
+                                </option>
+                                <option value="Others" {{ old('mother_tongue') == 'Others' ? 'selected' : '' }}>Others
+                                </option>
                             </select>
+                            <div id="mother_tongue_error" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
+                                Please select your Mother Tongue
+                            </div>
                             @error('mother_tongue')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
-
                         <div class="form-group" id="other-mothertongue-field" style="display: none;">
                             <label for="other_mothertongue">Please Specify</label>
                             <input type="text" class="form-control" id="other_mothertongue" name="other_mothertongue"
@@ -150,15 +179,15 @@
                         </div>
 
                         <div class="col-6">
-                            <input type="text" class="form-control" value="{{ old('caste') }}"  placeholder="caste" name="caste"
-                                id="caste"  required>
+                            <input type="text" class="form-control" value="{{ old('caste') }}" placeholder="caste"
+                                name="caste" id="caste" required>
                             @error('caste')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="gotra" name="gotra"
-                            value="{{ old('gotra') }}"  placeholder="Gothra"  required>
+                                value="{{ old('gotra') }}" placeholder="Gothra" required>
                             @error('gotra')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -178,17 +207,27 @@
                             @enderror
                         </div>
                         <div class="col-6">
-                            <select name="annual_income" class="form-control" id="annual_income"
-                                placeholder="annual_income" value="{{ old('annual_income') }}" required>
-                                <option value=""disable selected>Select Annual Income</option>
-                                <option value="1-10 lakh">1-10 Lakh</option>
-                                <option value="11-20 lakh"> 10 -20 Lakh</option>
-                                <option value="21-30 lakh">21-30 Lakh</option>
-                                <option value="31-40 lakh">31-40 Lakh</option>
-                                <option value="41-50 lakh">41-50 Lakh</option>
-                                <option value="51-60 lakh">51-60 Lakh</option>
-                                <option value="61-70 lakh">61-70 Lakh</option>
+                            <?php
+                            $incomeRanges = [];
+                            for ($start = 1; $start <= 70; $start += 1) {
+                                $end = $start + 1;
+                                $incomeRanges[] = "{$start}-{$end} Lakh";
+                            }
+                            ?>
+
+                            <select name="annual_income" class="form-control" id="annual_income" required>
+                                <option value="" disabled {{ old('annual_income') ? '' : 'selected' }}>Select Annual
+                                    Income</option>
+                                @foreach ($incomeRanges as $range)
+                                    <option value="{{ $range }}"
+                                        {{ old('annual_income') == $range ? 'selected' : '' }}>
+                                        {{ $range }}
+                                    </option>
+                                @endforeach
                             </select>
+                            <div id="annual_income_error" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
+                                Please select annual Income
+                            </div>
                             @error('annual_income')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -211,7 +250,7 @@
                             <div class="input-group">
                                 <span class="input-group-text" id="country-code">+91</span>
                                 <input type="text" class="form-control" id="phone" name="phone" minlength="10"
-                                    maxlength="10" placeholder="Mobile No"
+                                    maxlength="10" placeholder="Mobile No" value="{{ old('phone') }}"
                                     oninput="this.value = this.value.replace(/\D/g, '')" value="{{ old('phone') }}"
                                     required>
                             </div>
@@ -230,7 +269,9 @@
 
                         <div class="col-6">
                             <input type="text" class="form-control" id="aadhar_no" name="aadhar_no"
-                                placeholder="AADHAR NO " value="{{ old('aadhar_no') }}">
+                                placeholder="AADHAR NO" value="{{ old('aadhar_no') }}" required>
+                            <small id="aadharError" class="text-danger d-none" style="font-size: 13px;">Please enter a
+                                valid Aadhar number.</small>
                             @error('aadhar_no')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -262,7 +303,8 @@
                         <div class="col-6">
                             <div id="hobbies-container">
                                 <div class="hobby-row">
-                                    <textarea class="form-control" name="hobbies" placeholder="Hobbies" required></textarea>
+                                    <input type="text" class="form-control" name="hobbies" placeholder="Hobbies"
+                                        value="{{ old('hobbies') }}" required>
                                 </div>
                             </div>
                             @error('hobbies')
@@ -271,7 +313,7 @@
                         </div>
                         <div class="col-6">
                             <input type="url" class="form-control" id="facebook_profile" name="facebook_profile"
-                                placeholder="Facebook Profile / Insta Profile">
+                                placeholder="Facebook Profile / Insta Profile" value="{{ old('facebook_profile') }}">
                             @error('facebook_profile')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -283,43 +325,52 @@
 
                         <div class="col-12 bi-ftre">
                             <label>Upload Profile</label><br />
-                            <input type="file" class="image-file" name="image_url[]" id="image_url" multiple accept="image/*">
+                            <input type="file" class="image-file" name="image_url[]" id="image_url" multiple
+                                accept="image/*">
                             <div id="image-preview-container" class="d-flex mt-3"></div>
                         </div>
 
                         <div class="col-md-12">
-                            <label for="marritialstatus">Marital Status</label>
                             <select id="marritialstatus" name="marritialstatus" class="form-select" required>
                                 <option value="" disabled selected>Marital Status</option>
-                                <option value="unmarried">Un Married</option>
-                                <option value="divorsed">Divorsed</option>
+                                <option value="unmarried"{{ old('marritialstatus') == 'unmarried' ? 'selected' : '' }}>Un
+                                    Married
+                                </option>
+                                <option value="divorsed" {{ old('marritialstatus') == 'divorsed' ? 'selected' : '' }}>
+                                    Divorsed</option>
                                 @error('marritialstatus')
                                     <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                                 @enderror
                             </select>
+                            <div id="marritialstatuserror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
+                                Please select Marrital Status
+                            </div>
                         </div>
                         <div class="col-md-12 mt-3" id="children-container" style="display: none;">
-                            <label for="numberOfChildren">Number of Children</label>
-                            <input type="number" id="numberOfChildren" class="form-control"
-                                placeholder="Enter number of children" min="1">
+                            <input type="number" id="numberOfChildren" name="no_of_children" class="form-control"
+                                placeholder="Enter number of children" value="{{ old('no_of_children') }}"
+                                min="1">
                         </div>
 
                         <div class="col-md-12 mt-3" id="children-details-container" style="display: none;">
                         </div>
                         <div class="col-md-12">
                             <select id="relationship_manager" name="req_rel_manager" class="form-select" required>
-                                <option selected>Do you need relationship manager to search on behalf of you ?
+                                <option value="" disabled {{ old('req_rel_manager') ? '' : 'selected' }}>
+                                    Do you need a relationship manager to search on behalf of you?
                                 </option>
-                                <option>Yes </option>
-                                <option> No</option>
-                                @error('req_rel_manager')
-                                    <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                                @enderror
-
+                                <option value="Yes" {{ old('req_rel_manager') == 'Yes' ? 'selected' : '' }}>Yes
+                                </option>
+                                <option value="No" {{ old('req_rel_manager') == 'No' ? 'selected' : '' }}>No</option>
                             </select>
+                            @error('req_rel_manager')
+                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                            @enderror
+
                         </div>
                         <div class="col-12">
-                            <textarea class="form-control" id="inputname" name="expectations" placeholder="Expectations? " required></textarea>
+                            <textarea class="form-control" id="inputname" name="expectations" placeholder="Expectations? "
+                                value="{{ old('expectations') }}" required></textarea>
                             @error('expectations')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -328,35 +379,35 @@
 
                         <div class="col-6">
                             <input type="text" class="form-control" id="father_name" name="father_name"
-                                placeholder="Father Name" required>
+                                placeholder="Father Name" value="{{ old('father_name') }}" required>
                             @error('father_name')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="father_occupation" name="father_occupation"
-                                placeholder="Father Occupation" required>
+                                placeholder="Father Occupation" value="{{ old('father_occupation') }}" required>
                             @error('father_occupation')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="mother_name" name="mother_name"
-                                placeholder="Mother Name" required>
+                                placeholder="Mother Name" value="{{ old('mother_name') }}" required>
                             @error('mother_name')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="mother_occupation" name="mother_occupation"
-                                placeholder="Mother Occupation" required>
+                                placeholder="Mother Occupation" value="{{ old('mother_occupation') }}" required>
                             @error('mother_occupation')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-12">
                             <input type="text" class="form-control" id="siblings" name="siblings"
-                                placeholder="Number of Siblings" required>
+                                placeholder="Number of Siblings" value="{{ old('siblings') }}" required>
                             @error('siblings')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -364,30 +415,33 @@
                         <div id="siblings-details-container" class="row mt-3"></div>
 
                         <div class="col-12">
-                            <label for="locations">Present Address</label>
                             <input type="text" class="form-control" id="locations" name="locations"
-                                placeholder="Present Address" required>
+                                placeholder="Present Address" value="{{ old('locations') }}" required>
                             @error('locations')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="col-md-12" id="present-house-status-container" style="display: none;">
-                            <label for="present_house_status">House Status for Present Address</label>
                             <select id="present_house_status" name="present_house_status" class="form-select" required>
-                                <option value="" disabled selected>Select House Status</option>
-                                <option value="own">Own House</option>
-                                <option value="rent">Rent House</option>
+                                <option value="" disabled {{ old('present_house_status') ? '' : 'selected' }}>
+                                    Select House Status
+                                </option>
+                                <option value="own" {{ old('present_house_status') == 'own' ? 'selected' : '' }}>Own
+                                    House</option>
+                                <option value="rent" {{ old('present_house_status') == 'rent' ? 'selected' : '' }}>Rent
+                                    House</option>
                             </select>
                             @error('present_house_status')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
 
+
                         <div class="col-12">
-                            <label for="permanent_locations">Permanent Address</label>
                             <input type="text" class="form-control" id="permanent_locations"
-                                name="permanent_locations" placeholder="Permanent Address" required>
+                                name="permanent_locations" placeholder="Permanent Address"
+                                value="{{ old('permanent_locations') }}" required>
                             @error('permanent_locations')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -397,9 +451,13 @@
                             <label for="permanent_house_status">House Status for Permanent Address</label>
                             <select id="permanent_house_status" name="permanent_house_status" class="form-select"
                                 required>
-                                <option value="" disabled selected>Select House Status</option>
-                                <option value="own">Own House</option>
-                                <option value="rent">Rent House</option>
+                                <option value="" disabled {{ old('permanent_house_status') ? '' : 'selected' }}>
+                                    Select House Status
+                                </option>
+                                <option value="own" {{ old('permanent_house_status') == 'own' ? 'selected' : '' }}>Own
+                                    House</option>
+                                <option value="rent" {{ old('permanent_house_status') == 'rent' ? 'selected' : '' }}>
+                                    Rent House</option>
                             </select>
                             @error('permanent_house_status')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
@@ -408,31 +466,41 @@
                         <div class="col-md-12">
                             <select id="asset_value" name="asset_value" class="form-select" required>
                                 <option selected>Asset Value </option>
-                                <option value="5lakh-10lakh">5lakh - 10lakh</option>
-                                <option value="10lakh-20lakh">10lakh - 20lakh</option>
-                                <option value="will disclose later">Will Disclose Later</option>
+                                <option value="{{ old('asset_value') }} == '5lakh - 10lakh' ? 'selected' : ">5lakh -
+                                    10lakh</option>
+                                <option value="{{ old('asset_value') }} == '10lakh - 20lakh' ? 'selected' : ">10lakh -
+                                    20lakh</option>
+                                <option value="{{ old('asset_value') }} == 'Will Disclose Later' ? 'selected' : ">Will
+                                    Disclose Later</option>
                                 @error('asset_value')
                                     <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                                 @enderror
 
                             </select>
+                            <div id="asset_value_error" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
+                                Please select the Asset Value
+                            </div>
                         </div>
                         <h5 class="h5-find pd-2">How I Want to Talk to My Matches</h5>
                         <div class="col-md-12">
                             <select id="preferreday" name="preferreday" class="form-select" required>
-                                <option disabled selected>Preferred Day to Talk</option>
-                                <option value="anyday">Any Day</option>
-                                <option value="selectday">Select the day</option>
-                                @error('preferreday')
-                                    <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                                @enderror
-
+                                <option value="" disabled {{ old('preferreday') ? '' : 'selected' }}>Preferred Day
+                                    to Talk</option>
+                                <option value="Any Day" {{ old('preferreday') == 'Any Day' ? 'selected' : '' }}>Any Day
+                                </option>
+                                <option value="Select the day"
+                                    {{ old('preferreday') == 'Select the day' ? 'selected' : '' }}>Select the day</option>
                             </select>
+                            @error('preferreday')
+                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                            @enderror
                         </div>
+
 
                         <div class="col-12 hidden" id="timings-container">
                             <label for="timings">Timings</label>
-                            <input type="datetime-local" name="timings" class="form-control" id="timings">
+                            <input type="datetime-local" name="timings" class="form-control"
+                                value="{{ old('timings') }}" id="timings">
                         </div>
 
 
@@ -440,7 +508,8 @@
                             <input type="text" class="form-control" id="preferred_contact_no"
                                 name="preferred_contact_no" minlength="10" maxlength="10"
                                 placeholder="Prefered contact number to talk"
-                                oninput="this.value = this.value.replace(/\D/g, '')" required>
+                                oninput="this.value = this.value.replace(/\D/g, '')"
+                                value="{{ old('preferred_contact_no') }}" required>
                             @error('preferred_contact_no')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -449,21 +518,33 @@
                         <div class="col-12">
                             <select class="form-control" id="contact_related_to" name="contact_related_to"
                                 placeholder="Relation" required>
-                                <option value=""disable selected> Select Relation</option>
-                                <option value="father">Father</option>
-                                <option value="mother">Mother</option>
-                                <option value="brother">Brother</option>
-                                <option value="sister">Sister</option>
-                                @error('contact_related_to')
-                                    <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                                @enderror
+                                <option value="" disabled selected>Relation</option>
+                                <option value="father" {{ old('contact_related_to') == 'father' ? 'selected' : '' }}>
+                                    Father</option>
+                                <option value="mother" {{ old('contact_related_to') == 'mother' ? 'selected' : '' }}>
+                                    Mother</option>
+                                <option value="brother" {{ old('contact_related_to') == 'brother' ? 'selected' : '' }}>
+                                    Brother</option>
+                                <option value="sister" {{ old('contact_related_to') == 'sister' ? 'selected' : '' }}>
+                                    Sister</option>
                             </select>
+                            <div id="contact_related_to_error" class="text-danger ps-0 mb-2 d-none"
+                                style="font-size: 13px;">
+                                Please select Qualification
+                            </div>
+                            @error('contact_related_to')
+                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                        </div>
                         <div class="col-12">
-                            <input type="checkbox" id="termscheck" value="Bike">
-                            <label for="vehicle1"> Terms and conditions</label>
+                            <input type="checkbox" id="terms" name="terms">
+                            <label for="terms">I agree to the terms and conditions</label>
+                            <div id="termsError" class="text-danger d-none" style="font-size: 13px;">
+                                You must agree to the terms and conditions to proceed.
+                            </div>
                         </div>
+
                         <div class="col-12 text-center">
                             <button type="submit" class="btn bt-register">Register Now</button>
                         </div>
@@ -707,6 +788,118 @@
 
                 reader.readAsDataURL(file);
             });
+        });
+    </script>
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            const aadharInput = document.getElementById('aadhar_no');
+            const aadharError = document.getElementById('aadharError');
+            const aadharPattern = /^\d{12}$/;
+
+            if (!aadharPattern.test(aadharInput.value)) {
+                aadharError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                aadharError.classList.add('d-none');
+            }
+
+            const nationalitySelect = document.getElementById('nationality');
+            const nationalityError = document.getElementById('nationalityError');
+            if (nationalitySelect.value === "") {
+                nationalityError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                nationalityError.classList.add('d-none');
+            }
+
+            const religionSelect = document.getElementById('religion');
+            const religionError = document.getElementById('religionerror');
+            if (religionSelect.value === "") {
+                religionError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                religionError.classList.add('d-none');
+            }
+
+            const genderSelect = document.getElementById('gender');
+            const genderError = document.getElementById('genderError');
+            if (genderSelect.value === "") {
+                genderError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                genderError.classList.add('d-none');
+            }
+
+
+            const qualificationSelect = document.getElementById('qualification');
+            const qualificationError = document.getElementById('qualificationerror');
+            if (qualificationSelect.value === "") {
+                qualificationError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                qualificationError.classList.add('d-none');
+            }
+
+            const mothertongueSelect = document.getElementById('mother_tongue');
+            const mothertongueError = document.getElementById('mother_tongue_error');
+            if (mothertongueSelect.value == "") {
+                mothertongueError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                mothertongueError.classList.add('d-none');
+            }
+
+            const annualincomeSelect = document.getElementById('annual_income');
+            const annualincomeError = document.getElementById('annual_income_error');
+            if (annualincomeSelect.value == "") {
+                annualincomeError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                annualincomeError.classList.add('d-none');
+            }
+
+            const marritialstatusSelect = document.getElementById('marritalstatus');
+            const marritialstatusError = document.getElementById('marritialstatuserror');
+            if (marritialstatusSelect.value == "") {
+                marritialstatusError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                marritialstatusError.classList.add('d-none');
+            }
+
+            const assetvalueSelect = document.getElementById('asset_value');
+            const assetvalueError = document.getElementById('asset_value_error');
+            if (assetvalueSelect.value == "") {
+                assetvalueError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                assetvalueError.classList.add('d-none');
+
+            }
+
+            const contactrelatedtoSelect = document.getElementById('contact_related_to');
+            const contactrelatedtoError = document.getElementById('contact_related_to_error');
+            if (contactrelatedtoSelect.value == "") {
+                contactrelatedtoError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                contactrelatedtoError.classList.add('d-none');
+            }
+            const termsCheckbox = document.getElementById('terms');
+            const termsError = document.getElementById('termsError');
+            if (!termsCheckbox.checked) {
+                termsError.classList.remove('d-none');
+                isValid = false;
+            } else {
+                termsError.classList.add('d-none');
+            }
+
+            if (isValid) {
+                this.submit();
+            }
         });
     </script>
 @endsection
