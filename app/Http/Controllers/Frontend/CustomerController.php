@@ -6,8 +6,6 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use App\Mail\CustomerRegister;
 use App\Models\Customer;
-use App\Models\CustomerDetails;
-use App\Models\CustomerImage;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -180,9 +178,16 @@ class CustomerController extends Controller
                 $i++;
             }
 
+
             DB::commit();
             // if ('req_rel_manager' === 'yes') {
+            // if ('req_rel_manager' === 'yes') {
 
+            //     Mail::send('emails.notify_admin', $data, function ($message) {
+            //         $message->to('admin@example.com')
+            //             ->subject('Relationship Manager Request');
+            //     });
+            // }
             //     Mail::send('emails.notify_admin', $data, function ($message) {
             //         $message->to('admin@example.com')
             //             ->subject('Relationship Manager Request');
@@ -205,7 +210,10 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $customer = Customer::find($id);
-
+        // dd($customer);
+        // if (!$customer) {
+        //     return redirect()->route('admin.customer.index')->with('error', 'Customer not found.');
+        // }
 
         return view('frontend.customer.update', compact('customer'));
     }
@@ -348,27 +356,50 @@ class CustomerController extends Controller
         return view('frontend.customer.matches', compact('profiles'));
     }
 
-
-    public function logout()
-    {
-        Auth::guard('customer')->logout();
-        return redirect()->route('customer.login');
-    }
-
+        public function logout(){
+            Auth::guard('customer')->logout();
+            return redirect()->route('customer.login');
+        }
 
     public function detail()
     {
         return view('frontend.customer.profile-detail');
     }
-    public function getCustomerById(Request $request)
+    public function redirectToGoogle()
     {
-        $customerId = $request->input('customer_id');
-        $customer = Customer::with('details')->where('customer_id', $customerId)->first();
-
-        if ($customer) {
-            return response()->json(['success' => true, 'data' => $customer]);
-        }
-
-        return response()->json(['success' => false, 'message' => 'Customer not found']);
+        return Socialite::driver('google')->redirect();
     }
+
+    public function handleGoogleCallback()
+    {
+        try {
+            $user = Socialite::driver('google')->user();
+            $customer = Customer::where('email', $user->email)->first();
+
+            if ($customer) {
+                $customer->update(['email_verified_at' => Carbon::now()]);
+                Auth::guard('customer')->login($customer);
+
+
+
+                $intendedUrl = Session::get('url.intended');
+                $profile = route('customer.profile');
+                return redirect()->intended($intendedUrl ?? $profile);
+            } else {
+                Customer::create([
+                    'name' => $user->user['given_name'],
+                    'lastname' => $user->user['family_name'],
+                    'email' => $user->email,
+                    'email_verified_at' => Carbon::now()
+                ]);
+                $customer = Customer::where('email', $user->email)->first();
+                Auth::guard('customer')->login($customer);
+                return redirect()->route('customer.profile');
+            }
+        } catch (Exception $e) {
+            // dd($e);
+            return redirect('auth/google');
+        }
+    }
+
 }

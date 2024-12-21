@@ -36,6 +36,9 @@ Route::post('/customer-details', [CustomerController::class, 'getCustomerById'])
 Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
 Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');
 
+Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');
+
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');
     Route::post('login', [LoginController::class, 'authenticate']);
