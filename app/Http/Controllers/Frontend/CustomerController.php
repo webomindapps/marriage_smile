@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
 use App\Mail\CustomerRegister;
 use App\Models\Customer;
 use App\Models\CustomerDetails;
@@ -10,13 +11,14 @@ use App\Models\CustomerImage;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB as FacadesDB;
 
 class CustomerController extends Controller
 {
@@ -37,8 +39,8 @@ class CustomerController extends Controller
             'mother_tongue' => 'required|string',
             'caste' => 'required|string',
             'gotra' => 'required|string',
-            'sun_star' => 'required|string',
-            'birth_star' => 'required|string',
+            'sun_star' => 'nullable|string',
+            'birth_star' => 'nullable|string',
             'annual_income' => 'required',
             'company_name' => 'required|string',
             'experience' => 'required|string',
@@ -138,6 +140,9 @@ class CustomerController extends Controller
                 'timings',
                 'preferred_contact_no',
                 'contact_related_to',
+                'no_of_children',
+                'other_mothertongue',
+                'other_qualification',
             ]);
 
             $customerDetailsData['customers_id'] = $customer->id;
@@ -147,8 +152,6 @@ class CustomerController extends Controller
                 $path = $request->file('image_path')->store('documents/horoscope', 'public');
                 $customer->details()->update(['image_path' => $path]);
             }
-
-
             $i = 1;
             while ($request->has("child_{$i}_gender")) {
                 $childData = [
@@ -178,7 +181,13 @@ class CustomerController extends Controller
             }
 
             DB::commit();
+            // if ('req_rel_manager' === 'yes') {
 
+            //     Mail::send('emails.notify_admin', $data, function ($message) {
+            //         $message->to('admin@example.com')
+            //             ->subject('Relationship Manager Request');
+            //     });
+            // }
             Mail::to($request->email)->send(new CustomerRegister($customer));
 
             return redirect()->route('customer.login')->with('verify', 'Customer registered successfully');
@@ -339,11 +348,13 @@ class CustomerController extends Controller
         return view('frontend.customer.matches', compact('profiles'));
     }
 
+
     public function logout()
     {
         Auth::guard('customer')->logout();
         return redirect()->route('customer.login');
     }
+
 
     public function detail()
     {
