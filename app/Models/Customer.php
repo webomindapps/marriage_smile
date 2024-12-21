@@ -19,10 +19,10 @@ class Customer extends Authenticatable
 
     public function details()
     {
-        return $this->hasOne(CustomerDetails::class,'id');
+        return $this->hasOne(CustomerDetails::class, 'id');
     }
     public function documents()
     {
-        return $this->hasMany(CustomerImage::class,'id');
+        return $this->hasMany(CustomerImage::class, 'customers_id');
     }
 }
