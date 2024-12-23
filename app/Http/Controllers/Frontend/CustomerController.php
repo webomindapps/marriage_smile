@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Mail\CustomerRegister;
 use App\Models\Customer;
+use App\Models\CustomerDetails;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -309,7 +310,7 @@ class CustomerController extends Controller
             $attempt = Auth::guard('customer')->attempt(['customer_id' => $request->email, 'password' => $request->password]);
             if ($attempt) {
                 $customer = Auth::guard('customer')->user();
-                return redirect()->route('customer.profile');
+                return redirect()->route('customer.matches');
             }
         }
 
@@ -331,11 +332,13 @@ class CustomerController extends Controller
 
 
 
-        $oppositeGender = $customer->gender === 'male' ? 'female' : 'male';
+        $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
 
-        $profiles = Customer::with('details')->where('gender', $oppositeGender)->get();
+        $profiledetails = CustomerDetails::where('gender', $oppositeGender)->get();
+        $profile = Customer::all();
 
-        return view('frontend.customer.matches', compact('profiles'));
+
+        return view('frontend.customer.matches', compact('profiledetails', 'profile'));
     }
 
     public function logout()
@@ -366,7 +369,7 @@ class CustomerController extends Controller
 
 
                 $intendedUrl = Session::get('url.intended');
-                $profile = route('customer.profile');
+                $profile = route('customer.matches');
                 return redirect()->intended($intendedUrl ?? $profile);
             } else {
                 Customer::create([
@@ -377,12 +380,22 @@ class CustomerController extends Controller
                 ]);
                 $customer = Customer::where('email', $user->email)->first();
                 Auth::guard('customer')->login($customer);
-                return redirect()->route('customer.profile');
+                return redirect()->route('customer.matches');
             }
         } catch (Exception $e) {
             // dd($e);
             return redirect('auth/google');
         }
     }
+    public function getCustomerById(Request $request)
+    {
+        $customerId = $request->customer_id;
+        $customer = Customer::with('details')->where('customer_id', $customerId)->first();
 
+        if ($customer) {
+            return response()->json(['success' => true, 'data' => $customer]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Customer not found']);
+    }
 }
