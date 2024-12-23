@@ -181,13 +181,6 @@ class CustomerController extends Controller
 
             DB::commit();
             // if ('req_rel_manager' === 'yes') {
-            // if ('req_rel_manager' === 'yes') {
-
-            //     Mail::send('emails.notify_admin', $data, function ($message) {
-            //         $message->to('admin@example.com')
-            //             ->subject('Relationship Manager Request');
-            //     });
-            // }
             //     Mail::send('emails.notify_admin', $data, function ($message) {
             //         $message->to('admin@example.com')
             //             ->subject('Relationship Manager Request');
