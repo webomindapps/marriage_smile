@@ -5,13 +5,38 @@
                 <img src="{{ $customer->documents->first() ? asset('storage/' . $customer->documents->first()->image_url) : asset('frontend/assets/images/default.jpg') }}" 
                      class="img-fluid img-radi">
             </div>
-                
+
             <div class="col-lg-8">
 
                 <h4 class="pro-hea">Hi {{ $customer->name }}</h4>
-                <h6 class="profile-des">{{ $customer->customer_id }} <span class="co-editprofile"> <a
-                            href="{{ route('admin.customer.edit', $customer->id) }}" style="color: red;">View
-                            Dashboard</a>
+                <h6 class="profile-des">{{ $customer->customer_id }} <span class="co-editprofile">
+                        <div class="dropdown d-inline">
+                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                style="color: red;">Dashboard</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.customer.edit', $customer->id) }}">
+                                        Edit
+                                    </a>
+                                </li>
+                                <li>
+                                    {{-- <form action="{{ route('admin.customer.destroy', $customer->id) }}" method="POST"
+                                        class="d-inline">
+                                        @csrf
+                                        @method('DELETE') --}}
+                                        <button type="submit" class="dropdown-item"
+                                            onclick="return confirm('Are you sure you want to delete this customer?');">
+                                            Delete
+                                        </button>
+                                    {{-- </form> --}}
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"    >
+                                        Hold
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </span></h6>
 
             </div>

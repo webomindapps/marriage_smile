@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Frontend\CustomerController;
 use App\Http\Controllers\Frontend\MarriageController;
@@ -27,9 +28,9 @@ Route::post('customer/password-reset', [CustomerPasswordResetController::class, 
 Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
 Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
 Route::post('customer/{id}/edit', [CustomerController::class, 'update']);
-Route::get('customer/matches',[CustomerController::class,'matches'])->name('customer.matches');
-Route::get('customer/logout',[CustomerController::class,'logout'])->name('customer.logout');
-Route::get('customer/detail',[CustomerController::class,'detail'])->name('customer.details');
+Route::get('customer/matches', [CustomerController::class, 'matches'])->name('customer.matches');
+Route::get('customer/logout', [CustomerController::class, 'logout'])->name('customer.logout');
+Route::get('customer/detail', [CustomerController::class, 'detail'])->name('customer.details');
 Route::post('/customer-details', [CustomerController::class, 'getCustomerById']);
 
 
@@ -38,6 +39,10 @@ Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCall
 
 Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
 Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');
+
+//enquiry
+Route::get('enquiry', [EnquiryController::class, 'index'])->name('guest.enquiry');
+Route::post('enquiry', [EnquiryController::class, 'store']);
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');
@@ -56,13 +61,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('testimonial/delete/{id}', [TestimonialController::class, 'delete'])->name('testimonials.delete');
 
     //FAQ
-    Route::get('/faq', [FaqController::class,'index'])->name('faq');
-    Route::get('/faq/create',[FaqController::class,'create'])->name('faq.create');
-    Route::post('/faq/create',[FaqController::class,'store']);
-    Route::get('/faq/edit/{id}',[FaqController::class,'edit'])->name('faq.edit');
-    Route::post('/faq/edit/{id}',[FaqController::class,'update']);
-    Route::get('/faq/delete/{id}',[FaqController::class,'delete'])->name('faq.delete');
-    Route::post('faq/bulk',[FaqController::class,'bulk'])->name('faq.bulk');
+    Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+    Route::get('/faq/create', [FaqController::class, 'create'])->name('faq.create');
+    Route::post('/faq/create', [FaqController::class, 'store']);
+    Route::get('/faq/edit/{id}', [FaqController::class, 'edit'])->name('faq.edit');
+    Route::post('/faq/edit/{id}', [FaqController::class, 'update']);
+    Route::get('/faq/delete/{id}', [FaqController::class, 'delete'])->name('faq.delete');
+    Route::post('faq/bulk', [FaqController::class, 'bulk'])->name('faq.bulk');
 
     //Pages
     Route::get('pages', [PageController::class, 'index'])->name('pages');
@@ -71,10 +76,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('pages/create', [PageController::class, 'store'])->name('pages.create');
     Route::get('pages/{id}/edit', [PageController::class, 'edit'])->name('pages.edit');
     Route::post('pages/{id}/edit', [PageController::class, 'update']);
-    Route::get('pages/{id}/destroy', [PageController::class, 'destroy'])->name('pages.delete'); 
-    
+    Route::get('pages/{id}/destroy', [PageController::class, 'destroy'])->name('pages.delete');
+
     //user
     Route::get('user', [UserController::class, 'index'])->name('user');
-    Route::get('user/{id}/destroy', [UserController::class, 'destroy'])->name('user.delete'); 
+    Route::get('user/{id}/destroy', [UserController::class, 'destroy'])->name('user.delete');
 
 });

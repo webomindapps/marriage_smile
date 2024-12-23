@@ -488,8 +488,8 @@
                                     to Talk</option>
                                 <option value="Any Day" {{ old('preferreday') == 'Any Day' ? 'selected' : '' }}>Any Day
                                 </option>
-                                <option value="Select the day"
-                                    {{ old('preferreday') == 'Select the day' ? 'selected' : '' }}>Select the day</option>
+                                <option value="selectday"
+                                    {{ old('preferreday') == 'selectday' ? 'selected' : '' }}>Select the day</option>
                             </select>
                             @error('preferreday')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
@@ -825,7 +825,7 @@
             }
 
             const genderSelect = document.getElementById('gender');
-            const genderError = document.getElementById('genderError');
+            const genderError = document.getElementById('gendererror');
             if (genderSelect.value === "") {
                 genderError.classList.remove('d-none');
                 isValid = false;
@@ -861,7 +861,7 @@
                 annualincomeError.classList.add('d-none');
             }
 
-            const marritialstatusSelect = document.getElementById('marritalstatus');
+            const marritialstatusSelect = document.getElementById('marritialstatus');
             const marritialstatusError = document.getElementById('marritialstatuserror');
             if (marritialstatusSelect.value == "") {
                 marritialstatusError.classList.remove('d-none');
