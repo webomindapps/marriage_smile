@@ -16,6 +16,6 @@ class CustomerImage extends Model
     ];
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customers_id');
+        return $this->hasOne(Customer::class, 'customers_id');
     }
 }

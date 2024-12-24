@@ -33,6 +33,9 @@ Route::get('customer/logout', [CustomerController::class, 'logout'])->name('cust
 Route::get('customer/detail', [CustomerController::class, 'detail'])->name('customer.details');
 Route::post('/customer-details', [CustomerController::class, 'getCustomerById']);
 
+Route::post('/search-opposite-gender', [CustomerController::class, 'searchOppositeGender']);
+Route::get('/search-by-id/{id}', [CustomerController::class, 'searchById']);
+
 
 Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
 Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');

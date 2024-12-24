@@ -324,7 +324,7 @@
                         </div>
 
                         <div class="col-12 bi-ftre">
-                            <label>Upload Profile</label><br />
+                            <label>Upload Photo (Maximium 3 photos required)</label><br />
                             <input type="file" class="image-file" name="image_url[]" id="image_url" multiple
                                 accept="image/*">
                             <div id="image-preview-container" class="d-flex mt-3"></div>

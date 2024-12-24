@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Mail\CustomerRegister;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\CustomerDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -313,7 +314,7 @@ class CustomerController extends Controller
 
         if ($attempt) {
             $customer = Auth::guard('customer')->user();
-            return redirect()->route('customer.profile');
+            return redirect()->route('customer.matches');
         } else {
             $attempt = Auth::guard('customer')->attempt(['customer_id' => $request->email, 'password' => $request->password]);
             if ($attempt) {
@@ -338,15 +339,12 @@ class CustomerController extends Controller
     {
         $customer = Auth::guard('customer')->user();
 
-
-
         $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
 
-        $profiledetails = CustomerDetails::where('gender', $oppositeGender)->get();
-        $profile = Customer::all();
+        $profiledetails = CustomerDetails::with(['customer.documents'])->where('gender', $oppositeGender)->get();
 
 
-        return view('frontend.customer.matches', compact('profiledetails', 'profile'));
+        return view('frontend.customer.matches', compact('profiledetails'));
     }
 
     public function logout()
@@ -405,5 +403,40 @@ class CustomerController extends Controller
         }
 
         return response()->json(['success' => false, 'message' => 'Customer not found']);
+    }
+    public function searchOppositeGender(Request $request)
+    {
+        $customer = Auth::guard('customer')->user();
+        $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
+
+        $age = $request->input('age');
+        $maritalStatus = $request->input('marital_status');
+
+        $query = Customer::whereHas('details', function ($query) use ($oppositeGender, $age, $maritalStatus) {
+            $query->where('gender', $oppositeGender);
+
+            if ($age && $age !== "Doesn't Matter") {
+                [$ageStart, $ageEnd] = explode('-', $age);
+                $query->whereBetween('age', [(int)$ageStart, (int)$ageEnd]);
+            }
+
+            if ($maritalStatus && $maritalStatus !== "Doesn't Matter") {
+                $query->where('marital_status', $maritalStatus);
+            }
+        })
+            ->with('details') 
+            ->get();
+
+        return response()->json($query);
+    }
+    public function searchById($id)
+    {
+        $profile = Customer::with('details')->find($id);
+
+        if (!$profile) {
+            return response()->json(['message' => 'Profile not found.'], 404);
+        }
+
+        return response()->json($profile);
     }
 }
