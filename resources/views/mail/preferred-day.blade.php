@@ -31,10 +31,10 @@
                     <hr>
                     <h4> Customer name : {{ $customer->name }} <br />
                         Customer id: {{ $customer->customer_id }}<br />
-                        Gender : {{ $customer->gender }}<br />
+                        Gender : {{ $customer->details->gender }}<br />
                         Phone No : {{ $customer->phone }}<br />
                         Email : {{$customer->email }}<br />
-                        Day and Timmings : {{ $customer->gender }}
+                        Day and Timmings : {{ $customer->details->timings }}
                     </h4>
                     <h5 class="">{{ $customer->name }} has requsted for the Preferred Day and Time To Meet the Bride/Groom.</h5>
 

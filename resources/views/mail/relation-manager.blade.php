@@ -30,7 +30,7 @@
                 <td style="padding: 15px 15px;" valign="top">
                     <hr>
                     <h4> Customer name : {{ $customer->name }} ,,<br /> Customer id: {{ $customer->customer_id }}<br />
-                        Gender : {{ $customer->gender }}
+                        Gender : {{ $customer->details->gender }}
                     </h4>
                     <h5 class="">{{ $customer->name }} has requsted for the Relationship Manager  .</h5>
 

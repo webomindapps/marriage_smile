@@ -733,7 +733,7 @@
     <script>
         document.getElementById('mother_tongue').addEventListener('change', function() {
             const otherMotherTongueField = document.getElementById('other-mothertongue-field');
-            if (this.value === 'others') {
+            if (this.value === 'Others') {
                 otherMotherTongueField.style.display = 'block';
             } else {
                 otherMotherTongueField.style.display = 'none';

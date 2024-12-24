@@ -179,11 +179,11 @@ class CustomerController extends Controller
             }
 
             DB::commit();
-            if ($req_rel_manager === 'yes') {
-                Mail::to('admin@example.com')->send(new RelationManger($customer));
+            if ($req_rel_manager === 'Yes') {
+                Mail::to('sunil@webomindapps.com')->send(new RelationManger($customer));
             }
             if ($timings) {
-                Mail::to('admin@example.com')->send(new PreferredDay($customer));
+                Mail::to('sunil@webomindapps.com')->send(new PreferredDay($customer));
             }
             Mail::to($request->email)->send(new CustomerRegister($customer));
 
