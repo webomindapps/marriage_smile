@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers\Frontend;
 
-
+use Exception;
+use Carbon\Carbon;
+use App\Models\Customer;
+use App\Mail\PreferredDay;
+use App\Mail\RelationManger;
 use Illuminate\Http\Request;
 use App\Mail\CustomerRegister;
-use App\Models\Customer;
-use App\Models\CustomerDetails;
-use App\Models\CustomerImage;
-use Carbon\Carbon;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\CustomerDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\DB as FacadesDB;
 
 class CustomerController extends Controller
 {
@@ -39,8 +38,8 @@ class CustomerController extends Controller
             'mother_tongue' => 'required|string',
             'caste' => 'required|string',
             'gotra' => 'required|string',
-            'sun_star' => 'nullable|string',
-            'birth_star' => 'nullable|string',
+            'sun_star' => 'required|string',
+            'birth_star' => 'required|string',
             'annual_income' => 'required',
             'company_name' => 'required|string',
             'experience' => 'required|string',
@@ -140,10 +139,9 @@ class CustomerController extends Controller
                 'timings',
                 'preferred_contact_no',
                 'contact_related_to',
-                'no_of_children',
-                'other_mothertongue',
-                'other_qualification',
             ]);
+            $req_rel_manager = $request->input('req_rel_manager');
+            $timings = $request->input('timings');
 
             $customerDetailsData['customers_id'] = $customer->id;
 
@@ -181,13 +179,12 @@ class CustomerController extends Controller
             }
 
             DB::commit();
-            // if ('req_rel_manager' === 'yes') {
-
-            //     Mail::send('emails.notify_admin', $data, function ($message) {
-            //         $message->to('admin@example.com')
-            //             ->subject('Relationship Manager Request');
-            //     });
-            // }
+            if ($req_rel_manager === 'Yes') {
+                Mail::to('sunil@webomindapps.com')->send(new RelationManger($customer));
+            }
+            if ($timings) {
+                Mail::to('sunil@webomindapps.com')->send(new PreferredDay($customer));
+            }
             Mail::to($request->email)->send(new CustomerRegister($customer));
 
             return redirect()->route('customer.login')->with('verify', 'Customer registered successfully');
@@ -205,7 +202,10 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $customer = Customer::find($id);
-
+        // dd($customer);
+        // if (!$customer) {
+        //     return redirect()->route('admin.customer.index')->with('error', 'Customer not found.');
+        // }
 
         return view('frontend.customer.update', compact('customer'));
     }
@@ -314,12 +314,12 @@ class CustomerController extends Controller
 
         if ($attempt) {
             $customer = Auth::guard('customer')->user();
-            return redirect()->route('customer.profile');
+            return redirect()->route('customer.matches');
         } else {
             $attempt = Auth::guard('customer')->attempt(['customer_id' => $request->email, 'password' => $request->password]);
             if ($attempt) {
                 $customer = Auth::guard('customer')->user();
-                return redirect()->route('customer.profile');
+                return redirect()->route('customer.matches');
             }
         }
 
@@ -339,15 +339,13 @@ class CustomerController extends Controller
     {
         $customer = Auth::guard('customer')->user();
 
+        $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
+
+        $profiledetails = CustomerDetails::with(['customer.documents'])->where('gender', $oppositeGender)->get();
 
 
-        $oppositeGender = $customer->gender === 'male' ? 'female' : 'male';
-
-        $profiles = Customer::where('gender', $oppositeGender)->get();
-
-        return view('frontend.customer.matches', compact('profiles'));
+        return view('frontend.customer.matches', compact('profiledetails'));
     }
-
 
     public function logout()
     {
@@ -355,20 +353,90 @@ class CustomerController extends Controller
         return redirect()->route('customer.login');
     }
 
-
     public function detail()
     {
         return view('frontend.customer.profile-detail');
     }
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        try {
+            $user = Socialite::driver('google')->user();
+            $customer = Customer::where('email', $user->email)->first();
+
+            if ($customer) {
+                $customer->update(['email_verified_at' => Carbon::now()]);
+                Auth::guard('customer')->login($customer);
+
+
+
+                $intendedUrl = Session::get('url.intended');
+                $profile = route('customer.matches');
+                return redirect()->intended($intendedUrl ?? $profile);
+            } else {
+                Customer::create([
+                    'name' => $user->user['given_name'],
+                    'lastname' => $user->user['family_name'],
+                    'email' => $user->email,
+                    'email_verified_at' => Carbon::now()
+                ]);
+                $customer = Customer::where('email', $user->email)->first();
+                Auth::guard('customer')->login($customer);
+                return redirect()->route('customer.matches');
+            }
+        } catch (Exception $e) {
+            // dd($e);
+            return redirect('auth/google');
+        }
+    }
     public function getCustomerById(Request $request)
     {
-        $customerId = $request->input('customer_id');
-        $customer = Customer::where('customer_id', $customerId)->first();
+        $customerId = $request->customer_id;
+        $customer = Customer::with('details')->where('customer_id', $customerId)->first();
 
         if ($customer) {
             return response()->json(['success' => true, 'data' => $customer]);
         }
 
         return response()->json(['success' => false, 'message' => 'Customer not found']);
+    }
+    public function searchOppositeGender(Request $request)
+    {
+        $customer = Auth::guard('customer')->user();
+        $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
+
+        $age = $request->input('age');
+        $maritalStatus = $request->input('marital_status');
+
+        $query = Customer::whereHas('details', function ($query) use ($oppositeGender, $age, $maritalStatus) {
+            $query->where('gender', $oppositeGender);
+
+            if ($age && $age !== "Doesn't Matter") {
+                [$ageStart, $ageEnd] = explode('-', $age);
+                $query->whereBetween('age', [(int)$ageStart, (int)$ageEnd]);
+            }
+
+            if ($maritalStatus && $maritalStatus !== "Doesn't Matter") {
+                $query->where('marital_status', $maritalStatus);
+            }
+        })
+            ->with('details') 
+            ->get();
+
+        return response()->json($query);
+    }
+    public function searchById($id)
+    {
+        $profile = Customer::with('details')->find($id);
+
+        if (!$profile) {
+            return response()->json(['message' => 'Profile not found.'], 404);
+        }
+
+        return response()->json($profile);
     }
 }

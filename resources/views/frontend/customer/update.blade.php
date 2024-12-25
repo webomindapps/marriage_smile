@@ -8,7 +8,7 @@
     <section class="register-f">
         <div class="container">
             <h2 class="register-h">
-                Let's Sign Up!
+              My Dashboard
             </h2>
             <div class="row big-y">
                 <div class="col-md-8 bg-col">
@@ -110,21 +110,7 @@
                             <input type="email" class="form-control" id="email" name="email"
                                 value="{{ $customer->email }}" placeholder="Email id ">
                         </div>
-                        <div class="col-6 position-relative">
-                            <input type="password" class="form-control input-password" id="password" name="password"
-                                placeholder="Enter Password" value="{{ $customer->password }}">
-                            <span class="login-pass toggle-password">
-                                <i class="bx bx-hide"></i>
-                            </span>
-                        </div>
-
-                        <div class="col-6 position-relative">
-                            <input type="password" class="form-control input-password" id="conf_password"
-                                name="conf_password" placeholder="Enter Confirm Password">
-                            <span class="login-pass toggle-password">
-                                <i class="bx bx-hide"></i>
-                            </span>
-                        </div>
+                       
 
 
                         <div class="col-6">
