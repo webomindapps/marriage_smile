@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Validation\ValidationException;
 
 class CustomerController extends Controller
 {
@@ -314,6 +313,8 @@ class CustomerController extends Controller
 
         if ($attempt) {
             $customer = Auth::guard('customer')->user();
+            $customer->last_login_time = Carbon::now();
+            $customer->save();
             return redirect()->route('customer.matches');
         } else {
             $attempt = Auth::guard('customer')->attempt(['customer_id' => $request->email, 'password' => $request->password]);
