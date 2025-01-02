@@ -15,6 +15,7 @@ class Customer extends Authenticatable
         'phone',
         'conf_password',
         'email_verified_at',
+        'last_login_time',
     ];
 
     public function details()
