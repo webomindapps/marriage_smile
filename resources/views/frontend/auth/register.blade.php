@@ -19,7 +19,7 @@
                         @csrf
                         <h5 class="h5-find pd-1">About Myself —In Detail </h5>
                         <div class="col-6 position-relative required-field">
-                            <select class="form-control" id="nationality" name="nationality" placeholder="nationality">
+                            <select class="form-select" id="nationality" name="nationality" placeholder="nationality">
                                 <option value="" disabled {{ old('nationality') ? '' : 'selected' }}>Select
                                     Nationality</option>
                                 <option value="Indian" {{ old('nationality') == 'Indian' ? 'selected' : '' }}>Indian
@@ -35,7 +35,7 @@
 
 
                         <div class="col-6">
-                            <select class="form-control" id="religion" name="religion" placeholder="Religion">
+                            <select class="form-select" id="religion" name="religion" placeholder="Religion">
                                 <option value="" disabled {{ old('religion') ? '' : 'selected' }}>Select Religion
                                 </option>
                                 <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="col-6">
-                            <select class="form-control" id="gender" name="gender" value="{{ old('gender') }}"
+                            <select class="form-select" id="gender" name="gender" value="{{ old('gender') }}"
                                 placeholder="Gender">
                                 <option value=""disabled selected>Select Gender</option>
                                 <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
@@ -85,7 +85,7 @@
                         </div>
 
                         <div class="col-6">
-                            <select class="form-control" id="qualification" name="qualification" placeholder="qualification"
+                            <select class="form-select" id="qualification" name="qualification" placeholder="qualification"
                                 required>
                                 <option value="" disabled {{ old('qualification') ? '' : 'selected' }}>Select
                                     Qualification</option>
@@ -145,7 +145,7 @@
 
 
                         <div class="col-6">
-                            <select class="form-control" id="mother_tongue" name="mother_tongue"
+                            <select class="form-select" id="mother_tongue" name="mother_tongue"
                                 placeholder="Mother Tongue" required>
                                 <option value="" disabled {{ old('mother_tongue') ? '' : 'selected' }}>Select Mother
                                     Tongue</option>
@@ -215,7 +215,7 @@
                             }
                             ?>
 
-                            <select name="annual_income" class="form-control" id="annual_income" required>
+                            <select name="annual_income" class="form-select" id="annual_income" required>
                                 <option value="" disabled {{ old('annual_income') ? '' : 'selected' }}>Select Annual
                                     Income</option>
                                 @foreach ($incomeRanges as $range)
@@ -466,11 +466,13 @@
                         <div class="col-md-12">
                             <select id="asset_value" name="asset_value" class="form-select" required>
                                 <option selected>Asset Value </option>
-                                <option value="{{ old('asset_value') }} == '5lakh - 10lakh' ? 'selected' : ">5lakh -
+                                <option value="'5lakh - 10lakh"
+                                    {{ old('asset_value') == '5lakh - 10lakh' ? 'selected' : '' }}>5lakh -
                                     10lakh</option>
-                                <option value="{{ old('asset_value') }} == '10lakh - 20lakh' ? 'selected' : ">10lakh -
+                                <option value="10lakh - 20lakh"
+                                    {{ old('asset_value') == '10lakh - 20lakh' ? 'selected' : '' }}>10lakh -
                                     20lakh</option>
-                                <option value="{{ old('asset_value') }} == 'Will Disclose Later' ? 'selected' : ">Will
+                                <option value="Will Disclose Later"{{ old('asset_value') == 'Will Disclose Later' ? 'selected' : ''}}>Will
                                     Disclose Later</option>
                                 @error('asset_value')
                                     <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
@@ -488,8 +490,8 @@
                                     to Talk</option>
                                 <option value="Any Day" {{ old('preferreday') == 'Any Day' ? 'selected' : '' }}>Any Day
                                 </option>
-                                <option value="selectday"
-                                    {{ old('preferreday') == 'selectday' ? 'selected' : '' }}>Select the day</option>
+                                <option value="selectday" {{ old('preferreday') == 'selectday' ? 'selected' : '' }}>
+                                    Select the day</option>
                             </select>
                             @error('preferreday')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>

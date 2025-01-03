@@ -8,7 +8,7 @@
     <section class="register-f">
         <div class="container">
             <h2 class="register-h">
-              My Dashboard
+                My Dashboard
             </h2>
             <div class="row big-y">
                 <div class="col-md-8 bg-col">
@@ -24,9 +24,10 @@
                             </select>
                         </div>
                         <div class="col-6">
-                            <select class="form-control" id="religion" name="religion" placeholder="Religion">
+                            <select class="form-control" id="religion" name="religion">
                                 <option value=""disabled selected>Select Religion</option>
-                                <option value="hindu" {{ $customer->religion == 'hindu' ? 'selected' : '' }}>Hindu</option>
+                                <option value="Hindu" {{ $customer->details->religion == 'Hindu' ? 'selected' : '' }}>Hindu
+                                </option>
 
                             </select>
                         </div>
@@ -45,12 +46,9 @@
                             </select>
                         </div>
                         <div class="col-6 position-relative">
-                            <div class="form-floating mb-3">
-                                <input type="text" name="dob" class="form-control" placeholder="DOB"
-                                    onfocus="(this.type='date')" onblur="(this.type='text')" id="dob"
-                                    autocomplete="off" value="{{ $customer->dob }}">
-                                <label for="dob">DOB</label>
-                            </div>
+                            <input type="text" name="dob" class="form-control" placeholder="DOB"
+                                onfocus="(this.type='date')" onblur="if(this.value===''){this.type='text'}" id="dob"
+                                autocomplete="off" value="{{ old('dob', $customer->details->dob) }}" required>
                         </div>
 
                         <div class="col-6">
@@ -58,7 +56,8 @@
                                 <option value="" disabled>Select Mother Tongue</option>
                                 @foreach (['kannada', 'tamil', 'telugu', 'malayalam', 'hindi'] as $tongue)
                                     <option value="{{ $tongue }}"
-                                        {{ $customer->mother_tongue == $tongue ? 'selected' : '' }}>{{ ucfirst($tongue) }}
+                                        {{ $customer->details->mother_tongue == $tongue ? 'selected' : '' }}>
+                                        {{ ucfirst($tongue) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -68,38 +67,35 @@
                                 <option value="" disabled>Caste</option>
                                 @foreach (['shetty', 'gowda', 'reddy', 'brahmin', 'Lingayits', 'Vyshas', 'Yadavas'] as $caste)
                                     <option value="{{ $caste }}"
-                                        {{ $customer->caste == $caste ? 'selected' : '' }}>{{ ucfirst($caste) }}</option>
+                                        {{ $customer->details->caste == $caste ? 'selected' : '' }}>{{ ucfirst($caste) }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-6">
-                            <input type="text" class="form-control" id="sub_caste" name="sub_caste"
-                                value="{{ $customer->sub_caste }}" placeholder="Sub Caste ">
-                        </div>
-                        <div class="col-6">
                             <input type="text" class="form-control" id="gotra" name="gotra"
-                                value="{{ $customer->gotra }}" placeholder="Gothra">
+                                value="{{ $customer->details->gotra }}" placeholder="Gothra">
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="sun_star" name="sun_star"
-                                value="{{ $customer->sun_star }}" placeholder="Sunstar">
+                                value="{{ $customer->details->sun_star }}" placeholder="Sunstar">
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="birth_star" name="birth_star"
-                                value="{{ $customer->birth_star }}" placeholder="Birth Star">
+                                value="{{ $customer->details->birth_star }}" placeholder="Birth Star">
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="annual_income" name="annual_income"
-                                value="{{ $customer->annual_income }}" placeholder="Annual Income">
+                                value="{{ $customer->details->annual_income }}" placeholder="Annual Income">
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="company_name" name="company_name"
-                                value="{{ $customer->company_name }}" placeholder="Company Name">
+                                value="{{ $customer->details->company_name }}" placeholder="Company Name">
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="experience" name="experience"
-                                value="{{ $customer->experience }}" placeholder="Working Experience">
+                                value="{{ $customer->details->experience }}" placeholder="Working Experience">
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" id="phone" name="phone" minlength="10"
@@ -110,32 +106,32 @@
                             <input type="email" class="form-control" id="email" name="email"
                                 value="{{ $customer->email }}" placeholder="Email id ">
                         </div>
-                       
+
 
 
                         <div class="col-6">
                             <input type="text" class="form-control" id="aadhar_no" name="aadhar_no"
-                                value="{{ $customer->aadhar_no }}" placeholder="AADHAR NO">
+                                value="{{ $customer->details->aadhar_no }}" placeholder="AADHAR NO">
                         </div>
-                        <div class="col-8">
+                        <div class="col-6">
                             <div id="hobbies-container">
                                 <div class="hobby-row">
-                                    <input type="text" class="form-control" name="hobbies[]" placeholder="Hobbies"
-                                        value="{{ $customer->hobbies }}">
+                                    <input type="text" class="form-control" name="hobbies" placeholder="Hobbies"
+                                        value="{{ $customer->details->hobbies }}">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <button type="button" id="add-hobby-btn" class="btn">Add Hobby</button>
-                        </div>
-                        <div class="col-12">
+
+                        <div class="col-6">
                             <input type="url" class="form-control" id="facebook_profile" name="facebook_profile"
-                                placeholder="Facebook Profile / Insta Profile" value="{{ $customer->facebook_profile }}">
+                                placeholder="Facebook Profile / Insta Profile"
+                                value="{{ $customer->details->facebook_profile }}">
                         </div>
                         <div class="col-12 bi-ftre">
-                            <label>Horoscope</label><br />
-                            <input type="file" id="image_path" name="image_path"
-                                value="{{ $customer->image_path }}">
+                            <img src="{{ asset('storage/' . $customer->documents->first()->image_url) }}" height="100px"
+                                width="100px">
+                            <label> Update Horoscope </label><br />
+                            <input type="file" id="image_path" name="image_path">
                         </div>
 
                         <div class="col-md-12">
@@ -198,14 +194,7 @@
                         </div>
 
 
-                        <div class="col-md-12">
-                            <select id="house_status" name="house_status" class="form-select">
-                                <option selected>House Status </option>
-                                <option>Own House</option>
-                                <option>Rent House</option>
-                                <option>Apartment</option>
-                            </select>
-                        </div>
+
                         <div class="col-md-12">
                             <select id="asset_value" name="asset_value" class="form-select">
                                 <option selected>Asset Value </option>
@@ -276,27 +265,7 @@
             </div>
         </div>
     </section>
-    <script>
-        const container = document.getElementById("hobbies-container");
-        const addButton = document.getElementById("add-hobby-btn");
-        let hobbyCount = 1;
-        const maxRows = 2;
-        addButton.addEventListener("click", function() {
-            if (hobbyCount < maxRows) {
-                hobbyCount++;
-                const newRow = document.createElement("div");
-                newRow.classList.add("hobby-row");
-                newRow.innerHTML = `
-                    <input type="text" class="form-control" name="hobbies[]" value="{{ $customer->hobbies }}" placeholder="Hobbies">
-                `;
-                container.appendChild(newRow);
-            }
 
-            if (hobbyCount >= maxRows) {
-                addButton.disabled = true;
-            }
-        });
-    </script>
     <script>
         const maritalStatus = document.getElementById("marritialstatus");
         const childrenContainer = document.getElementById("children-container");

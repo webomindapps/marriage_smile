@@ -200,7 +200,7 @@ class CustomerController extends Controller
 
     public function edit($id)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::with('documents')->find($id);
         // dd($customer);
         // if (!$customer) {
         //     return redirect()->route('admin.customer.index')->with('error', 'Customer not found.');
