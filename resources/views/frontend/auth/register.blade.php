@@ -17,7 +17,7 @@
                     <form class="row" id="registrationForm" action="{{ route('customer.store') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
-                        <h5 class="h5-find pd-1">About Myself —In Detail </h5>
+                        <h5 class="h5-find pd-1"><i class="fas fa-user-circle"></i> About Myself —In Detail </h5>
                         <div class="col-6 position-relative required-field">
                             <select class="form-select" id="nationality" name="nationality" placeholder="nationality">
                                 <option value="" disabled {{ old('nationality') ? '' : 'selected' }}>Select
@@ -375,7 +375,7 @@
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
-                        <h5 class="h5-find pd-2">My Family Details </h5>
+                        <h5 class="h5-find pd-2"> <i class="fas fa-users"></i> My Family Details </h5>
 
                         <div class="col-6">
                             <input type="text" class="form-control" id="father_name" name="father_name"
@@ -472,7 +472,9 @@
                                 <option value="10lakh - 20lakh"
                                     {{ old('asset_value') == '10lakh - 20lakh' ? 'selected' : '' }}>10lakh -
                                     20lakh</option>
-                                <option value="Will Disclose Later"{{ old('asset_value') == 'Will Disclose Later' ? 'selected' : ''}}>Will
+                                <option
+                                    value="Will Disclose Later"{{ old('asset_value') == 'Will Disclose Later' ? 'selected' : '' }}>
+                                    Will
                                     Disclose Later</option>
                                 @error('asset_value')
                                     <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
@@ -483,7 +485,7 @@
                                 Please select the Asset Value
                             </div>
                         </div>
-                        <h5 class="h5-find pd-2">How I Want to Talk to My Matches</h5>
+                        <h5 class="h5-find pd-2"><i class="fas fa-comment-dots"></i> How I Want to Talk to My Matches</h5>
                         <div class="col-md-12">
                             <select id="preferreday" name="preferreday" class="form-select" required>
                                 <option value="" disabled {{ old('preferreday') ? '' : 'selected' }}>Preferred Day
