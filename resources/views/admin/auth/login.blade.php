@@ -2,7 +2,8 @@
     <div class="row">
         <div class="col-lg-5 mx-auto my-5">
             <div class="col-lg-12 text-center">
-                <img src="{{ asset('frontend/assets/images/logo.png') }}" class="img-fluid logo_img" alt="">
+                <img src="{{ asset('frontend/assets/images/logo.png') }}" class="img-fluid logo_img" style="height: 70px"
+                    alt="">
             </div>
             <div class="login-card bg-white shadow-sm">
                 <form action="{{ route('admin.login') }}" method="POST" enctype="multipart/form-data">

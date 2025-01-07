@@ -32,6 +32,7 @@
                                 <li><a href="">Supports</a></li>
                                 <li><a href="">Terms & Conditon</a></li>
                                 <li><a href="">Privacy Policy</a></li>
+                                <li><a href="{{route('pricing')}}">Pricing</a></li>
 
                             </ul>
                         </div>

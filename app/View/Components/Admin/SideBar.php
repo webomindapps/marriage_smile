@@ -46,6 +46,24 @@ class SideBar extends Component
                 ],
             ]
         ],
+        [
+            'title' => 'Masters',
+            'icon' => 'fal fa-cogs',
+            'isSubMenu' => true,
+            'name' => 'masters',
+            'subMenus' => [
+                [
+                    'title' => 'Features',
+                    'icon' => 'bx bx-chevron-right',
+                    'route' => 'admin.features',
+                ],
+                [
+                    'title' => 'Plans',
+                    'icon' => 'bx bx-chevron-right',
+                    'route' => 'admin.plans',
+                ],
+            ]
+        ],
 
         // [
         //     'title' => 'CMS',
@@ -59,34 +77,6 @@ class SideBar extends Component
         //             'route' => 'admin.cms.pages.index',
         //         ],
 
-        //     ]
-        // ],
-        // [
-        //     'title' => 'Masters',
-        //     'icon' => 'fal fa-cogs',
-        //     'isSubMenu' => true,
-        //     'name' => 'masters',
-        //     'subMenus' => [
-        //         [
-        //             'title' => 'Settings',
-        //             'icon' => 'bx bx-chevron-right',
-        //             'route' => 'admin.masters.settings.index',
-        //         ],
-        //         [
-        //             'title' => 'Emoji',
-        //             'icon' => 'bx bx-chevron-right',
-        //             'route' => 'admin.masters.emoji.index',
-        //         ],
-        //         [
-        //             'title' => 'Subscription Plans',
-        //             'icon' => 'bx bx-chevron-right',
-        //             'route' => 'admin.masters.subscription-plans.index',
-        //         ],
-        //         [
-        //             'title' => 'Weekly Tips',
-        //             'icon' => 'bx bx-chevron-right',
-        //             'route' => 'admin.masters.weekly-tips.index',
-        //         ],
         //     ]
         // ],
     ];

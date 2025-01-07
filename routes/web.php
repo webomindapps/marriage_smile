@@ -6,10 +6,14 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\EnquiryController;
+use App\Http\Controllers\Admin\FeatureController;
+use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\Frontend\CustomerController;
 use App\Http\Controllers\Frontend\MarriageController;
 use App\Http\Controllers\frontend\CustomerPasswordResetController;
+use App\Http\Controllers\SubscriptionController;
 
 Route::get('/', [MarriageController::class, 'index']);
 
@@ -46,6 +50,16 @@ Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCall
 //enquiry
 Route::get('enquiry', [EnquiryController::class, 'index'])->name('guest.enquiry');
 Route::post('enquiry', [EnquiryController::class, 'store']);
+
+// Friend Request
+Route::get('/friend-requests', [FriendRequestController::class, 'index'])->name('friend.requests');
+Route::get('/friend-request/{id}', [FriendRequestController::class, 'store'])->name('send.friend.request');
+Route::get('/accept-request/{id}', [FriendRequestController::class, 'accept'])->name('accept.request');
+Route::get('/reject-request/{id}', [FriendRequestController::class, 'reject'])->name('reject.request');
+
+// pricing
+Route::get('/pricing', [MarriageController::class, 'pricingView'])->name('pricing');
+Route::get('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');
@@ -85,4 +99,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('user', [UserController::class, 'index'])->name('user');
     Route::get('user/{id}/destroy', [UserController::class, 'destroy'])->name('user.delete');
 
+    // Features
+    Route::get('features', [FeatureController::class, 'index'])->name('features');
+    Route::get('feature/create', [FeatureController::class, 'create'])->name('feature.create');
+    Route::post('feature/create', [FeatureController::class, 'store']);
+    Route::get('feature/{id}/edit', [FeatureController::class, 'edit'])->name('feature.edit');
+    Route::post('feature/{id}/edit', [FeatureController::class, 'update']);
+
+    // Plans
+    Route::get('plans', [PlanController::class, 'index'])->name('plans');
+    Route::get('plan/create', [PlanController::class, 'create'])->name('plan.create');
+    Route::post('plan/create', [PlanController::class, 'store']);
+    Route::get('plan/{id}/edit', [PlanController::class, 'edit'])->name('plan.edit');
+    Route::post('plan/{id}/edit', [PlanController::class, 'update']);
 });

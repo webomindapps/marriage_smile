@@ -35,15 +35,16 @@
                             </ul>
                         </div>
                         @if ($customer->last_login_time)
-                        <p class="last-login btn btn-sm btn-outline-secondary">
-                            Last login: {{ \Carbon\Carbon::parse($customer->last_login_time)->format('jS M g:i A') }}
-                        </p>
-                    @else
-                        <p class="last-login btn btn-sm btn-outline-secondary">
-                            Last login: Not Available
-                        </p>
-                    @endif
-                    
+                            <p class="last-login btn btn-sm btn-outline-secondary">
+                                Last login:
+                                {{ \Carbon\Carbon::parse($customer->last_login_time)->format('jS M g:i A') }}
+                            </p>
+                        @else
+                            <p class="last-login btn btn-sm btn-outline-secondary">
+                                Last login: Not Available
+                            </p>
+                        @endif
+
                     </span>
                 </h6>
 
@@ -59,7 +60,9 @@
             <a class="nav-link" aria-current="page" href="{{ route('customer.matches') }}"> Profiles <i
                     class="fa fa-chevron-right chev-icon"></i></a>
             <a class="nav-link" href="#">Short Listed Matches <i class="fa fa-chevron-right chev-icon4"></i></a>
-            <a class="nav-link" href="#">Received Requests <i class="fa fa-chevron-right chev-icon4"></i></a>
+            <a class="nav-link" href="{{ route('friend.requests') }}">
+                Received Requests <i class="fa fa-chevron-right chev-icon4"></i>
+            </a>
         </nav>
         <!-- //// -->
     </div>

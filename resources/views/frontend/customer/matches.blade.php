@@ -167,13 +167,15 @@
                                 <div class="pink-bg-list">
                                     <ul class="list-none col-li">
                                         <li>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                class="lucide lucide-send">
-                                                <path d="m22 2-7 20-4-9-9-4Z" />
-                                                <path d="M22 2 11 13" />
-                                            </svg> <span>Send Request</span>
+                                            <a href="{{ route('send.friend.request', $item->id) }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-send">
+                                                    <path d="m22 2-7 20-4-9-9-4Z" />
+                                                    <path d="M22 2 11 13" />
+                                                </svg> <span>Send Request</span>
+                                            </a>
                                         </li>
                                         <li>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
@@ -410,9 +412,9 @@
                     </div> --}}
             </div>
             <!-- <div class="col-lg-2">
-                                                                                        <img src="img/advertise.jpg" class="img-fluid clas-to1">
-                                                                                         <img src="img/advert2.jpg" class="img-fluid clas-to1">
-                                                                                    </div> -->
+                                                                                                    <img src="img/advertise.jpg" class="img-fluid clas-to1">
+                                                                                                     <img src="img/advert2.jpg" class="img-fluid clas-to1">
+                                                                                                </div> -->
         </div>
         </div>
 
