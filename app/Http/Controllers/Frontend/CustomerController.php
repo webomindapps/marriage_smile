@@ -42,6 +42,7 @@ class CustomerController extends Controller
             'annual_income' => 'required',
             'company_name' => 'required|string',
             'experience' => 'required|string',
+            'expectations' => 'nullable',
             'phone' => 'required|numeric',
             'email' => 'required|email|unique:customers,email',
             'password' => 'required|string|same:conf_password',
@@ -201,11 +202,6 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $customer = Customer::find($id);
-        // dd($customer);
-        // if (!$customer) {
-        //     return redirect()->route('admin.customer.index')->with('error', 'Customer not found.');
-        // }
-
         return view('frontend.customer.update', compact('customer'));
     }
 
@@ -213,62 +209,123 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
 
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required|string',
-            'nationality' => 'required|string',
-            'religion' => 'required|string',
-            'qualification' => 'required|string',
-            'dob' => 'required|date',
-            'mother_tongue' => 'required|string',
-            'caste' => 'required|string',
-            'sub_caste' => 'required|string',
-            'gotra' => 'required|string',
-            'sun_star' => 'required|string',
-            'birth_star' => 'required|string',
-            'annual-income' => 'required|numeric',
-            'company_name' => 'required|string',
-            'experience' => 'required|string',
-            'phone' => 'required|numeric',
             'email' => 'required|email',
-            'password' => 'required|string|confirmed',
-            'aadhar_no' => 'required|numeric|digits:12',
-            'hobbies' => 'required|array',
-            'facebook_profile' => 'nullable|url',
-            'marritialstatus' => 'required|string',
-            'no_of_children' => 'nullable|integer',
-            'father_name' => 'required|string',
-            'mother_name' => 'required|string',
-            'father_occupation' => 'required|string',
-            'mother_occupation' => 'required|string',
-            'siblings' => 'required|string',
-            'locations' => 'required|string',
-            'permanent_locations' => 'required|string',
-            'house_status' => 'required|string',
-            'asset_value' => 'required|string',
-            'preferreday' => 'required|string',
-            'timings' => 'nullable|string',
-            'preferred_contact_no' => 'required|numeric',
-            'contact_related_to' => 'required|string',
+            'phone' => 'required|numeric',
+            'image_path' => 'nullable|image',
+            'image_url.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
+
         DB::beginTransaction();
 
         try {
-            $customer->update($validatedData);
+            // Update customer basic details
+            $customerData = $request->only(['name', 'email', 'phone']);
+            $customer->update($customerData);
 
+            // Update documents
+            if ($request->hasFile('image_url')) {
+                foreach ($request->file('image_url') as $imageUrl) {
+                    $path = $imageUrl->store('documents/profiles', 'public');
+                    $customer->documents()->create([
+                        'customers_id' => $customer->id,
+                        'image_url' => $path,
+                    ]);
+                }
+            }
+
+            // Update customer details
+            $customerDetailsData = $request->only([
+                'nationality',
+                'religion',
+                'gender',
+                'height',
+                'colour',
+                'qualification',
+                'dob',
+                'age',
+                'mother_tongue',
+                'caste',
+                'annual_income',
+                'company_name',
+                'experience',
+                'req_rel_manager',
+                'expectations',
+                'gotra',
+                'sun_star',
+                'birth_star',
+                'aadhar_no',
+                'hobbies',
+                'marritialstatus',
+                'father_name',
+                'mother_name',
+                'father_occupation',
+                'mother_occupation',
+                'siblings',
+                'locations',
+                'present_house_status',
+                'permanent_locations',
+                'permanent_house_status',
+                'asset_value',
+                'preferreday',
+                'timings',
+                'preferred_contact_no',
+                'contact_related_to',
+            ]);
+
+            $customerDetails = CustomerDetails::where('customers_id', $customer->id)->first();
+            // dd($customerDetails);
+            if (!$customerDetails) {
+                // If no record exists, you can create one or handle it as an error
+                return back()->with('error', 'Customer details not found. Please ensure they exist before updating.');
+            }
+
+            $customerDetails->update($customerDetailsData);
+            // Update image_path in customer details
             if ($request->hasFile('image_path')) {
                 $path = $request->file('image_path')->store('documents/horoscope', 'public');
-                $customer->update(['image_path' => $path]);
+                CustomerDetails::where('customers_id', $customer->id)->update(['image_path' => $path]);
+            }
+
+            // Update customer relations (children and siblings)
+            DB::table('customer_relations')->where('customers_id', $customer->id)->delete();
+
+            $i = 1;
+            while ($request->has("child_{$i}_gender")) {
+                $childData = [
+                    'customers_id' => $customer->id,
+                    'child_gender' => $request->input("child_{$i}_gender"),
+                    'child_age' => $request->input("child_{$i}_age"),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                DB::table('customer_relations')->insert($childData);
+                $i++;
+            }
+
+            $i = 1;
+            while ($request->has("sibling_{$i}_marital_status")) {
+                $siblingData = [
+                    'customers_id' => $customer->id,
+                    'sibling_maritial_status' => $request->input("sibling_{$i}_marital_status"),
+                    'sibling_age_relation' => $request->input("sibling_{$i}_age_relation"),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                DB::table('customer_relations')->insert($siblingData);
+                $i++;
             }
 
             DB::commit();
 
-            return redirect()->route('customer.profile')->with('verify', 'Customer Data Updated successfully');
-        } catch (Exception $e) {
+            return redirect()->route('customer.profile', $id)->with('success', 'Customer updated successfully');
+        } catch (\Exception $e) {
             DB::rollBack();
-
             return back()->with('error', 'An error occurred while updating the customer: ' . $e->getMessage());
         }
     }
+
     public function login()
     {
         return view('frontend.auth.login');
@@ -418,14 +475,14 @@ class CustomerController extends Controller
 
             if ($age && $age !== "Doesn't Matter") {
                 [$ageStart, $ageEnd] = explode('-', $age);
-                $query->whereBetween('age', [(int)$ageStart, (int)$ageEnd]);
+                $query->whereBetween('age', [(int) $ageStart, (int) $ageEnd]);
             }
 
             if ($maritalStatus && $maritalStatus !== "Doesn't Matter") {
                 $query->where('marital_status', $maritalStatus);
             }
         })
-            ->with('details') 
+            ->with('details')
             ->get();
 
         return response()->json($query);

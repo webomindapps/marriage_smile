@@ -34,16 +34,19 @@
                                 </li>
                             </ul>
                         </div>
-                        @if ($customer->last_login_time)
-                            <p class="last-login btn btn-sm btn-outline-secondary">
-                                Last login:
-                                {{ \Carbon\Carbon::parse($customer->last_login_time)->format('jS M g:i A') }}
-                            </p>
-                        @else
-                            <p class="last-login btn btn-sm btn-outline-secondary">
-                                Last login: Not Available
-                            </p>
-                        @endif
+                        <div class="mt-4">
+                            @if ($customer->last_login_time)
+                                <p class="last-login btn btn-sm btn-outline-secondary">
+                                    Last login:
+                                    {{ (new DateTime($customer->last_login_time))->setTimezone(new DateTimeZone('Asia/Kolkata'))->format('jS M g:i A') }}
+                                </p>
+                            @else
+                                <p class="last-login btn btn-sm btn-outline-secondary">
+                                    Last login: Not Available
+                                </p>
+                            @endif
+                        </div>
+
 
                     </span>
                 </h6>
