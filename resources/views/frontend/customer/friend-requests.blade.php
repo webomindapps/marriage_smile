@@ -16,7 +16,7 @@
                             <div class="border p-3 mb-3 d-flex rounded">
                                 <div class="picture">
                                     <img src="{{ $request->sender->documents->first() ? asset('storage/' . $request->sender->documents->first()->image_url) : asset('frontend/assets/images/default.jpg') }}"
-                                        class="img-fluid img-radi">
+                                        class="img-fluid img-radi" style="width: 60px; height: 60px;" alt="">
                                 </div>
                                 <div class="content">
                                     <p>{{ $request->sender?->name }}</p>

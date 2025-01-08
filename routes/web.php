@@ -17,49 +17,57 @@ use App\Http\Controllers\SubscriptionController;
 
 Route::get('/', [MarriageController::class, 'index']);
 
-Route::get('customer/register', [CustomerController::class, 'register'])->name('customer.register');
-Route::post('customer/store', [CustomerController::class, 'storecustomer'])->name('customer.store');
-Route::get('customer/login', [CustomerController::class, 'login'])->name('customer.login');
-Route::post('customer/login', [CustomerController::class, 'authenticate']);
-Route::get('customer/email-verify', [CustomerController::class, 'verify'])->name('customer.verify');
-Route::post('customer/email-verify', [CustomerController::class, 'sendVerifyMail']);
-Route::get('customer/email-verified', [CustomerController::class, 'verifyEmail'])->name('customer.email.verified');
-Route::get('forget-password', [CustomerController::class, 'forget'])->name('customer.forgot-password');
+Route::group(['middleware' => 'customer.guest'], function () {
+    Route::get('customer/register', [CustomerController::class, 'register'])->name('customer.register');
+    Route::post('customer/store', [CustomerController::class, 'storecustomer'])->name('customer.store');
 
-Route::post('forget-password', [CustomerPasswordResetController::class, 'forgetMail']);
-Route::get('customer/{token}/password-reset', [CustomerPasswordResetController::class, 'resetView'])->name('customer.reset.view');
-Route::post('customer/password-reset', [CustomerPasswordResetController::class, 'resetPassword'])->name('customer.password.reset');
-Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
-Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
-Route::post('customer/{id}/edit', [CustomerController::class, 'update']);
-Route::get('customer/matches', [CustomerController::class, 'matches'])->name('customer.matches');
-Route::get('customer/logout', [CustomerController::class, 'logout'])->name('customer.logout');
-Route::get('customer/detail', [CustomerController::class, 'detail'])->name('customer.details');
-Route::post('/customer-details', [CustomerController::class, 'getCustomerById']);
+    Route::get('customer/login', [CustomerController::class, 'login'])->name('customer.login');
+    Route::post('customer/login', [CustomerController::class, 'authenticate']);
+
+    Route::get('customer/email-verify', [CustomerController::class, 'verify'])->name('customer.verify');
+    Route::post('customer/email-verify', [CustomerController::class, 'sendVerifyMail']);
+    Route::get('customer/email-verified', [CustomerController::class, 'verifyEmail'])->name('customer.email.verified');
+
+    Route::get('forget-password', [CustomerController::class, 'forget'])->name('customer.forgot-password');
+    Route::post('forget-password', [CustomerPasswordResetController::class, 'forgetMail']);
+
+    Route::get('customer/{token}/password-reset', [CustomerPasswordResetController::class, 'resetView'])->name('customer.reset.view');
+    Route::post('customer/password-reset', [CustomerPasswordResetController::class, 'resetPassword'])->name('customer.password.reset');
+
+    Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
+    Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');
+
+    Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
+    Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');
+});
+
+Route::group(['middleware' => 'customer.auth'], function () {
+    Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+    Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
+    Route::post('customer/{id}/edit', [CustomerController::class, 'update']);
+    Route::get('customer/matches', [CustomerController::class, 'matches'])->name('customer.matches');
+    Route::get('customer/logout', [CustomerController::class, 'logout'])->name('customer.logout');
+    Route::get('customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.details');
+    Route::post('/customer-details', [CustomerController::class, 'getCustomerById']);
+
+    // Friend Request
+    Route::get('/friend-requests', [FriendRequestController::class, 'index'])->name('friend.requests');
+    Route::get('/friend-request/{id}', [FriendRequestController::class, 'store'])->name('send.friend.request');
+    Route::get('/accept-request/{id}', [FriendRequestController::class, 'accept'])->name('accept.request');
+    Route::get('/reject-request/{id}', [FriendRequestController::class, 'reject'])->name('reject.request');
+
+    // pricing
+    Route::get('/pricing', [MarriageController::class, 'pricingView'])->name('pricing');
+    Route::get('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
+});
 
 Route::post('/search-opposite-gender', [CustomerController::class, 'searchOppositeGender']);
 Route::get('/search-by-id/{id}', [CustomerController::class, 'searchById']);
 
 
-Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
-Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');
-
-Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
-Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');
-
 //enquiry
 Route::get('enquiry', [EnquiryController::class, 'index'])->name('guest.enquiry');
 Route::post('enquiry', [EnquiryController::class, 'store']);
-
-// Friend Request
-Route::get('/friend-requests', [FriendRequestController::class, 'index'])->name('friend.requests');
-Route::get('/friend-request/{id}', [FriendRequestController::class, 'store'])->name('send.friend.request');
-Route::get('/accept-request/{id}', [FriendRequestController::class, 'accept'])->name('accept.request');
-Route::get('/reject-request/{id}', [FriendRequestController::class, 'reject'])->name('reject.request');
-
-// pricing
-Route::get('/pricing', [MarriageController::class, 'pricingView'])->name('pricing');
-Route::get('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');

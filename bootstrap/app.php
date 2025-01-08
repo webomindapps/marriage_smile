@@ -27,6 +27,13 @@ return Application::configure(basePath: dirname(__DIR__))
             }
             return route('admin.login');
         });
+
+        $middleware->alias([
+            'customer.guest' => \App\Http\Middleware\CustomerRedirect::class,
+            'customer.auth'  => \App\Http\Middleware\CustomerAuthenticate::class,
+            'admin.auth'  => \App\Http\Middleware\AdminAuthenticate::class,
+            'valid.check'  => \App\Http\Middleware\ValidityCheck::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

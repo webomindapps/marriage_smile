@@ -195,10 +195,6 @@ class CustomerController extends Controller
         }
     }
 
-
-
-
-
     public function edit($id)
     {
         $customer = Customer::find($id);
@@ -411,9 +407,10 @@ class CustomerController extends Controller
         return redirect()->route('customer.login');
     }
 
-    public function detail()
+    public function detail($id)
     {
-        return view('frontend.customer.profile-detail');
+        $customer = CustomerDetails::with('customer')->find($id);
+        return view('frontend.customer.profile-detail', compact('customer'));
     }
     public function redirectToGoogle()
     {

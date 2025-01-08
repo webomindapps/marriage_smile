@@ -2,7 +2,7 @@
     <div class="profile-per">
         <div class="row">
             <div class="col-lg-4">
-                <img src="{{ $customer->documents->first() ? asset('storage/' . $customer->documents->first()->image_url) : asset('frontend/assets/images/default.jpg') }}"
+                <img src="{{ $customer->documents?->first() ? asset('storage/' . $customer->documents?->first()->image_url) : asset('frontend/assets/images/default.jpg') }}"
                     class="img-fluid img-radi">
             </div>
 
@@ -34,26 +34,23 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="mt-4">
-                            @if ($customer->last_login_time)
-                                <p class="last-login btn btn-sm btn-outline-secondary">
-                                    Last login:
-                                    {{ (new DateTime($customer->last_login_time))->setTimezone(new DateTimeZone('Asia/Kolkata'))->format('jS M g:i A') }}
-                                </p>
-                            @else
-                                <p class="last-login btn btn-sm btn-outline-secondary">
-                                    Last login: Not Available
-                                </p>
-                            @endif
-                        </div>
-
-
                     </span>
                 </h6>
 
 
             </div>
-
+            <div class="col-12">
+                <div class="mt-4">
+                    <p class="last-login btn btn-sm btn-outline-secondary w-100">
+                        @if ($customer->last_login_time)
+                            Last login:
+                            {{ (new DateTime($customer->last_login_time))->setTimezone(new DateTimeZone('Asia/Kolkata'))->format('jS M g:i A') }}
+                        @else
+                            Last login: Not Available
+                        @endif
+                    </p>
+                </div>
+            </div>
         </div>
         <hr>
         <!-- /////navigation vertical//// -->
