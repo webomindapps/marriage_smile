@@ -85,47 +85,41 @@
                         </div>
 
                         <div class="col-6">
-                            <select class="form-select" id="qualification" name="qualification" placeholder="qualification"
-                                required>
-                                <option value="" disabled {{ old('qualification') ? '' : 'selected' }}>Select
-                                    Qualification</option>
+                            <select class="form-select" id="qualification" name="qualification" required>
+                                <option value="" disabled {{ old('qualification') && old('qualification') !== 'Other' ? '' : 'selected' }}>
+                                    Select Qualification
+                                </option>
                                 <option value="BE" {{ old('qualification') == 'BE' ? 'selected' : '' }}>BE</option>
-                                <option value="B Com" {{ old('qualification') == 'B Com' ? 'selected' : '' }}>B Com
-                                </option>
+                                <option value="B Com" {{ old('qualification') == 'B Com' ? 'selected' : '' }}>B Com</option>
                                 <option value="B Sc" {{ old('qualification') == 'B Sc' ? 'selected' : '' }}>B Sc</option>
-                                <option value="B Tech" {{ old('qualification') == 'B Tech' ? 'selected' : '' }}>B Tech
-                                </option>
+                                <option value="B Tech" {{ old('qualification') == 'B Tech' ? 'selected' : '' }}>B Tech</option>
                                 <option value="BBA" {{ old('qualification') == 'BBA' ? 'selected' : '' }}>BBA</option>
                                 <option value="BCA" {{ old('qualification') == 'BCA' ? 'selected' : '' }}>BCA</option>
                                 <option value="M Sc" {{ old('qualification') == 'M Sc' ? 'selected' : '' }}>M Sc</option>
-                                <option value="M Tech" {{ old('qualification') == 'M Tech' ? 'selected' : '' }}>M Tech
-                                </option>
+                                <option value="M Tech" {{ old('qualification') == 'M Tech' ? 'selected' : '' }}>M Tech</option>
                                 <option value="MBA" {{ old('qualification') == 'MBA' ? 'selected' : '' }}>MBA</option>
                                 <option value="MCA" {{ old('qualification') == 'MCA' ? 'selected' : '' }}>MCA</option>
-                                <option value="Diploma" {{ old('qualification') == 'Diploma' ? 'selected' : '' }}>Diploma
-                                </option>
+                                <option value="Diploma" {{ old('qualification') == 'Diploma' ? 'selected' : '' }}>Diploma</option>
                                 <option value="ITI" {{ old('qualification') == 'ITI' ? 'selected' : '' }}>ITI</option>
-                                <option value="Others" {{ old('qualification') == 'Others' ? 'selected' : '' }}>Others
-                                </option>
                                 <option value="10th" {{ old('qualification') == '10th' ? 'selected' : '' }}>10th</option>
                                 <option value="12th" {{ old('qualification') == '12th' ? 'selected' : '' }}>12th</option>
+                                <option value="Other" {{ old('qualification') == 'Other' ? 'selected' : '' }}>Other</option>
                             </select>
+                            
+                            @if (old('qualification') == 'Other')
+                                <input type="text" name="qualification" class="form-control mt-2" 
+                                       placeholder="Enter Other Qualification" value="{{ old('qualification') }}" required>
+                            @endif
+                        
                             <div id="qualificationerror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
                                 Please select Qualification
                             </div>
+                        
                             @error('qualification')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
-
                         </div>
-                        <div class="form-group" id="other-qualification-field" style="display: none;">
-                            <label for="other_qualification">Please Specify</label>
-                            <input type="text" class="form-control" id="other_qualification"
-                                name="other_qualification" placeholder="Enter your qualification">
-                            @error('other_qualification')
-                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        
                         <div class="col-6 position-relative">
                             <input type="text" name="dob" class="form-control" value="{{ old('dob') }}"
                                 placeholder="DOB" onfocus="(this.type='date')"

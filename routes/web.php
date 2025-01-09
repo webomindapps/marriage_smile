@@ -3,17 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
-use App\Http\Controllers\Admin\PlanController;
-use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\FriendRequestController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Frontend\CustomerController;
 use App\Http\Controllers\Frontend\MarriageController;
+use App\Http\Controllers\Frontend\ShortlistController;
 use App\Http\Controllers\frontend\CustomerPasswordResetController;
-use App\Http\Controllers\SubscriptionController;
 
 Route::get('/', [MarriageController::class, 'index']);
 
@@ -59,6 +60,11 @@ Route::group(['middleware' => 'customer.auth'], function () {
     // pricing
     Route::get('/pricing', [MarriageController::class, 'pricingView'])->name('pricing');
     Route::get('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
+
+    //shortlist
+    Route::get('customer/shortlist', [ShortlistController::class, 'shortlist'])->name('customer.shortlist');
+    Route::get('add/{id}/shortlist', [ShortlistController::class, 'addToShortlist'])->name('add-to-shortlist');
+    Route::get('shortlist/{id}/remove', [ShortlistController::class, 'removeFromShortlist'])->name('shortlist.remove');
 });
 
 Route::post('/search-opposite-gender', [CustomerController::class, 'searchOppositeGender']);
