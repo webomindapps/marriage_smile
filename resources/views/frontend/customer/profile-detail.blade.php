@@ -8,6 +8,23 @@
                 width: 100%;
                 object-fit: cover;
             }
+
+            .match-box {
+                display: flex;
+                height: 100%;
+                align-items: center
+            }
+
+            .match-box img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .match-box .match-img {
+                margin-left: -30px;
+            }
         </style>
     @endpush
     <section class="dash-pad">
@@ -150,8 +167,13 @@
 
                                 <div class="row bo-filter4" id="about">
                                     <div class="col-md-2">
-                                        <img src="{{ asset('frontend/assets/images/vishnuwithg.png') }}"
-                                            class="img-fluid min-imh">
+                                        <div class="match-box">
+                                            <img src="{{ auth('customer')->user()?->documents?->first() ? asset('storage/' . auth('customer')->user()?->documents?->first()->image_url) : asset('frontend/assets/images/default.jpg') }}"
+                                                class="img-fluid">
+                                            <img src="{{ $customer->customer?->documents?->first() ? asset('storage/' . $customer->customer?->documents?->first()->image_url) : asset('frontend/assets/images/default.jpg') }}"
+                                                class="img-fluid match-img">
+                                        </div>
+                                        {{-- <img src="{{ asset('frontend/assets/images/vishnuwithg.png') }}" class="img-fluid min-imh"> --}}
                                     </div>
                                     <div class="col-md-10">
                                         <h4 class="pro-hea"> It’s an 93% Match!</h4>
@@ -163,18 +185,154 @@
                                     <p>I am looking for a suitable groom for my daughter.</p>
                                 </div>
 
-                                <div class="education">
+                                {{-- <div class="education">
                                     <h4>Education</h4>
                                     <img src="{{ asset('frontend/assets/images/icon1.png') }}"
                                         class="img-fluid code-imwidt">
                                     <span class="educat-head">{{ $customer->qualification }}</span>
+                                </div> --}}
+                                <div class="education">
+                                    <h4>Basic Details</h4>
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4">Gender</h4>
+                                            <p class="heigh-p">{{ $customer->gender }} </p>
+                                        </div>
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Height</h4>
+                                            <p class="heigh-p">{{ $customer->height }} </p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Skin Tone</h4>
+                                            <p class="heigh-p">{{ $customer->colour }}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Age</h4>
+                                            <p class="heigh-p">{{ $customer->age }} Years </p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Marital Staus</h4>
+                                            <p class="heigh-p">{{ $customer->marritialstatus }} </p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Nationality</h4>
+                                            <p class="heigh-p">{{ $customer->nationality }}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Mother Tongue </h4>
+                                            <p class="heigh-p">{{ $customer->mother_tongue }}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Education</h4>
+                                            <p class="heigh-p">{{ $customer->qualification }}</p>
+                                        </div>
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Annual Income </h4>
+                                            <p class="heigh-p">{{ $customer->annual_income }}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Religion</h4>
+                                            <p class="heigh-p">{{ $customer->religion }}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Caste </h4>
+                                            <p class="heigh-p">{{ $customer->caste }}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Gotra </h4>
+                                            <p class="heigh-p">{{ $customer->gotra }}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Sun star </h4>
+                                            <p class="heigh-p">{{ $customer->sun_star }}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Birth star </h4>
+                                            <p class="heigh-p">{{ $customer->birth_star }}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4">Hobbies</h4>
+                                            <p class="heigh-p">{{ $customer->hobbies }}</p>
+                                        </div>
+
+                                    </div>
                                 </div>
-                                <h4 class="conta-detail">Contact Details</h4>
+                                <div class="">
+                                    <h4 class="conta-detail">Contact Details</h4>
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4">Mobile No </h4>
+                                            <p class="heigh-p">{{ $customer->customer?->phone }}</p>
+                                        </div>
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4">Facebook/Instagram Profile </h4>
+                                            <p class="heigh-p">{{ $customer->facebook_profile }}</p>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="cont-bg">
                                     <h4>Go Premium to contact matches </h4>
-                                    <p>Inititate a voice or a video call with the profiles you like by upgrading to a
-                                        membership</p>
-                                    <a href="{{route('pricing')}}"><p class="requ-horoscope">Upgrade Now</p></a>
+                                    <p>Get new profiles email alerts by upgrading to a membership</p>
+                                    <a href="{{ route('pricing') }}">
+                                        <p class="requ-horoscope">Upgrade Now</p>
+                                    </a>
 
                                 </div>
 
@@ -201,8 +359,8 @@
                                                 class="img-fluid img-carer">
                                         </div>
                                         <div class="col-md-10 acou-profe">
-                                            <h4 class="carrerh4">Middle Class Nuclear Family from Chennai/ Madras, Tamil
-                                                Nadu, India</h4>
+                                            <h4 class="carrerh4">Middle Class Nuclear Family from
+                                                {{ $customer->permanent_locations }}</h4>
                                             <p class="careerp">Moderate values</p>
                                             <hr>
                                         </div>
@@ -220,6 +378,30 @@
                                             {{-- <p class="careerp">Earns Rs. 7.5 - 10 Lakh per Annum</p> --}}
                                         </div>
 
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4">Father's Name</h4>
+                                            <p class="heigh-p">{{ $customer->father_name }} </p>
+                                        </div>
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Mother's Name</h4>
+                                            <p class="heigh-p">{{ $customer->mother_name }} </p>
+                                        </div>
+                                    </div>
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="col-md-10">
+                                            <h4 class="heig-h4"> Siblings {{ $customer->siblings }}</h4>
+                                            <p class="heigh-p">
+                                                @foreach ($customer->sibilingdetails as $sibling)
+                                                    {{ $sibling->sibling_age_relation }} ({{ $sibling->sibling_maritial_status }}),
+                                                @endForEach
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- ///end// -->
@@ -242,7 +424,7 @@
                                 <div class="education">
 
                                     <h4 class="margin-g">Expections</h4>
-                                    <p class="careerp-h">{{$customer->expectations}}</p>
+                                    <p class="careerp-h">{{ $customer->expectations }}</p>
 
                                 </div>
 

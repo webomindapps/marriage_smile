@@ -55,4 +55,8 @@ class CustomerDetails extends Model
     {
         return $this->belongsTo(Customer::class, 'customers_id', 'id');
     }
+    public function sibilingdetails()
+    {
+        return $this->hasMany(CustomerRelation::class, 'customers_id');
+    }
 }
