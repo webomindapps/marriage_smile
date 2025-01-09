@@ -389,14 +389,23 @@ class CustomerController extends Controller
         $customer = Auth::guard('customer')->user();
         return view('frontend.customer.profile', compact('customer'));
     }
-    public function matches()
+    public function matches(Request $request)
     {
+        $profileId = $request->profile_id;
         $customer = Auth::guard('customer')->user();
-
         $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
+        $query = CustomerDetails::with(['customer.documents'])
+            ->where('gender', $oppositeGender);
 
-        $profiledetails = CustomerDetails::with(['customer.documents'])->where('gender', $oppositeGender)->get();
+        // Apply profile ID filter if provided
+        if ($profileId) {
+            $query->whereHas('customer', function ($q) use ($profileId) {
+                $q->where('customer_id', $profileId); // Adjust 'id' to match the actual field name
+            });
+        }
 
+        // Execute the query
+        $profiledetails = $query->paginate(10);
 
         return view('frontend.customer.matches', compact('profiledetails'));
     }
