@@ -59,7 +59,7 @@
                     class="fa fa-chevron-right chev-icon"></i></a> --}}
             <a class="nav-link" aria-current="page" href="{{ route('customer.matches') }}"> Profiles <i
                     class="fa fa-chevron-right chev-icon"></i></a>
-            <a class="nav-link" href="#">Short Listed Matches <i class="fa fa-chevron-right chev-icon4"></i></a>
+            <a class="nav-link" href="{{ route('customer.shortlist') }}">Short Listed Matches <i class="fa fa-chevron-right chev-icon4"></i></a>
             <a class="nav-link" href="{{ route('friend.requests') }}">
                 Received Requests <i class="fa fa-chevron-right chev-icon4"></i>
             </a>
