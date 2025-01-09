@@ -59,16 +59,15 @@
                                     <div id="searchResults" class="mt-3"></div>
                                 </div>
                                 <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                                    <form class="row ne-id-search" id="searchByIdForm">
+                                    <form class="row ne-id-search" action="">
                                         <div class="col-md-12">
                                             <input type="text" class="form-control" id="profileId" name="profile_id"
                                                 placeholder="Enter Profile ID">
                                         </div>
+                                        <div class="col-12 text-center">
+                                            <button type="submit" class="btn bt-register">Search</button>
+                                        </div>
                                     </form>
-                                    <div class="col-12 text-center">
-                                        <button type="button" class="btn bt-register"
-                                            id="showProfilesButton">Search</button>
-                                    </div>
                                 </div>
                             </div>
                         </div>

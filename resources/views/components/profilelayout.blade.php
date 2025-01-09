@@ -11,33 +11,13 @@
                 <h4 class="pro-hea">Hi {{ $customer->name }}</h4>
                 <h6 class="profile-des">
                     {{ $customer->customer_id }}
-                    <span class="co-editprofile">
-                        <div class="dropdown d-inline">
-                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"
-                                style="color: red;">Dashboard</a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('admin.customer.edit', $customer->id) }}">
-                                        Edit
-                                    </a>
-                                </li>
-                                <li>
-                                    <button type="submit" class="dropdown-item"
-                                        onclick="return confirm('Are you sure you want to delete this customer?');">
-                                        Delete
-                                    </button>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item">
-                                        Hold
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </span>
+                    <a href="{{ route('admin.customer.edit', $customer->id) }}">
+                        <span class="co-editprofile">
+                            <i class="fas fa-pencil"></i>
+                            Edit Profile
+                        </span>
+                    </a>
                 </h6>
-
-
             </div>
             <div class="col-12">
                 <div class="mt-4">

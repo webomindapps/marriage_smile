@@ -60,7 +60,12 @@
                                                     class="dropdown-menu account-dropdown-menu">
                                                     <li class="dropdown-item">
                                                         <a href="{{ route('customer.profile') }}">
-                                                            Profile
+                                                            Dashboard
+                                                        </a>
+                                                    </li>
+                                                    <li class="dropdown-item">
+                                                        <a href="{{ route('admin.customer.edit', $customer->id) }}">
+                                                            Edit Profile
                                                         </a>
                                                     </li>
                                                     <li>
