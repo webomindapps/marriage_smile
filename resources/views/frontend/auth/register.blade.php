@@ -86,40 +86,51 @@
 
                         <div class="col-6">
                             <select class="form-select" id="qualification" name="qualification" required>
-                                <option value="" disabled {{ old('qualification') && old('qualification') !== 'Other' ? '' : 'selected' }}>
+                                <option value="" disabled
+                                    {{ old('qualification') && old('qualification') !== 'Other' ? '' : 'selected' }}>
                                     Select Qualification
                                 </option>
                                 <option value="BE" {{ old('qualification') == 'BE' ? 'selected' : '' }}>BE</option>
-                                <option value="B Com" {{ old('qualification') == 'B Com' ? 'selected' : '' }}>B Com</option>
+                                <option value="B Com" {{ old('qualification') == 'B Com' ? 'selected' : '' }}>B Com
+                                </option>
                                 <option value="B Sc" {{ old('qualification') == 'B Sc' ? 'selected' : '' }}>B Sc</option>
-                                <option value="B Tech" {{ old('qualification') == 'B Tech' ? 'selected' : '' }}>B Tech</option>
+                                <option value="B Tech" {{ old('qualification') == 'B Tech' ? 'selected' : '' }}>B Tech
+                                </option>
                                 <option value="BBA" {{ old('qualification') == 'BBA' ? 'selected' : '' }}>BBA</option>
                                 <option value="BCA" {{ old('qualification') == 'BCA' ? 'selected' : '' }}>BCA</option>
                                 <option value="M Sc" {{ old('qualification') == 'M Sc' ? 'selected' : '' }}>M Sc</option>
-                                <option value="M Tech" {{ old('qualification') == 'M Tech' ? 'selected' : '' }}>M Tech</option>
+                                <option value="M Tech" {{ old('qualification') == 'M Tech' ? 'selected' : '' }}>M Tech
+                                </option>
                                 <option value="MBA" {{ old('qualification') == 'MBA' ? 'selected' : '' }}>MBA</option>
                                 <option value="MCA" {{ old('qualification') == 'MCA' ? 'selected' : '' }}>MCA</option>
-                                <option value="Diploma" {{ old('qualification') == 'Diploma' ? 'selected' : '' }}>Diploma</option>
+                                <option value="Diploma" {{ old('qualification') == 'Diploma' ? 'selected' : '' }}>Diploma
+                                </option>
                                 <option value="ITI" {{ old('qualification') == 'ITI' ? 'selected' : '' }}>ITI</option>
                                 <option value="10th" {{ old('qualification') == '10th' ? 'selected' : '' }}>10th</option>
                                 <option value="12th" {{ old('qualification') == '12th' ? 'selected' : '' }}>12th</option>
-                                <option value="Other" {{ old('qualification') == 'Other' ? 'selected' : '' }}>Other</option>
+                                <option value="Others" {{ old('qualification') == 'Others' ? 'selected' : '' }}>Others
+                                </option>
                             </select>
-                            
+
                             @if (old('qualification') == 'Other')
-                                <input type="text" name="qualification" class="form-control mt-2" 
-                                       placeholder="Enter Other Qualification" value="{{ old('qualification') }}" required>
+                                <input type="text" id="other-qualification-field" name="otherqualification"
+                                    class="form-control mt-2" placeholder="Enter Other Qualification"
+                                    value="{{ old('qualification') }}" required>
+                            @else
+                                <input type="text" style="display: none;" id="other-qualification-field"
+                                    name="otherqualification" class="form-control mt-2"
+                                    placeholder="Enter Other Qualification">
                             @endif
-                        
+
                             <div id="qualificationerror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
                                 Please select Qualification
                             </div>
-                        
+
                             @error('qualification')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
-                        
+
                         <div class="col-6 position-relative">
                             <input type="text" name="dob" class="form-control" value="{{ old('dob') }}"
                                 placeholder="DOB" onfocus="(this.type='date')"
@@ -163,13 +174,16 @@
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="form-group" id="other-mothertongue-field" style="display: none;">
-                            <label for="other_mothertongue">Please Specify</label>
-                            <input type="text" class="form-control" id="other_mothertongue" name="other_mothertongue"
-                                placeholder="Enter your Mother Tongue">
-                            @error('other_mothertongue')
-                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                            @enderror
+                        <div class="form-group">
+                            @if (old('mother_tongue') == 'Other')
+                                <input type="text" id="other-mothertongue-field" name="othermother_tongue"
+                                    class="form-control mt-2" placeholder="Enter Other mother tongue"
+                                    value="{{ old('mother_tongue') }}" required>
+                            @else
+                                <input type="text" style="display: none;" id="other-mothertongue-field"
+                                    name="othermother_tongue" class="form-control mt-2"
+                                    placeholder="Enter Other mother_tongue">
+                            @endif
                         </div>
 
                         <div class="col-6">
@@ -719,11 +733,14 @@
     </script>
     <script>
         document.getElementById('qualification').addEventListener('change', function() {
+            
             const otherQualificationField = document.getElementById('other-qualification-field');
             if (this.value === 'Others') {
                 otherQualificationField.style.display = 'block';
+                otherQualificationField.setAttribute('required', 'required');
             } else {
                 otherQualificationField.style.display = 'none';
+                otherQualificationField.removeAttribute('required');
             }
         });
     </script>
@@ -733,8 +750,10 @@
             const otherMotherTongueField = document.getElementById('other-mothertongue-field');
             if (this.value === 'Others') {
                 otherMotherTongueField.style.display = 'block';
+                otherMotherTongueField.setAttribute('required', 'required');
             } else {
                 otherMotherTongueField.style.display = 'none';
+                otherMotherTongueField.removeAttribute('required');
             }
         });
     </script>

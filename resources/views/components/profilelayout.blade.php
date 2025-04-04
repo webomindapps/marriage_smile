@@ -8,7 +8,7 @@
 
             <div class="col-lg-8">
 
-                <h4 class="pro-hea">Hi {{ $customer->name }}</h4>
+                <h4 class="pro-hea">Hi {{ explode(' ', $customer->name)[0] }}</h4>
                 <h6 class="profile-des">
                     {{ $customer->customer_id }}
                     <a href="{{ route('admin.customer.edit', $customer->id) }}">

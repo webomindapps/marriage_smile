@@ -54,7 +54,7 @@
                                                 <a id="account-dropdown" data-bs-toggle="dropdown" aria-expanded="false"
                                                     class="dropdown-toggle">
                                                     <i class="far fa-user-circle userIcon"></i>
-                                                    {{ $customer->name }}
+                                                    {{ explode(' ', $customer->name)[0] }}
                                                 </a>
                                                 <ul aria-labelledby="account-dropdown"
                                                     class="dropdown-menu account-dropdown-menu">

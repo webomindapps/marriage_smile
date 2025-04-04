@@ -24,11 +24,9 @@ return new class extends Migration
             $table->string('height');
             $table->string('colour');
             $table->string('qualification');
-            $table->string('other_qualification')->nullable();
             $table->date('dob');
             $table->bigInteger('age');
             $table->string('mother_tongue');
-            $table->string('other_mothertongue')->nullable();
             $table->string('caste');
             $table->string('gotra');
             $table->string('sun_star')->nullable();
