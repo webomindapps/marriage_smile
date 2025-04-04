@@ -4,6 +4,7 @@
     @php
 
         $columns = [
+            ['label' => '', 'column' => '', 'sort' => false],
             ['label' => 'Id', 'column' => 'id', 'sort' => true],
             ['label' => 'Name', 'column' => 'name', 'sort' => true],
             ['label' => 'Customer Id', 'column' => 'customer_id', 'sort' => true],

@@ -11,7 +11,7 @@
                 <h4 class="pro-hea">Hi {{ $customer->name }}</h4>
                 <h6 class="profile-des">
                     {{ $customer->customer_id }}
-                    <a href="{{ route('admin.customer.edit', $customer->id) }}">
+                    <a href="{{ route('customer.edit', $customer->id) }}">
                         <span class="co-editprofile">
                             <i class="fas fa-pencil"></i>
                             Edit Profile
@@ -39,11 +39,29 @@
                     class="fa fa-chevron-right chev-icon"></i></a> --}}
             <a class="nav-link" aria-current="page" href="{{ route('customer.matches') }}"> Profiles <i
                     class="fa fa-chevron-right chev-icon"></i></a>
-            <a class="nav-link" href="{{ route('customer.shortlist') }}">Short Listed Matches <i class="fa fa-chevron-right chev-icon4"></i></a>
+            <a class="nav-link" href="{{ route('customer.shortlist') }}">Short Listed Matches <i
+                    class="fa fa-chevron-right chev-icon4"></i></a>
             <a class="nav-link" href="{{ route('friend.requests') }}">
                 Received Requests <i class="fa fa-chevron-right chev-icon4"></i>
             </a>
         </nav>
         <!-- //// -->
+
+    </div>
+    <div class="profile-per mt-2">
+        <nav class="nav flex-column">
+            <a class="btn btn-danger" href="{{ route('customer.delete', $customer->id) }}"
+                onclick="return confirm('Are you sure you want to delete this customer?');"> Delete
+                Account</a>
+            @if ($customer->status == 1)
+                <a href="{{ route('customer.hold', $customer->id) }}" class="btn btn-info mt-2"
+                    onclick="return confirm('Are you sure to Hold  your profile from displaying ?');">Hold</a>
+            @else
+                <a href="{{ route('customer.hold', $customer->id) }}" class="btn btn-info mt-2"
+                    onclick="return confirm('Are you sure ?');">Active</a>
+            @endif
+            <a href="{{ route('customer.logout') }}" class="btn btn-secondary mt-2">Logout</a>
+
+        </nav>
     </div>
 </div>

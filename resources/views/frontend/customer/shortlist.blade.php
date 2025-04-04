@@ -28,7 +28,7 @@
                                         <a href="{{ route('customer.details', $list->customer->id) }}"
                                             class="text-decoration-none">
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ asset($document->image_url ?? 'frontend/assets/images/default-profile.png') }}"
+                                                <img src="{{ asset('storage/' . $document->image_url ?? 'frontend/assets/images/default-profile.png') }}"
                                                     alt="Profile Picture" class="rounded-circle me-3" width="50"
                                                     height="50">
                                                 <div>

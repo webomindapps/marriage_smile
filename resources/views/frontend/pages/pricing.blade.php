@@ -1,217 +1,144 @@
 @extends('frontend.layouts.applayout')
+@push('styles')
+    <link href="{{ asset('frontend/assets/css/pricing.css') }}" rel="stylesheet">
+@endpush
 @section('main')
-    <section class="">
+    <section class="dash-pad mt-2 mb-4">
         <div class="container">
-            <div class="row min-vh-100 mt-5">
-                <div class="col-12">
-                    <h3 class="text-center">Plans and Packages</h3>
-                </div>
-                <div class="col-lg-7 mx-auto">
-                    <table border="0" cellpadding="0" cellspacing="0" width="766"
-                        style="border-collapse:collapse;width:576pt">
+            <div class="row">
+                <h2 class="cl-h3">Our Subscription Plans</h2>
+                <div class="container bg-light ">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6">
+                            <div class="card bg-warning border-0 rounded-0 shadow hei-3">
+                                <div class="card-header text-center text-white border-0">
+                                    <h2><strong>Basic</strong></h2>
+                                    <p>Free <br>Members</p>
 
-                        <colgroup>
-                            <col width="373" style="width:280pt">
-                            <col width="142" style="width:107pt">
-                            <col width="140" style="width:105pt">
-                            <col width="111" style="width:84pt">
-                        </colgroup>
-                        <tbody>
-                            <tr height="19" style="height:14.5pt">
-                                <td rowspan="2" height="58" width="373"
-                                    style="height:43.5pt;width:280pt;text-align:center;vertical-align:middle;border:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif">
-                                    Particulars</td>
-                                <td rowspan="2" width="142"
-                                    style="width:107pt;text-align:center;vertical-align:middle;border:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif">
-                                    Free Members</td>
-                                <td width="140"
-                                    style="border-left:none;width:105pt;text-align:center;vertical-align:middle;border-top:0.5pt solid windowtext;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif">
-                                    Plan M</td>
-                                <td width="111"
-                                    style="border-left:none;width:84pt;text-align:center;vertical-align:middle;border-top:0.5pt solid windowtext;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif">
-                                    Plan S</td>
-                            </tr>
-                            <tr height="39" style="height:29pt">
-                                <td height="39" width="140"
-                                    style="height:29pt;border-top:none;border-left:none;width:105pt;text-align:center;vertical-align:middle;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif">
-                                    6999<br>
-                                    4999 ( Inc GST)</td>
-                                <td width="111"
-                                    style="border-top:none;border-left:none;width:84pt;text-align:center;vertical-align:middle;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif">
-                                    2999<br>
-                                    1499 ( Inc GST)&nbsp;</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Validity&nbsp;</td>
-                                <td width="142"
-                                    style="border-top:none;border-left:none;width:107pt;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    3
-                                    Months</td>
-                                <td width="140"
-                                    style="border-top:none;border-left:none;width:105pt;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    1
-                                    Year</td>
-                                <td width="111"
-                                    style="border-top:none;border-left:none;width:84pt;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    1
-                                    Year</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Name Access</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Photo Access</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    10</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Unlimited</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    1000</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    No.of Profies
-                                    can Access with all details</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    5</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    01 Year / 300</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    01 Year / 100</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Horoscope
-                                    Access</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    5</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Chat With
-                                    Bride or Groom</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    5</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Dedicated
-                                    Executive from Marriage Smile for co-ordination&nbsp;</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    No</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    No</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Weekly updates
-                                    from Marriage Smile Team</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    No</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    No</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    New Profiles
-                                    email alerts&nbsp;</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    No</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    No</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Quarterly
-                                    Online Meetings</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    Yes</td>
-                            </tr>
-                            <tr height="19" style="height:14.5pt">
-                                <td height="19"
-                                    style="height:14.5pt;border-top:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;border-left:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                </td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    <a href="" class="btn btn-sm btn-info text-white m-2">Active</a>
-                                </td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    <a href="{{route('subscribe')}}" class="btn btn-sm btn-info text-white m-2">Subscribe</a>
-                                </td>
-                                <td
-                                    style="border-top:none;border-left:none;text-align:center;border-right:0.5pt solid windowtext;border-bottom:0.5pt solid windowtext;padding-top:1px;padding-right:1px;padding-left:1px;color:black;font-size:11pt;font-family:Calibri,sans-serif;vertical-align:bottom">
-                                    <a href="{{route('subscribe')}}" class="btn btn-sm btn-info text-white m-2">Subscribe</a>
-                                </td>
-                            </tr>
+                                </div>
+                                <div class="card-body bg-white">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>3 Months</strong> Validity
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Name
+                                            Access</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>10</strong> Photo Access
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>5</strong> Profiles can Access with all details
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>5</strong> Horoscope Access
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>5</strong> Chats With Bride or Groom
+                                        </li>
 
-                        </tbody>
-                    </table>
+                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
+                                            Dedicated Executive from Marriage Smile for coordination</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
+                                            Weekly updates from Marriage Smile Team</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i> New
+                                            Profiles email alerts </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
+                                            Quarterly Online Meetings</li>
+                                    </ul>
+                                    <!--  <p class="text-center font-weight-bolder text-dark h1 display-4 mb-0">$3</p>
+                                    <p class="small text-center font-weight-bolder text-secondary">per month</p> -->
+                                    <a href="{{ route('subscribe') }}" class="btn btn-block bg-warning text-white">Contact
+                                        Us</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="card bg-success border-0 rounded-0 shadow hei-3">
+                                <div class="card-header text-center text-white border-0">
+
+                                    <h2><strong>Plan S</strong></h2>
+                                    <p>2999<br>
+                                        1499 ( Inc GST) </p>
+                                </div>
+                                <div class="card-body bg-white">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>1 Year</strong> Validity
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Name
+                                            Access</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>1000</strong> Photo Access
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>01 Year / 599 </strong> Profiles can Access with all details
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            Horoscope Access</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Chats
+                                            With Bride or Groom</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
+                                            Dedicated Executive from Marriage Smile for coordination </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
+                                            Weekly updates from Marriage Smile Team</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i> New
+                                            Profiles email alerts </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            Quarterly Online Meetings</li>
+                                    </ul>
+
+
+
+
+                                    <a href="{{ route('subscribe') }}" class="btn btn-block bg-success text-white">Buy
+                                        Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                            <div class="card bg-info border-0 rounded-0 shadow hei-3">
+                                <div class="card-header text-center text-white border-0">
+                                    <h2><strong>Plan M</strong></h2>
+                                    <p>6999<br>
+                                        4999 ( Inc GST)</p>
+
+
+                                </div>
+                                <div class="card-body bg-white">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>1 Year</strong> Validity
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Name
+                                            Access</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>Unlimited</strong>
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            <strong>01 Year / 899 </strong> Profiles can Access with all details
+                                        </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            Horoscope Access</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Chats
+                                            With Bride or Groom</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            Dedicated Executive from Marriage Smile for coordination </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Weekly
+                                            updates from Marriage Smile Team</li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> New
+                                            Profiles email alerts </li>
+                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                            Quarterly Online Meetings </li>
+                                    </ul>
+
+                                    <a href="{{ route('subscribe') }}" class="btn btn-block bg-success text-white">Buy
+                                        Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
     </section>
 @endsection

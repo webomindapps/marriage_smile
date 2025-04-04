@@ -52,22 +52,32 @@
                             </table>
 
                         </div>
-                        <div class="col-lg-12">
-                            <p class="mt-2">Features</p>
-                            <div class="row">
-                                @foreach ($features as $key => $item)
-                                    <div class="col-lg-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="feature_ids[]"
-                                                value="{{ $item->id }}" id="feature-{{ $item->id }}">
-                                            <label class="form-check-label" for="feature-{{ $item->id }}">
-                                                {{ $item->name }}
-                                            </label>
-                                        </div>
-                                    </div>
-                                @endforeach
+                        <div class="col-lg-12 mt-4">
+                            <p class="mt-2">Selected Features</p>
+                            <div class="col-12 text-end mb-2">
+                                <button type="button" id="add-feature-row" class="btn btn-primary btn-sm">Add
+                                    Feature</button>
                             </div>
+
+
+                            <table class="table table-bordered" id="features-table">
+                                <thead>
+                                    <tr>
+                                        <th>Feature</th>
+                                        <th>Number of Values / Unlimited</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                 
+                                </tbody>
+                            </table>
                         </div>
+
+                        <script>
+                            const allFeatures = @json($features);
+                        </script>
+
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
@@ -114,6 +124,39 @@
                     });
                 }
                 attachDeleteEvents();
+            });
+        </script>
+        <script>
+            document.getElementById('add-feature-row').addEventListener('click', function() {
+                const tableBody = document.querySelector('#features-table tbody');
+
+                const featureOptions = allFeatures.map(feature => {
+                    return `<option value="${feature.id}">${feature.name}</option>`;
+                }).join('');
+
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>
+                        <select name="feature_ids[]" class="form-control feature-dropdown">
+                            <option value="">Select Feature</option>
+                            ${featureOptions}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="feature_values[]" class="form-control" placeholder="Enter value or 'Unlimited'">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-feature-row">Remove</button>
+                    </td>
+                `;
+                tableBody.appendChild(newRow);
+            });
+
+            // Remove feature row
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('remove-feature-row')) {
+                    e.target.closest('tr').remove();
+                }
             });
         </script>
     @endpush
