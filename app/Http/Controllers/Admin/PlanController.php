@@ -66,11 +66,14 @@ class PlanController extends Controller
                 $plan->thumbnail = $request->file('thumbnail')->store('plans');
                 $plan->save();
             }
-            if ($request->has('feature_ids')) {
-                foreach ($request->feature_ids as $feature) {
-                    $plan->features()->attach($feature);
+            if ($request->has('feature_ids') && $request->has('feature_values')) {
+                foreach ($request->feature_ids as $index => $feature_id) {
+                    $plan->features()->attach($feature_id, [
+                        'feature_value' => $request->feature_values[$index] ?? null,
+                    ]);
                 }
             }
+
             if ($request->duration && $request->prices && $request->special_prices) {
                 foreach ($request->duration as $key => $duration) {
                     $plan->prices()->create([
@@ -110,9 +113,18 @@ class PlanController extends Controller
                 $plan->thumbnail = $request->file('thumbnail')->store('plans');
                 $plan->save();
             }
-            if ($request->has('feature_ids')) {
-                $plan->features()->sync($request->feature_ids);
+            if ($request->has('feature_ids') && $request->has('feature_values')) {
+                $syncData = [];
+            
+                foreach ($request->feature_ids as $index => $featureId) {
+                    $syncData[$featureId] = [
+                        'feature_value' => $request->feature_values[$index] ?? null
+                    ];
+                }
+            
+                $plan->features()->sync($syncData);
             }
+            
             $plan->prices()->delete();
             if ($request->duration && $request->prices && $request->special_prices) {
                 foreach ($request->duration as $key => $duration) {

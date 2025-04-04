@@ -17,7 +17,7 @@ class Plan extends Model
     ];
     public function features(): BelongsToMany
     {
-        return $this->belongsToMany(Feature::class);
+        return $this->belongsToMany(Feature::class)->withPivot('feature_value');;
     }
     public function prices(): HasMany
     {

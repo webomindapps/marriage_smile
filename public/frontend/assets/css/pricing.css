@@ -1,0 +1,55 @@
+h2.cl-h3 {
+    text-align: center;
+    font-size: 45px;
+    margin-bottom: 30px;
+}
+
+
+.rounded-0 {
+    border-radius: 0 !important;
+    padding-top: 21px;
+}
+
+
+.bg-info {
+    --bs-bg-opacity: 1;
+    background-color: rgb(54 5 105) !important;
+}
+
+.bg-success {
+    --bs-bg-opacity: 1;
+    background-color: rgb(222 28 120) !important;
+}
+
+.bg-warning {
+    --bs-bg-opacity: 1;
+    background-color: rgb(56 5 108) !important;
+}
+
+.text-warning {
+    --bs-text-opacity: 1;
+    color: rgb(2 143 12) !important;
+    font-size: 15px;
+}
+
+.text-secondary {
+    --bs-text-opacity: 1;
+    color: rgb(212 17 17) !important;
+    font-size: 15px;
+}
+
+.mb-4 {
+    margin-bottom: 15px!important;
+}
+
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+
+li i{
+    font-family: "poppins", sans-serif;
+}

@@ -40,15 +40,7 @@
             <div class="row">
                 <div class="col-lg-3">
                     <x-profilelayout />
-                    <div class="profile-per mt-2">
-                        <nav class="nav flex-column">
-                            <a class="btn btn-danger" href=""
-                                onclick="return confirm('Are you sure you want to delete this customer?');"> Delete
-                                Account</a>
-                            <a href="" class="btn btn-info mt-2">Hold</a>
-                            <a href="{{ route('customer.logout') }}" class="btn btn-secondary mt-2">Logout</a>
-                        </nav>
-                    </div>
+                    
                 </div>
                 <div class="col-lg-8 new-gp ">
                     <div class="profile-edit">

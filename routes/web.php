@@ -51,6 +51,8 @@ Route::group(['middleware' => 'customer.auth'], function () {
     Route::get('customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.details');
     Route::post('/customer-details', [CustomerController::class, 'getCustomerById']);
 
+    Route::get('/customer/delete/{id}',[CustomerController::class,'deletecustomer'])->name('customer.delete');
+
     // Friend Request
     Route::get('/friend-requests', [FriendRequestController::class, 'index'])->name('friend.requests');
     Route::get('/friend-request/{id}', [FriendRequestController::class, 'store'])->name('send.friend.request');
@@ -65,6 +67,7 @@ Route::group(['middleware' => 'customer.auth'], function () {
     Route::get('customer/shortlist', [ShortlistController::class, 'shortlist'])->name('customer.shortlist');
     Route::get('add/{id}/shortlist', [ShortlistController::class, 'addToShortlist'])->name('add-to-shortlist');
     Route::get('shortlist/{id}/remove', [ShortlistController::class, 'removeFromShortlist'])->name('shortlist.remove');
+    Route::get('hold-customer/{id}',[CustomerController::class,'holdCustomer'])->name('customer.hold');
 });
 
 Route::post('/search-opposite-gender', [CustomerController::class, 'searchOppositeGender']);

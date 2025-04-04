@@ -80,7 +80,7 @@ class CustomerController extends Controller
                 'conf_password',
                 'email_verified_at'
             ]);
-
+            $customerData['status'] = 1;
             $customerData['password'] = Hash::make($customerData['password']);
 
             $latestCustomer = Customer::latest()->first();
@@ -362,27 +362,29 @@ class CustomerController extends Controller
             ->orWhere('customer_id', $request->email)
             ->first();
 
-        if (is_null($cust) || $cust->password == '') {
-            return back()->with('danger', 'Account Not Found');
+        // Check if the user exists and has a valid password
+        if (!$cust || !$cust->password || !Hash::check($request->password, $cust->password)) {
+            return back()->with('danger', 'Invalid credentials.');
         }
 
-        if (is_null($cust->email_verified_at)) {
-            return back()->with('danger', 'Verify your account first');
+        // Check email verification before login
+        if (!$cust->email_verified_at) {
+            return back()->with('danger', 'Verify your account first.');
         }
 
-        $attempt = Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password]);
+        // Determine whether to use email or customer_id
+        $credentials = ['password' => $request->password];
+        if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $request->email;
+        } else {
+            $credentials['customer_id'] = $request->email;
+        }
 
-        if ($attempt) {
+        if (Auth::guard('customer')->attempt($credentials)) {
             $customer = Auth::guard('customer')->user();
-            $customer->last_login_time = Carbon::now();
+            $customer->last_login_time = now();
             $customer->save();
             return redirect()->route('customer.matches');
-        } else {
-            $attempt = Auth::guard('customer')->attempt(['customer_id' => $request->email, 'password' => $request->password]);
-            if ($attempt) {
-                $customer = Auth::guard('customer')->user();
-                return redirect()->route('customer.matches');
-            }
         }
 
         return back()->with('danger', 'Invalid credentials.');
@@ -402,14 +404,28 @@ class CustomerController extends Controller
         $profileId = $request->profile_id;
         $customer = Auth::guard('customer')->user();
         $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
+
+        // Start building the query
         $query = CustomerDetails::with(['customer.documents'])
             ->where('gender', $oppositeGender);
 
         // Apply profile ID filter if provided
-        if ($profileId) {
+        if (!empty($profileId)) {
             $query->whereHas('customer', function ($q) use ($profileId) {
-                $q->where('customer_id', $profileId); // Adjust 'id' to match the actual field name
+                $q->where('customer_id', $profileId);
             });
+        }
+
+        // Apply age filter only if either age_from or age_to is provided
+        if ($request->filled('age_from') || $request->filled('age_to')) {
+            $ageFrom = (int) ($request->age_from ?? 18); // Default minimum age
+            $ageTo = (int) ($request->age_to ?? 100);    // Default maximum age
+            $query->whereBetween('age', [$ageFrom, $ageTo]);
+        }
+
+        // Apply marital status filter only if provided and not "Doesn't Matter"
+        if ($request->filled('marital_status') && $request->marital_status !== "Doesn't Matter") {
+            $query->where('marritialstatus', $request->marital_status);
         }
 
         // Execute the query
@@ -417,7 +433,6 @@ class CustomerController extends Controller
 
         return view('frontend.customer.matches', compact('profiledetails'));
     }
-
     public function logout()
     {
         Auth::guard('customer')->logout();
@@ -510,5 +525,26 @@ class CustomerController extends Controller
         }
 
         return response()->json($profile);
+    }
+    public function deletecustomer($id)
+    {
+        $customer = Customer::find($id);
+        if ($customer) {
+            $customer->delete();
+            return response()->json(['message' => 'Customer deleted successfully.']);
+        }
+    }
+    public function holdcustomer($id)
+    {
+        $customer = Customer::find($id);
+        if ($customer->status == 1) {
+            $customer->status = 0;
+            $customer->save();
+            return redirect()->back()->with(['success' => 'Customer hold successfully.']);
+        } else {
+            $customer->status = 1;
+            $customer->save();
+            return redirect()->back()->with(['success' => 'Customer activated successfully.']);
+        }
     }
 }
