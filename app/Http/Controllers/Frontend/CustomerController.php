@@ -77,7 +77,6 @@ class CustomerController extends Controller
                 'email',
                 'phone',
                 'password',
-                'conf_password',
                 'email_verified_at'
             ]);
             $customerData['status'] = 1;
