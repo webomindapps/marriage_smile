@@ -90,6 +90,83 @@
                                                                 <option value="unmarried"> Un Married</option>
 
                                                             </select>
+
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <h4 class="heig-h4"> Height In ft</h4>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <input type="text" name="height"
+                                                                        class="form-control" placeholder="Height in ft"
+                                                                        min="2">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <h4 class="heig-h4"> Qualification</h4>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <select class="form-control" id="qualification"
+                                                                        name="qualification" required>
+                                                                        <option value="" disabled
+                                                                            {{ old('qualification') && old('qualification') !== 'Other' ? '' : 'selected' }}>
+                                                                            Select Qualification
+                                                                        </option>
+                                                                        <option value="BE"
+                                                                            {{ old('qualification') == 'BE' ? 'selected' : '' }}>
+                                                                            BE</option>
+                                                                        <option value="B Com"
+                                                                            {{ old('qualification') == 'B Com' ? 'selected' : '' }}>
+                                                                            B Com
+                                                                        </option>
+                                                                        <option value="B Sc"
+                                                                            {{ old('qualification') == 'B Sc' ? 'selected' : '' }}>
+                                                                            B Sc</option>
+                                                                        <option value="B Tech"
+                                                                            {{ old('qualification') == 'B Tech' ? 'selected' : '' }}>
+                                                                            B Tech
+                                                                        </option>
+                                                                        <option value="BBA"
+                                                                            {{ old('qualification') == 'BBA' ? 'selected' : '' }}>
+                                                                            BBA</option>
+                                                                        <option value="BCA"
+                                                                            {{ old('qualification') == 'BCA' ? 'selected' : '' }}>
+                                                                            BCA</option>
+                                                                        <option value="M Sc"
+                                                                            {{ old('qualification') == 'M Sc' ? 'selected' : '' }}>
+                                                                            M Sc</option>
+                                                                        <option value="M Tech"
+                                                                            {{ old('qualification') == 'M Tech' ? 'selected' : '' }}>
+                                                                            M Tech
+                                                                        </option>
+                                                                        <option value="MBA"
+                                                                            {{ old('qualification') == 'MBA' ? 'selected' : '' }}>
+                                                                            MBA</option>
+                                                                        <option value="MCA"
+                                                                            {{ old('qualification') == 'MCA' ? 'selected' : '' }}>
+                                                                            MCA</option>
+                                                                        <option value="Diploma"
+                                                                            {{ old('qualification') == 'Diploma' ? 'selected' : '' }}>
+                                                                            Diploma
+                                                                        </option>
+                                                                        <option value="ITI"
+                                                                            {{ old('qualification') == 'ITI' ? 'selected' : '' }}>
+                                                                            ITI</option>
+                                                                        <option value="10th"
+                                                                            {{ old('qualification') == '10th' ? 'selected' : '' }}>
+                                                                            10th</option>
+                                                                        <option value="12th"
+                                                                            {{ old('qualification') == '12th' ? 'selected' : '' }}>
+                                                                            12th</option>
+                                                                        <option value="Other"
+                                                                            {{ old('qualification') == 'Other' ? 'selected' : '' }}>
+                                                                            Other
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+
+                                                            </div>
                                                         </div>
                                                         <div class="col-12 text-center mt-3">
                                                             <button type="submit" class="btn bt-register">Show Me
@@ -101,7 +178,8 @@
                                                 <!-- Search by Profile ID -->
                                                 <div class="tab-pane fade" id="profileIdTab">
                                                     <form class="row ne-id-search" method="GET"
-                                                        action="{{ route('customer.matches') }}" id="profileIdSearchForm">
+                                                        action="{{ route('customer.matches') }}"
+                                                        id="profileIdSearchForm">
                                                         <div class="col-md-12">
                                                             <input type="text" class="form-control" id="profileId"
                                                                 name="customer_id" placeholder="Enter Profile ID">
