@@ -35,7 +35,7 @@
                 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
+                        <div class="modal-content" id="profilemodal">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="searchModalLabel">Search Profiles</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -61,7 +61,7 @@
                                                     <form id="filterForm" method="GET"
                                                         action="{{ route('customer.matches') }}">
                                                         <div class="row">
-                                                            <div class="col-md-10">
+                                                            <div class="col-md-12">
                                                                 <h4 class="heig-h4"> Age</h4>
                                                                 <div class="row">
                                                                     <div class="col">
@@ -82,7 +82,6 @@
                                                             <select name="marital_status" class="form-control">
                                                                 <option value=""disable selected>Doesn't Matter
                                                                 </option>
-                                                                <option value="never Married">Never Married</option>
                                                                 <option value="awaiting Divorce">Awaiting Divorce</option>
                                                                 <option value="divorsed">Divorced</option>
                                                                 <option value="widowed">Widowed</option>
@@ -199,7 +198,7 @@
                             <div class="pink-bg-list">
                                 <ul class="list-none col-li">
                                     <li>
-                                        <a href="/send-friend-request/${item.id}">
+                                        <a href="{{ route('send.friend.request', $item->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -211,7 +210,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/add-to-shortlist/${item.id}">
+                                        <a href="{{ route('add-to-shortlist', $item->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"

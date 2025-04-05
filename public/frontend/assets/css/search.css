@@ -573,3 +573,6 @@ hr.lin-profile {
     position: relative;
     box-shadow: 2px -1px 12px -2px #ccc;
 }
+#profilemodal{
+    height:400px;
+}
