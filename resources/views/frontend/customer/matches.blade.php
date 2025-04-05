@@ -13,7 +13,10 @@
                 <div class="row bo-filter">
                     <div class="col-md-10">
                         <h4 class="pro-hea"> Here's what we found!</h4>
-                        <p class="last-showp">Showing 1-20 of 680 matches</p>
+                        <p class="last-showp">
+                            Showing {{ $profiledetails->firstItem() }}–{{ $profiledetails->lastItem() }} of
+                            {{ $profiledetails->total() }} matches
+                        </p>
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#searchModal">
@@ -98,16 +101,18 @@
 
                                                 <!-- Search by Profile ID -->
                                                 <div class="tab-pane fade" id="profileIdTab">
-                                                    <form class="row ne-id-search" id="profileIdSearchForm">
+                                                    <form class="row ne-id-search" method="GET"
+                                                        action="{{ route('customer.matches') }}" id="profileIdSearchForm">
                                                         <div class="col-md-12">
                                                             <input type="text" class="form-control" id="profileId"
                                                                 name="customer_id" placeholder="Enter Profile ID">
                                                         </div>
+                                                        <div class="col-12 text-center mt-3">
+                                                            <button type="submit" class="btn bt-register"
+                                                                id="showProfilesButton">Show Me Profiles</button>
+                                                        </div>
                                                     </form>
-                                                    <div class="col-12 text-center mt-3">
-                                                        <button type="button" class="btn bt-register"
-                                                            id="showProfilesButton">Show Me Profiles</button>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -154,7 +159,7 @@
                                             <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
                                             <path d="M22 13a18.15 18.15 0 0 1-20 0" />
                                             <rect width="20" height="14" x="2" y="6" rx="2" />
-                                        </svg> <span>{{ $item->occupation }}</span>
+                                        </svg> <span>{{ $item->designation }}</span>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -244,7 +249,7 @@
     <!-- JavaScript for Profile ID Search -->
     <script>
         document.getElementById('showProfilesButton').addEventListener('click', function() {
-                        $('#searchModal').modal('hide');
+            $('#searchModal').modal('hide');
         });
     </script>
 @endsection

@@ -24,6 +24,7 @@ class CustomerDetails extends Model
         'caste',
         'annual_income',
         'company_name',
+        'designation',
         'experience',
         'req_rel_manager',
         'expectations',
