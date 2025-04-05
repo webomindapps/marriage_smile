@@ -169,13 +169,16 @@
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="form-group" id="other-mothertongue-field" style="display: none;">
-                            <label for="other_mothertongue">Please Specify</label>
-                            <input type="text" class="form-control" id="other_mothertongue" name="other_mothertongue"
-                                placeholder="Enter your Mother Tongue">
-                            @error('other_mothertongue')
-                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                            @enderror
+                        <div class="form-group">
+                            @if (old('mother_tongue') == 'Other')
+                                <input type="text" id="other-mothertongue-field" name="othermother_tongue"
+                                    class="form-control mt-2" placeholder="Enter Other mother tongue"
+                                    value="{{ old('mother_tongue') }}" required>
+                            @else
+                                <input type="text" style="display: none;" id="other-mothertongue-field"
+                                    name="othermother_tongue" class="form-control mt-2"
+                                    placeholder="Enter Other mother_tongue">
+                            @endif
                         </div>
 
                         <div class="col-6">
@@ -732,11 +735,14 @@
     </script>
     <script>
         document.getElementById('qualification').addEventListener('change', function() {
+            
             const otherQualificationField = document.getElementById('other-qualification-field');
             if (this.value === 'Others') {
                 otherQualificationField.style.display = 'block';
+                otherQualificationField.setAttribute('required', 'required');
             } else {
                 otherQualificationField.style.display = 'none';
+                otherQualificationField.removeAttribute('required');
             }
         });
     </script>
@@ -746,8 +752,10 @@
             const otherMotherTongueField = document.getElementById('other-mothertongue-field');
             if (this.value === 'Others') {
                 otherMotherTongueField.style.display = 'block';
+                otherMotherTongueField.setAttribute('required', 'required');
             } else {
                 otherMotherTongueField.style.display = 'none';
+                otherMotherTongueField.removeAttribute('required');
             }
         });
     </script>

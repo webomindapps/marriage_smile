@@ -107,10 +107,8 @@ class CustomerController extends Controller
                 'gender',
                 'height',
                 'colour',
-                'qualification',
                 'dob',
                 'age',
-                'mother_tongue',
                 'caste',
                 'annual_income',
                 'company_name',
@@ -140,6 +138,16 @@ class CustomerController extends Controller
                 'preferred_contact_no',
                 'contact_related_to',
             ]);
+            if ($request->qualification == 'Others') {
+                $customerDetailsData['qualification'] = $request->otherqualification;
+            } else {
+                $customerDetailsData['qualification'] = $request->qualification;
+            }
+            if ($request->mother_tongue == 'Others') {
+                $customerDetailsData['mother_tongue'] = $request->othermother_tongue;
+            } else {
+                $customerDetailsData['mother_tongue'] = $request->mother_tongue;
+            }
             $req_rel_manager = $request->input('req_rel_manager');
             $timings = $request->input('timings');
 
