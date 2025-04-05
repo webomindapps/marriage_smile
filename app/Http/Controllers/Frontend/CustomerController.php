@@ -112,6 +112,7 @@ class CustomerController extends Controller
                 'caste',
                 'annual_income',
                 'company_name',
+                'designation',
                 'experience',
                 'req_rel_manager',
                 'expectations',
@@ -252,6 +253,7 @@ class CustomerController extends Controller
                 'caste',
                 'annual_income',
                 'company_name',
+                'designation',
                 'experience',
                 'req_rel_manager',
                 'expectations',
@@ -400,29 +402,29 @@ class CustomerController extends Controller
     }
     public function matches(Request $request)
     {
-        $profileId = $request->profile_id;
+        $profileId = $request->customer_id;
         $customer = Auth::guard('customer')->user();
         $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
 
-      
+
         $query = CustomerDetails::with(['customer.documents'])
             ->where('gender', $oppositeGender);
 
-      
+
         if (!empty($profileId)) {
             $query->whereHas('customer', function ($q) use ($profileId) {
                 $q->where('customer_id', $profileId);
             });
         }
 
-       
+
         if ($request->filled('age_from') || $request->filled('age_to')) {
             $ageFrom = (int) ($request->age_from ?? 18); // Default minimum age
             $ageTo = (int) ($request->age_to ?? 100);    // Default maximum age
             $query->whereBetween('age', [$ageFrom, $ageTo]);
         }
 
-      
+
         if ($request->filled('marital_status') && $request->marital_status !== "Doesn't Matter") {
             $query->where('marritialstatus', $request->marital_status);
         }
@@ -530,7 +532,7 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
         if ($customer) {
             $customer->delete();
-            return response()->json(['message' => 'Customer deleted successfully.']);
+            return redirect()->route('customer.login')->with('success', 'Customer Deleted Successfully !!');
         }
     }
     public function holdcustomer($id)

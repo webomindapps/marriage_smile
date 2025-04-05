@@ -108,18 +108,13 @@
                                 <option value="ITI" {{ old('qualification') == 'ITI' ? 'selected' : '' }}>ITI</option>
                                 <option value="10th" {{ old('qualification') == '10th' ? 'selected' : '' }}>10th</option>
                                 <option value="12th" {{ old('qualification') == '12th' ? 'selected' : '' }}>12th</option>
-                                <option value="Others" {{ old('qualification') == 'Others' ? 'selected' : '' }}>Others
+                                <option value="Other" {{ old('qualification') == 'Other' ? 'selected' : '' }}>Other
                                 </option>
                             </select>
 
                             @if (old('qualification') == 'Other')
-                                <input type="text" id="other-qualification-field" name="otherqualification"
-                                    class="form-control mt-2" placeholder="Enter Other Qualification"
-                                    value="{{ old('qualification') }}" required>
-                            @else
-                                <input type="text" style="display: none;" id="other-qualification-field"
-                                    name="otherqualification" class="form-control mt-2"
-                                    placeholder="Enter Other Qualification">
+                                <input type="text" name="qualification" class="form-control mt-2"
+                                    placeholder="Enter Other Qualification" value="{{ old('qualification') }}" required>
                             @endif
 
                             <div id="qualificationerror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
@@ -244,6 +239,13 @@
                             <input type="text" class="form-control" id="company_name" name="company_name"
                                 placeholder="Company Name" value="{{ old('company_name') }}" required>
                             @error('company_name')
+                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="designation" name="designation"
+                                placeholder="Designation" value="{{ old('designation') }}">
+                            @error('designation')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>

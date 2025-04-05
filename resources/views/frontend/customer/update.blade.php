@@ -336,6 +336,13 @@
                                 @enderror
                             </div>
                             <div class="col-6">
+                                <input type="text" class="form-control" id="designation" name="designation"
+                                    value="{{ $customer->details->designation }}" placeholder="Designation">
+                                @error('designation')
+                                    <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-6">
                                 <input type="text" class="form-control" id="experience" name="experience"
                                     value="{{ $customer->details->experience }}" placeholder="Working Experience"
                                     required>
