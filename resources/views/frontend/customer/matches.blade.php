@@ -246,9 +246,11 @@
 
 
     <!-- JavaScript for Profile ID Search -->
-    <script>
-        document.getElementById('showProfilesButton').addEventListener('click', function() {
-            $('#searchModal').modal('hide');
-        });
-    </script>
+    @push('scripts')
+        <script>
+            $('#showProfilesButton').on('click', function() {
+                $('#searchModal').modal('hide');
+            });
+        </script>
+    @endpush
 @endsection
