@@ -548,4 +548,9 @@ class CustomerController extends Controller
             return redirect()->back()->with(['success' => 'Customer activated successfully.']);
         }
     }
+    public function chat()
+    {
+        $customer = Auth::guard('customer')->user();
+        return view('frontend.customer.chat', compact('customer'));
+    }
 }
