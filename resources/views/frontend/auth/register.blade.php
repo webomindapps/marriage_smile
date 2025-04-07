@@ -87,7 +87,7 @@
                         <div class="col-6">
                             <select class="form-select" id="qualification" name="qualification" required>
                                 <option value="" disabled
-                                    {{ old('qualification') && old('qualification') !== 'Other' ? '' : 'selected' }}>
+                                    {{ old('qualification') && old('qualification') !== 'Others' ? '' : 'selected' }}>
                                     Select Qualification
                                 </option>
                                 <option value="BE" {{ old('qualification') == 'BE' ? 'selected' : '' }}>BE</option>
@@ -108,14 +108,14 @@
                                 <option value="ITI" {{ old('qualification') == 'ITI' ? 'selected' : '' }}>ITI</option>
                                 <option value="10th" {{ old('qualification') == '10th' ? 'selected' : '' }}>10th</option>
                                 <option value="12th" {{ old('qualification') == '12th' ? 'selected' : '' }}>12th</option>
-                                <option value="Other" {{ old('qualification') == 'Other' ? 'selected' : '' }}>Other
+                                <option value="Others" {{ old('qualification') == 'Others' ? 'selected' : '' }}>Others
                                 </option>
                             </select>
-
-                            @if (old('qualification') == 'Other')
-                                <input type="text" name="qualification" class="form-control mt-2"
-                                    placeholder="Enter Other Qualification" value="{{ old('qualification') }}" required>
-                            @endif
+                            <input type="text" name="qualification" id="other-qualification-field"
+                                class="form-control mt-2" placeholder="Enter Other Qualification"
+                                value="{{ old('qualification') == 'Others' ? old('qualification_value') : '' }}"
+                                style="{{ old('qualification') == 'Others' ? '' : 'display: none;' }}"
+                                {{ old('qualification') == 'Others' ? 'required' : '' }}>
 
                             <div id="qualificationerror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
                                 Please select Qualification
@@ -735,7 +735,7 @@
     </script>
     <script>
         document.getElementById('qualification').addEventListener('change', function() {
-            
+
             const otherQualificationField = document.getElementById('other-qualification-field');
             if (this.value === 'Others') {
                 otherQualificationField.style.display = 'block';

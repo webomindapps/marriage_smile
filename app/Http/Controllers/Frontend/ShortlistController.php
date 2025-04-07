@@ -15,13 +15,13 @@ class ShortlistController extends Controller
         $exist = Shortlist::where('customer_id', $customer->id)->where('profile_id', $id)->first();
         if ($exist) {
             $exist->delete();
-            return back()->with('message', 'Profile removed successfully');
+            return back()->with('success', 'Profile removed successfully');
         } else {
             $shortlist = Shortlist::create([
                 'customer_id' => $customer->id,
                 'profile_id' => $id,
             ]);
-            return back()->with('message', 'Profile added successfully');
+            return back()->with('success', 'Profile added successfully');
         }
     }
     public function shortlist()
