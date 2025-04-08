@@ -16,7 +16,7 @@ use App\Http\Controllers\Frontend\MarriageController;
 use App\Http\Controllers\Frontend\ShortlistController;
 use App\Http\Controllers\frontend\CustomerPasswordResetController;
 
-Route::get('/', [MarriageController::class, 'index']);
+Route::get('/', [MarriageController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'customer.guest'], function () {
     Route::get('customer/register', [CustomerController::class, 'register'])->name('customer.register');
@@ -61,7 +61,7 @@ Route::group(['middleware' => 'customer.auth'], function () {
 
     // pricing
     Route::get('/pricing', [MarriageController::class, 'pricingView'])->name('pricing');
-    Route::get('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
+    Route::post('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
 
     //shortlist
     Route::get('customer/shortlist', [ShortlistController::class, 'shortlist'])->name('customer.shortlist');
