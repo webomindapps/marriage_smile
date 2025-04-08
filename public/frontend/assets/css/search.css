@@ -186,7 +186,7 @@ hr {
 
 .pink-bg-list {
     background: #fff4f6;
-    padding: 18px 28px 1px 28px;
+    padding: 18px 28px 7px 28px;
 }
 
 ul.list-none {
@@ -234,7 +234,7 @@ ul.list-none {
 
 ul.list-none.col-li {
     color: #ce1a77;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
 }
 
