@@ -15,8 +15,9 @@ class PlanPrice extends Model
         'special_price',
         'status'
     ];
-    public function priceplans(): BelongsTo
+
+    public function priceplans()
     {
-        return $this->belongsTo(Plan::class,'id');
+        return $this->belongsTo(Plan::class,'plan_id','id');
     }
 }
