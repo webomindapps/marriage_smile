@@ -68,6 +68,9 @@ Route::group(['middleware' => 'customer.auth'], function () {
     Route::get('add/{id}/shortlist', [ShortlistController::class, 'addToShortlist'])->name('add-to-shortlist');
     Route::get('shortlist/{id}/remove', [ShortlistController::class, 'removeFromShortlist'])->name('shortlist.remove');
     Route::get('hold-customer/{id}',[CustomerController::class,'holdCustomer'])->name('customer.hold');
+
+    // chat
+    Route::get('customer/chat', [CustomerController::class, 'chat'])->name('customer.chat');
 });
 
 Route::post('/search-opposite-gender', [CustomerController::class, 'searchOppositeGender']);
