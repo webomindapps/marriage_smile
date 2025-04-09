@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
 use App\Models\FAQ;
 use App\Models\Plan;
+use App\Models\Feature;
 use App\Models\Testimonials;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class MarriageController extends Controller
 {
@@ -18,7 +19,9 @@ class MarriageController extends Controller
     }
     public function pricingView()
     {
-        $plans = Plan::where('status', true)->orderBy('position', 'asc')->get();
-        return view('frontend.pages.pricing', compact('plans'));
+        $plans = Plan::where('status', true)->orderBy('position', 'asc')->with('features', 'prices')->get();
+        $allFeatures = Feature::all();
+
+        return view('frontend.pages.pricing', compact('plans', 'allFeatures'));
     }
 }

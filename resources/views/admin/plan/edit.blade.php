@@ -54,10 +54,10 @@
                                                 <input type="number" name="duration[]" value="{{ $item->duration }}">
                                             </td>
                                             <td>
-                                                <input type="number" name="prices[]" value="{{ $item->price }}">
+                                                <input type="number" name="price[]" value="{{ $item->price }}">
                                             </td>
                                             <td>
-                                                <input type="number" name="special_prices[]"
+                                                <input type="number" name="special_price[]"
                                                     value="{{ $item->special_price }}">
                                             </td>
                                             <td>

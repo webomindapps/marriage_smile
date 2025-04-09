@@ -14,9 +14,9 @@
                         <h3>Shortlist Profiles:-</h3>
                         @foreach ($shortlist as $list)
                             @php
-                                // Get the first document from the collection
-                                $document = $list->customer->documents->first();
+                                $document = $list->customer?->documents?->first();
                             @endphp
+
                             <div class="border p-3 mb-3 d-flex rounded">
                                 <div class="position-relative bg-white">
                                     <a onclick="return confirm('Are you sure you want to remove?')"
@@ -28,7 +28,7 @@
                                         <a href="{{ route('customer.details', $list->customer->id) }}"
                                             class="text-decoration-none">
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ asset('storage/' . $document->image_url ?? 'frontend/assets/images/default-profile.png') }}"
+                                                <img src="{{ $document ? asset('storage/' . $document->image_url) : asset('frontend/assets/images/default-profile.png') }}"
                                                     alt="Profile Picture" class="rounded-circle me-3" width="50"
                                                     height="50">
                                                 <div>
@@ -41,7 +41,6 @@
                                 </div>
                             </div>
                         @endforeach
-
                     </div>
                 </div>
             </div>

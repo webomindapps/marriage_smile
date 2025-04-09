@@ -26,4 +26,8 @@ class Customer extends Authenticatable
     {
         return $this->hasMany(CustomerImage::class, 'customers_id');
     }
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class, 'customer_id');
+    }
 }

@@ -9,133 +9,71 @@
                 <h2 class="cl-h3">Our Subscription Plans</h2>
                 <div class="container bg-light ">
                     <div class="row">
-                        <div class="col-md-4 col-sm-6">
-                            <div class="card bg-warning border-0 rounded-0 shadow hei-3">
-                                <div class="card-header text-center text-white border-0">
-                                    <h2><strong>Basic</strong></h2>
-                                    <p>Free <br>Members</p>
+                        @foreach ($plans as $plan)
+                            <div class="col-md-4 col-sm-6 mb-4">
+                                <div class="card bg-warning border-0 rounded-0 shadow hei-3">
+                                    <div class="card-header text-center text-white border-0">
+                                        <h3><strong>{{ $plan->name }}</strong></h3>
+                                        @foreach ($plan->prices as $price)
+                                            <h5>{{ $price->price == 0 ? 'Free' : '₹' . $price->price }}</h5>
+                                        @endforeach
+                                    </div>
+                                    <div class="card-body bg-white">
+                                        <ul class="list-unstyled">
+                                            {{-- Duration --}}
+                                            @foreach ($plan->prices as $price)
+                                                <li class="mb-4">
+                                                    <i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                                    {{ floor($price->duration / 365) > 0 ? floor($price->duration / 365) . ' ' . Str::plural('year', floor($price->duration / 365)) : '' }}
+                                                    {{ floor(($price->duration % 365) / 30) > 0 ? floor(($price->duration % 365) / 30) . ' ' . Str::plural('month', floor(($price->duration % 365) / 30)) : '' }}
+                                                </li>
+                                            @endforeach
 
-                                </div>
-                                <div class="card-body bg-white">
-                                    <ul class="list-unstyled">
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>3 Months</strong> Validity
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Name
-                                            Access</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>10</strong> Photo Access
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>5</strong> Profiles can Access with all details
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>5</strong> Horoscope Access
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>5</strong> Chats With Bride or Groom
-                                        </li>
+                                            {{-- Features --}}
+                                            @foreach ($allFeatures as $feature)
+                                                @php
+                                                    $attachedFeature = $plan->features->firstWhere('id', $feature->id);
+                                                @endphp
+                                                <li class="mb-4">
+                                                    @if ($attachedFeature)
+                                                        <i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
+                                                        <strong>{{ $attachedFeature->pivot->feature_value }}</strong>
+                                                        {{ $feature->name }}
+                                                    @else
+                                                        <i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
+                                                        {{ $feature->name }}
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
 
-                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
-                                            Dedicated Executive from Marriage Smile for coordination</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
-                                            Weekly updates from Marriage Smile Team</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i> New
-                                            Profiles email alerts </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
-                                            Quarterly Online Meetings</li>
-                                    </ul>
-                                    <!--  <p class="text-center font-weight-bolder text-dark h1 display-4 mb-0">$3</p>
-                                    <p class="small text-center font-weight-bolder text-secondary">per month</p> -->
-                                    <a href="{{ route('subscribe') }}" class="btn btn-block bg-warning text-white">Contact
-                                        Us</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6">
-                            <div class="card bg-success border-0 rounded-0 shadow hei-3">
-                                <div class="card-header text-center text-white border-0">
+                                        <form action="{{ route('subscribe') }}" method="POST">
+                                            @csrf
+                                            @php
+                                                $customer = Auth::guard('customer')->user();
+                                                $latestSubscription = optional(
+                                                    $customer->subscriptions()->latest('id')->first(),
+                                                );
+                                                $activePlanId = $latestSubscription->plan_id ?? null;
+                                                $currentPlanPrice = $plan->prices->first(); // adjust if more than one price per plan
+                                            @endphp
 
-                                    <h2><strong>Plan S</strong></h2>
-                                    <p>2999<br>
-                                        1499 ( Inc GST) </p>
-                                </div>
-                                <div class="card-body bg-white">
-                                    <ul class="list-unstyled">
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>1 Year</strong> Validity
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Name
-                                            Access</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>1000</strong> Photo Access
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>01 Year / 599 </strong> Profiles can Access with all details
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            Horoscope Access</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Chats
-                                            With Bride or Groom</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
-                                            Dedicated Executive from Marriage Smile for coordination </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i>
-                                            Weekly updates from Marriage Smile Team</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-times-circle text-secondary mr-2"></i> New
-                                            Profiles email alerts </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            Quarterly Online Meetings</li>
-                                    </ul>
+                                            <input type="hidden" name="plan_price_id" value="{{ $currentPlanPrice->id }}">
+
+                                            <button type="submit"
+                                                class="btn btn-block 
+                                                {{ $plan->prices->where('price', '>', 0)->isNotEmpty() ? 'bg-success' : 'bg-warning' }} 
+                                                text-white"
+                                                {{ $plan->id === $activePlanId ? 'disabled' : '' }}>
+                                                {{ $plan->id === $activePlanId ? 'Active' : ($plan->prices->where('price', '>', 0)->isNotEmpty() ? 'Buy Now' : 'Contact Us') }}
+                                            </button>
+                                        </form>
 
 
-
-
-                                    <a href="{{ route('subscribe') }}" class="btn btn-block bg-success text-white">Buy
-                                        Now</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4 col-sm-12">
-                            <div class="card bg-info border-0 rounded-0 shadow hei-3">
-                                <div class="card-header text-center text-white border-0">
-                                    <h2><strong>Plan M</strong></h2>
-                                    <p>6999<br>
-                                        4999 ( Inc GST)</p>
-
-
-                                </div>
-                                <div class="card-body bg-white">
-                                    <ul class="list-unstyled">
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>1 Year</strong> Validity
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Name
-                                            Access</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>Unlimited</strong>
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            <strong>01 Year / 899 </strong> Profiles can Access with all details
-                                        </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            Horoscope Access</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Chats
-                                            With Bride or Groom</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            Dedicated Executive from Marriage Smile for coordination </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> Weekly
-                                            updates from Marriage Smile Team</li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i> New
-                                            Profiles email alerts </li>
-                                        <li class="mb-4"><i class="fa fa-lg fa-check-circle text-warning mr-2"></i>
-                                            Quarterly Online Meetings </li>
-                                    </ul>
-
-                                    <a href="{{ route('subscribe') }}" class="btn btn-block bg-success text-white">Buy
-                                        Now</a>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

@@ -115,25 +115,24 @@ class PlanController extends Controller
             }
             if ($request->has('feature_ids') && $request->has('feature_values')) {
                 $syncData = [];
-            
+
                 foreach ($request->feature_ids as $index => $featureId) {
                     $syncData[$featureId] = [
                         'feature_value' => $request->feature_values[$index] ?? null
                     ];
                 }
-            
+
                 $plan->features()->sync($syncData);
             }
-            
+
             $plan->prices()->delete();
-            if ($request->duration && $request->prices && $request->special_prices) {
+            if ($request->has('duration') && $request->has('price') && $request->has('special_price')) {
                 foreach ($request->duration as $key => $duration) {
                     $plan->prices()->create([
                         'plan_id' => $plan->id,
                         'duration' => $duration,
-                    ], [
-                        'price' => $request->prices[$key],
-                        'special_price' => $request->special_prices[$key],
+                        'price' => $request->price[$key] ?? 0,
+                        'special_price' => $request->special_price[$key] ?? 0,
                     ]);
                 }
             }

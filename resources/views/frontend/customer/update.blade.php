@@ -40,13 +40,12 @@
             <div class="row">
                 <div class="col-lg-3">
                     <x-profilelayout />
-                    
+
                 </div>
                 <div class="col-lg-8 new-gp ">
                     <div class="profile-edit">
-                        <form class="row g-3" id="registrationForm"
-                            action="{{ route('admin.customer.edit', $customer->id) }}" method="POST"
-                            enctype="multipart/form-data">
+                        <form class="row g-3" id="registrationForm" action="{{ route('admin.customer.edit', $customer->id) }}"
+                            method="POST" enctype="multipart/form-data">
                             @csrf
                             <h5 class="h5-find pd-1"><i class="fas fa-user-circle"></i> Profile Details
                                 <span>(Verified)</span>
@@ -179,8 +178,7 @@
                                         12th
                                     </option>
                                 </select>
-                                <div id="qualificationerror" class="text-danger ps-0 mb-2 d-none"
-                                    style="font-size: 13px;">
+                                <div id="qualificationerror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
                                     Please select Qualification
                                 </div>
                                 @error('qualification')
@@ -398,9 +396,10 @@
                             <div class="col-12">
                                 <div class="bi-ftre">
                                     <label>Horoscope</label><br />
-                                    <input type="file" id="image_path" name="image_path" {{-- If there's an image path, show the old one --}}
-                                        @if ($customer->documents->isNotEmpty() && $customer->documents->first()->image_path) value="{{ asset('storage/' . $customer->documents->first()->image_path) }}" @endif>
+                                    <input type="file" id="image_path" name="image_path" {{-- If there's an image path, show the old one --}}>
                                 </div>
+                                <img src="{{ asset('storage/' . $customer->details->image_path) }}" class="img-thumbnail mt-2"
+                                    width="100" height="100" alt="Uploaded image">
                             </div>
 
                             <div class="col-12">

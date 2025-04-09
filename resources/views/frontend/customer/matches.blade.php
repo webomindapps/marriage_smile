@@ -273,7 +273,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="pink-bg-list">
+                            <div class="pink-bg-list mt-2">
                                 <ul class="list-none col-li">
                                     <li>
                                         <a href="{{ route('send.friend.request', $item->customer->id) }}">

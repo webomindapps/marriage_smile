@@ -19,8 +19,9 @@ class Plan extends Model
     {
         return $this->belongsToMany(Feature::class)->withPivot('feature_value');;
     }
-    public function prices(): HasMany
+    public function prices()
     {
         return $this->hasMany(PlanPrice::class);
     }
+    
 }
