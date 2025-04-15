@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Frontend\ChatsController;
 use App\Http\Controllers\Frontend\CustomerController;
 use App\Http\Controllers\Frontend\MarriageController;
 use App\Http\Controllers\Frontend\ShortlistController;
@@ -72,6 +73,13 @@ Route::group(['middleware' => 'customer.auth'], function () {
 
     // chat
     Route::get('customer/chat', [CustomerController::class, 'chat'])->name('customer.chat');
+    
+    Route::get('/chat/{user}',[ChatsController::class,'chat'])->name('chat');
+    Route::get('/chat/{id}/approve',[ChatsController::class,'approve']);
+    Route::get('/chat/{id}/block',[ChatsController::class,'block']);
+    
+    Route::resource('messages/{user}',ChatsController::class,['only' => ['index', 'store']])->middleware(['customer.auth']);
+    Route::get('conversations', [ChatsController::class, 'conversations']);
 });
 
 Route::post('/search-opposite-gender', [CustomerController::class, 'searchOppositeGender']);

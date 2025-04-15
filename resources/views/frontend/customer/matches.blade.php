@@ -305,7 +305,7 @@
                             <div class="pink-bg-list mt-2">
                                 <ul class="list-none col-li">
                                     <li>
-                                        <a href="{{ route('send.friend.request', $item->id) }}">
+                                        <a href="{{ route('send.friend.request', $item->customer->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -317,7 +317,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('add-to-shortlist', $item->id) }}">
+                                        <a href="{{ route('add-to-shortlist', $item->customer->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -329,7 +329,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('customer.chat') }}">
+                                        <a href="{{ route('chat',$item->customer->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"

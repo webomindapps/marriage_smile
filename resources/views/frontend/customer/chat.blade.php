@@ -8,18 +8,9 @@
             <div class="col-lg-3">
                 <x-Profilelayout />
             </div>
-            <div class="col-lg-8 new-gp">
-                <div class="row bo-filter">
-                    <div class="col-lg-3">
-                        <div class="bo-filter-box">
-                            <ul class="list-unstyled">
-                                <li><a href="#">All</a></li>
-                                <li><a href="#">Unread</a></li>
-                                <li><a href="#">Read</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-9"></div>
+            <div class="col-lg-9">
+                <div class="row w-100 border p-2 rounded" id="app">
+                    <chat-box :receiver_per="" :receiver="{{ $customer }}" :sender_per="" :sender="{{ $sender }}" /></chat-box>
                 </div>
             </div>
         </div>

@@ -1,43 +1,5 @@
 <template>
     <div class="chat-area">
-        <!-- chatlist -->
-        <div class="chatlist">
-            <div class="modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="chat-lists">
-                        <div
-                            class="chat-list mt-2"
-                            v-for="conversation in conversations"
-                            :key="conversation.id"
-                        >
-                            <div
-                                class="d-flex align-items-center px-2 py-1 rounded border"
-                                :class="{ atvcht: conversation.id === receiver.id }"
-                            >
-                                <div class="flex-shrink-0">
-                                    <img @click="selectConversation(conversation)"
-                                        class="img-fluid user_img"
-                                        :src="getConversationImageUrl(conversation)"
-                                        alt="user img"
-                                    />
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h3 @click="selectConversation(conversation)">
-                                        {{
-                                            conversation.first_name +
-                                            " " +
-                                            conversation.last_name
-                                        }}
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- chatlist -->
-
         <!-- chatbox -->
         <div class="chatbox">
             <div class="modal-dialog-scrollable">
@@ -53,11 +15,7 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h3>
-                                    {{
-                                        receiver.first_name +
-                                        " " +
-                                        receiver.last_name
-                                    }}
+                                    {{ receiver.name}}
                                 </h3>
                             </div>
                             <div class="dropdown">
@@ -79,14 +37,7 @@
                     <div class="modal-body">
                         <div class="msg-body">
                             <ul class="px-2" ref="messagesBox">
-                                <li v-if="sender_per?.is_blocked">
-                                    <p>You cannot send messages to this user as they have blocked you.</p>
-                                </li>
-                                <li class="text-end" v-else-if="!receiver_per?.is_approved">
-                                    <a class="approv_btn" @click.prevent="getApproval(receiver_per.id)">Approve chat request</a>
-                                </li>
                                 <li
-                                    v-else-if="sender_per?.is_approved"
                                     v-for="(message, index) in messages"
                                     :key="index"
                                     :class="[
@@ -100,7 +51,6 @@
                                         formatTimestamp(message.created_at)
                                     }}</span>
                                 </li>
-                                <li v-else>Chat request sent. Waiting for approval.</li>
                             </ul>
                         </div>
                     </div>
@@ -209,16 +159,12 @@ export default {
         };
 
         const getConversationImageUrl = (conversation) => {
-            return `/storage/${
-                conversation.motherdeatils.baby_photo || "default.png"
-            }`;
+            return "default.png";
         };
 
         // Computed property for image URL
         const imageUrl = computed(() => {
-            return `/storage/${
-                props.receiver.motherdeatils.baby_photo || "default.png"
-            }`;
+            return `/storage/${props.receiver.image}`;
         });
 
         onMounted(() => {
