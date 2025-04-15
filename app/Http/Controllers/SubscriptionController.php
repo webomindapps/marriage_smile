@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Plan;
 use App\Models\PlanPrice;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Mail\SubscriptionMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Models\SubscriptionValidation;
 
 class SubscriptionController extends Controller
 {
@@ -21,49 +23,79 @@ class SubscriptionController extends Controller
     {
         $customer = Auth::guard('customer')->user();
 
-        $existingSubscription = Subscription::where('customer_id', $customer->id)
-            ->where('status', '1')
-            ->first();
-
-        if (!$existingSubscription && !$request->has('plan_price_id')) {
-            $basicPlanPrice = PlanPrice::whereHas('priceplans', function ($q) {
-                $q->where('name', 'Basic');
-            })->first();
-
-            if (!$basicPlanPrice) {
-                return back()->with('error', 'Basic plan not found.');
-            }
-
-            $request->merge(['plan_price_id' => $basicPlanPrice->id]);
-        }
-
         $request->validate([
             'plan_price_id' => 'required|exists:plan_prices,id',
         ]);
 
         $planPrice = PlanPrice::with('priceplans')->findOrFail($request->plan_price_id);
-        // dd($planPrice->priceplans);
-        if ($existingSubscription) {
-            $existingSubscription->update(['status' => '0']);
-        }
+
+        // Deactivate any existing active subscription
+        Subscription::where('customer_id', $customer->id)
+            ->where('status', '1')
+            ->update(['status' => '0']);
 
         $start_date = now();
         $end_date = $start_date->copy()->addDays($planPrice->duration);
 
-        $subscription = Subscription::create([
-            'customer_id' => $customer->id,
-            'plan_id' => $planPrice->plan_id,
-            'plan' => $planPrice->priceplans->name ?? '',
-            'duration' => $planPrice->duration,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'price' => $planPrice->price,
-            'status' => '1',
-        ]);
+        // Create or update subscription
+        $subscription = Subscription::updateOrCreate(
+            [
+                'customer_id' => $customer->id,
+                'plan_id' => $planPrice->plan_id,
+            ],
+            [
+                'plan' => $planPrice->priceplans->name ?? '',
+                'duration' => $planPrice->duration,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'price' => $planPrice->special_price,
+                'status' => '1',
+            ]
+        );
 
-        Mail::to($customer->email)->send(new SubscriptionMail($subscription));
+        // Fetch plan features
+        $plan = Plan::with('features')->find($planPrice->plan_id);
+
+        $featureMap = [
+            1 => 'photo_viewable',
+            4 => 'hscop_viewable',
+            5 => 'chat_viewable',
+            6 => 'profile_viewable',
+        ];
+
+        $featureValues = [
+            'photo_viewable' => 0,
+            'hscop_viewable' => 0,
+            'profile_viewable' => 0,
+            'chat_viewable' => null,
+        ];
+
+        foreach ($plan->features as $feature) {
+            if (array_key_exists($feature->id, $featureMap)) {
+                $column = $featureMap[$feature->id];
+                $featureValues[$column] = $feature->pivot->feature_value;
+            }
+        }
+
+        // Create or update subscription validation
+        SubscriptionValidation::updateOrCreate(
+            ['customer_id' => $customer->id],
+            [
+                'plan_id' => $plan->id,
+                'subscription_id' => $subscription->id,
+                'photo_viewable' => $featureValues['photo_viewable'],
+                'hscop_viewable' => $featureValues['hscop_viewable'],
+                'profile_viewable' => $featureValues['profile_viewable'],
+                'chat_viewable' => $featureValues['chat_viewable'],
+            ]
+        );
+
+        // Mail::to($customer->email)->send(new SubscriptionMail($subscription));
+
         return redirect()->route('home')->with('success', 'Subscription successful!');
     }
+
+
 
 
 

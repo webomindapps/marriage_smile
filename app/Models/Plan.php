@@ -17,11 +17,16 @@ class Plan extends Model
     ];
     public function features(): BelongsToMany
     {
-        return $this->belongsToMany(Feature::class)->withPivot('feature_value');;
+        return $this->belongsToMany(Feature::class, 'feature_plan')->withPivot('feature_value');
+        
     }
     public function prices()
     {
         return $this->hasMany(PlanPrice::class);
     }
-    
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
 }
