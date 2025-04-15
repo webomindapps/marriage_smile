@@ -4,18 +4,25 @@ namespace App\Http\Controllers\Frontend;
 
 use Exception;
 use Carbon\Carbon;
+use App\Models\Plan;
 use App\Models\Customer;
+use App\Models\PlanPrice;
 use App\Mail\PreferredDay;
 use App\Mail\RelationManger;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Mail\CustomerRegister;
+use App\Mail\SubscriptionMail;
+use App\Models\CustomerDetails;
+use App\Models\ProfileViewable;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\CustomerDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Models\SubscriptionValidation;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
 
 class CustomerController extends Controller
@@ -194,6 +201,58 @@ class CustomerController extends Controller
                 Mail::to('sunil@webomindapps.com')->send(new PreferredDay($customer));
             }
             Mail::to($request->email)->send(new CustomerRegister($customer));
+
+            $basicPlan = PlanPrice::whereHas('priceplans', function ($q) {
+                $q->where('name', 'Basic');
+            })->first();
+
+            if ($basicPlan && $basicPlan->priceplans) {
+                $start_date = now();
+                $end_date = $start_date->copy()->addDays($basicPlan->duration);
+
+                $subscription = Subscription::create([
+                    'customer_id' => $customer->id,
+                    'plan_id' => $basicPlan->plan_id,
+                    'plan_price_id' => $basicPlan->id,
+                    'plan' => $basicPlan->priceplans->name ?? 'Basic',
+                    'duration' => $basicPlan->duration,
+                    'start_date' => $start_date,
+                    'end_date' => $end_date,
+                    'price' => $basicPlan->price,
+                    'status' => '1',
+                ]);
+            }
+            $plan = Plan::with('features')->find($basicPlan->plan_id);
+            $featureMap = [
+                1 => 'photo_viewable',
+                4 => 'hscop_viewable',
+                5 => 'chat_viewable',
+                6 => 'profile_viewable',
+            ];
+
+            $featureValues = [
+                'photo_viewable' => 0,
+                'hscop_viewable' => 0,
+                'profile_viewable' => 0,
+                'chat_viewable' => null,
+            ];
+            foreach ($plan->features as $feature) {
+                if (array_key_exists($feature->id, $featureMap)) {
+                    $column = $featureMap[$feature->id];
+                    $featureValues[$column] = $feature->pivot->feature_value;
+                }
+            }
+            SubscriptionValidation::create([
+                'customer_id' => $customer->id,
+                'plan_id' => $plan->id,
+                'subscription_id' => $subscription->id,
+                'photo_viewable' => $featureValues['photo_viewable'],
+                'hscop_viewable' => $featureValues['hscop_viewable'],
+                'profile_viewable' => $featureValues['profile_viewable'],
+                'chat_viewable' => $featureValues['chat_viewable'],
+            ]);
+            // dd($subscription);
+            Mail::to($customer->email)->send(new SubscriptionMail($subscription));
 
             return redirect()->route('customer.login')->with('verify', 'Customer registered successfully');
         } catch (Exception $e) {
@@ -400,6 +459,41 @@ class CustomerController extends Controller
         $customer = Auth::guard('customer')->user();
         return view('frontend.customer.profile', compact('customer'));
     }
+    // public function matches(Request $request)
+    // {
+    //     $profileId = $request->customer_id;
+    //     $customer = Auth::guard('customer')->user();
+    //     $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
+
+
+    //     $query = CustomerDetails::with(['customer.documents'])
+    //         ->where('gender', $oppositeGender);
+
+
+    //     if (!empty($profileId)) {
+    //         $query->whereHas('customer', function ($q) use ($profileId) {
+    //             $q->where('customer_id', $profileId);
+    //         });
+    //     }
+
+
+    //     if ($request->filled('age_from') || $request->filled('age_to')) {
+    //         $ageFrom = (int) ($request->age_from ?? 18); // Default minimum age
+    //         $ageTo = (int) ($request->age_to ?? 100);    // Default maximum age
+    //         $query->whereBetween('age', [$ageFrom, $ageTo]);
+    //     }
+
+
+    //     if ($request->filled('marital_status') && $request->marital_status !== "Doesn't Matter") {
+    //         $query->where('marritialstatus', $request->marital_status);
+    //     }
+
+    //     // Execute the query
+    //     $profiledetails = $query->paginate(10);
+
+    //     return view('frontend.customer.matches', compact('profiledetails'));
+    // }
+
     public function matches(Request $request)
     {
         $profileId = $request->customer_id;
@@ -407,10 +501,8 @@ class CustomerController extends Controller
         $customer = Auth::guard('customer')->user();
         $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
 
-
         $query = CustomerDetails::with(['customer.documents'])
             ->where('gender', $oppositeGender);
-
 
         if (!empty($profileId)) {
             $query->whereHas('customer', function ($q) use ($profileId) {
@@ -425,32 +517,148 @@ class CustomerController extends Controller
         }
 
         if ($request->filled('age_from') || $request->filled('age_to')) {
-            $ageFrom = (int) ($request->age_from ?? 18); // Default minimum age
-            $ageTo = (int) ($request->age_to ?? 100);    // Default maximum age
+            $ageFrom = (int) ($request->age_from ?? 18);
+            $ageTo = (int) ($request->age_to ?? 100);
             $query->whereBetween('age', [$ageFrom, $ageTo]);
         }
-
 
         if ($request->filled('marital_status') && $request->marital_status !== "Doesn't Matter") {
             $query->where('marritialstatus', $request->marital_status);
         }
 
-        // Execute the query
         $profiledetails = $query->paginate(10);
+        // dd($profiledetails);
+        foreach ($profiledetails as $profile) {
+            $matchedCustomer = Auth::guard('customer')->user();
+            // dd($matchedCustomer);
+            $subscription = Subscription::where('customer_id', $matchedCustomer->id)
+                ->where('status', 1)
+                ->latest()
+                ->first();
+            // dd($subscription);
+            $photoLimit = 0;
 
-        return view('frontend.customer.matches', compact('profiledetails'));
+            if ($subscription) {
+                // dd($subscription->plan_id);
+                $plan = Plan::with('features')->find($subscription->plan_id);
+                if ($plan) {
+                    $photoLimit = $plan->features()
+                        ->where('feature_id', '1')
+                        ->first()?->pivot?->feature_value ?? 0;
+                }
+            }
+            // dd($photoLimit);
+            $documents = $matchedCustomer->documents;
+            $totalPhotos = $documents->count();
+            $viewable = min($photoLimit, $totalPhotos);
+            $left = max($photoLimit - $viewable, 0);
+
+            $profile->photo_limit = $photoLimit;
+            $profile->photo_viewable = $viewable;
+            $profile->photo_left = $left;
+            $profile->documents = $documents;
+        }
+        $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
+
+        return view('frontend.customer.matches', compact('profiledetails', 'subscription'));
     }
+    public function viewPhoto(Request $request)
+    {
+        $customer = Auth::guard('customer')->user();
+
+        $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
+
+        if (!$subscription) {
+            return response()->json(['success' => false, 'message' => 'Subscription not found.']);
+        }
+
+        if ((int) $subscription->photo_viewable <= 0) {
+            return response()->json(['success' => false, 'message' => 'You’ve reached your photo view limit.']);
+        }
+
+        $subscription->decrement('photo_viewable');
+
+        $photoLimit = $request->photo_limit ?? $subscription->photo_viewable;
+        $viewed = $photoLimit - $subscription->photo_viewable;
+        $left = $subscription->photo_viewable;
+
+        return response()->json([
+            'success' => true,
+            'viewed' => $viewed,
+            'left' => $left
+        ]);
+    }
+    public function detail($id)
+    {
+        $customer = Auth::guard('customer')->user(); // logged-in customer
+        $profileId = $id;
+        // dd($profileId);
+        // Check if profile already viewed
+        $alreadyViewed = ProfileViewable::where('customer_id', $customer->id)
+            ->where('profile_id', $profileId)
+            ->exists();
+        // dd($alreadyViewed);
+        if (!$alreadyViewed) {
+            $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
+
+            if (!$subscription || $subscription->profile_viewable <= 0) {
+                return redirect()->back()->with('error', 'Profile view limit reached.');
+            }
+
+            ProfileViewable::create([
+                'customer_id' => $customer->id,
+                'plan_id' => $subscription->plan_id,
+                'subscription_id' => $subscription->subscription_id,
+                'profile_id' => $profileId,
+            ]);
+
+            $subscription->decrement('profile_viewable');
+            // dd($subscription);
+        }
+
+        $pendingViews = SubscriptionValidation::where('customer_id', $customer->id)->value('profile_viewable');
+
+        // Load profile detail
+        $customer = CustomerDetails::with('customer')->findOrFail($profileId);
+        // dd($customer);
+        return view('frontend.customer.profile-detail', compact('customer', 'pendingViews'));
+    }
+    public function downloadHoroscope($id)
+    {
+        $customer = Auth::guard('customer')->user();
+
+        $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
+
+        if (!$subscription || $subscription->hscop_viewable <= 0) {
+            return redirect()->back()->with('error', 'Horoscope download limit reached.');
+        }
+
+        // Get file path
+        $customerDetail = CustomerDetails::with('customer')->findOrFail($id);
+        $filePath = $customerDetail->image_path;
+
+        if (!Storage::disk('public')->exists($filePath)) {
+            return redirect()->back()->with('error', 'File not found.');
+        }
+
+        // Decrease count
+        $subscription->decrement('hscop_viewable');
+
+        // Download the file
+        return response()->download(storage_path('app/public/' . $filePath));
+    }
+
     public function logout()
     {
         Auth::guard('customer')->logout();
         return redirect()->route('customer.login');
     }
 
-    public function detail($id)
-    {
-        $customer = CustomerDetails::with('customer')->find($id);
-        return view('frontend.customer.profile-detail', compact('customer'));
-    }
+    // public function detail($id)
+    // {
+    //     $customer = CustomerDetails::with('customer')->find($id);
+    //     return view('frontend.customer.profile-detail', compact('customer'));
+    // }
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();

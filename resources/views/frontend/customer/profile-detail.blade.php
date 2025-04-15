@@ -411,8 +411,6 @@
                                 <!-- ///status/// -->
                                 <div class="education">
                                     <h4>Kundali and Astro</h4>
-                                    <img src="{{ asset('frontend/assets/images/kundli.png') }}"
-                                        class="img-fluid code-imwidt">
                                     <span class="educat-head">
                                         @if ($customer->dob)
                                             {{ \Carbon\Carbon::parse($customer->dob)->format('M d,Y') }}
@@ -420,7 +418,15 @@
                                             N/A
                                         @endif
                                     </span>
-                                    <p class="requ-horoscope">Request Horoscope</p>
+                                    @if ($customer->customer && $customer->customer->documents->isNotEmpty())
+                                        <a href="{{ route('customer.download.horoscope', $customer->id) }}">
+                                            <p class="requ-horoscope">Request Horoscope</p>
+                                        </a>
+                                    @else
+                                        <p class="requ-horoscope">Request Horoscope</p>
+                                    @endif
+
+                                    {{-- <p class="requ-horoscope">Request Horoscope</p> --}}
                                 </div>
 
                                 <!-- ///status/// -->

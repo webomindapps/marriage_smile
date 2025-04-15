@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Frontend\ChatsController;
 use App\Http\Controllers\Frontend\CustomerController;
 use App\Http\Controllers\Frontend\MarriageController;
 use App\Http\Controllers\Frontend\ShortlistController;
@@ -51,8 +52,9 @@ Route::group(['middleware' => 'customer.auth'], function () {
     Route::get('customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.details');
     Route::post('/customer-details', [CustomerController::class, 'getCustomerById']);
 
-    Route::get('/customer/delete/{id}',[CustomerController::class,'deletecustomer'])->name('customer.delete');
-
+    Route::get('/customer/delete/{id}', [CustomerController::class, 'deletecustomer'])->name('customer.delete');
+    Route::post('/photo/view/ajax', [CustomerController::class, 'viewPhoto'])->name('photo.view.ajax');
+    Route::get('/download-horoscope/{id}', [CustomerController::class, 'downloadHoroscope'])->name('customer.download.horoscope');
     // Friend Request
     Route::get('/friend-requests', [FriendRequestController::class, 'index'])->name('friend.requests');
     Route::get('/friend-request/{id}', [FriendRequestController::class, 'store'])->name('send.friend.request');
@@ -67,10 +69,17 @@ Route::group(['middleware' => 'customer.auth'], function () {
     Route::get('customer/shortlist', [ShortlistController::class, 'shortlist'])->name('customer.shortlist');
     Route::get('add/{id}/shortlist', [ShortlistController::class, 'addToShortlist'])->name('add-to-shortlist');
     Route::get('shortlist/{id}/remove', [ShortlistController::class, 'removeFromShortlist'])->name('shortlist.remove');
-    Route::get('hold-customer/{id}',[CustomerController::class,'holdCustomer'])->name('customer.hold');
+    Route::get('hold-customer/{id}', [CustomerController::class, 'holdCustomer'])->name('customer.hold');
 
     // chat
     Route::get('customer/chat', [CustomerController::class, 'chat'])->name('customer.chat');
+    
+    Route::get('/chat/{user}',[ChatsController::class,'chat'])->name('chat');
+    Route::get('/chat/{id}/approve',[ChatsController::class,'approve']);
+    Route::get('/chat/{id}/block',[ChatsController::class,'block']);
+    
+    Route::resource('messages/{user}',ChatsController::class,['only' => ['index', 'store']])->middleware(['customer.auth']);
+    Route::get('conversations', [ChatsController::class, 'conversations']);
 });
 
 Route::post('/search-opposite-gender', [CustomerController::class, 'searchOppositeGender']);

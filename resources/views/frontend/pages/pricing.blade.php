@@ -15,7 +15,12 @@
                                     <div class="card-header text-center text-white border-0">
                                         <h3><strong>{{ $plan->name }}</strong></h3>
                                         @foreach ($plan->prices as $price)
-                                            <h5>{{ $price->price == 0 ? 'Free' : '₹' . $price->price }}</h5>
+                                            <h6>
+                                                {!! $price->price == 0 ? 'Free' : '<del>₹' . $price->price . '</del>' !!}
+                                            </h6>
+                                            <h5>
+                                                {{ $price->special_price == 0 ? 'Member' : '₹' . $price->special_price . ' ( Inc GST )' }}
+                                            </h5>
                                         @endforeach
                                     </div>
                                     <div class="card-body bg-white">

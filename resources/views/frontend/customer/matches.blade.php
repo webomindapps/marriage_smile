@@ -2,6 +2,13 @@
 @section('main')
     @push('styles')
         <link href="{{ asset('frontend/assets/css/search.css') }}" rel="stylesheet">
+        <style>
+            .blur-image {
+                filter: blur(8px);
+                transition: filter 0.3s ease;
+                cursor: pointer;
+            }
+        </style>
     @endpush
     <div class="container">
         <div class="row mt-4">
@@ -219,19 +226,41 @@
                     </div>
                 </div>
 
-                <div id="customerDetailsContainer" class="mt-3"></div>
                 @foreach ($profiledetails as $item)
+                    <div class="mb-2 counter-wrapper" data-id="{{ $item->id }}">
+                        {{-- <strong>Total:</strong> <span class="total">{{ $item->photo_limit }}</span> |
+                        <strong>Viewed:</strong>
+                        <span class="viewed">{{ $item->photo_limit - $subscription->photo_viewable }}</span> | --}}
+                        <strong>Photo Views Left:</strong>
+                        <span class="left">{{ $subscription->photo_viewable }}</span> |
+                        <strong>Profile Views Left:</strong>
+                        <span > {{ $subscription->profile_viewable }}</span> |
+                        <strong>Horoscope Views Left:</strong>
+                        <span > {{ $subscription->hscop_viewable }}</span>
+                    </div>
+
                     <div class="row box-j">
-                        <div class="col-lg-4 p0">
-                            <a href="{{ route('customer.details', $item->id) }}">
-                                @if ($item->customer && $item->customer->documents->isNotEmpty())
-                                    <img src="{{ asset('storage/' . $item->customer->documents->first()->image_url) }}"
-                                        class="img-fluid wid-testimoni">
-                                @else
-                                    <img src="{{ asset('storage/default/image.jpg') }}" class="img-fluid wid-testimoni">
+                        @if ($item->documents->isNotEmpty())
+                            <div class="col-lg-4 p0">
+                                <a href="javascript:void(0);" class="photo-view-btn" data-id="{{ $item->id }}"
+                                    data-limit="{{ $item->photo_limit }}">
+                                    <img src="{{ asset('storage/' . $item->documents->first()->image_url) }}"
+                                        class="img-fluid wid-testimoni {{ $subscription->photo_viewable < 1 ? '' : 'blur-image' }}"
+                                        id="photo-{{ $item->id }}" style="cursor: pointer;">
+                                </a>
+                                @if ($item->documents->count() > $item->photo_limit)
+                                    <strong>
+                                        You have reached your photo view limit.
+                                        <a href="{{ route('pricing') }}">Upgrade your plan</a> to see more.
+                                    </strong>
                                 @endif
-                            </a>
-                        </div>
+                            </div>
+                        @endif
+
+
+
+
+
 
                         <div class="col-lg-8 p0">
                             <div class="test-main cls-for-all">
@@ -239,9 +268,9 @@
                                 <p>Last seen on
                                     {{ $item->customer->last_login_time ? \Carbon\Carbon::parse($item->customer->last_login_time)->format('d-M-y') : 'N/A' }}
                                 </p>
-                                <a href="{{ route('customer.details', $item->id) }}">
-                                    <h4 class="pro-hea">{{ $item->customer->name }}</h4>
-                                </a>
+                                {{-- <a href="{{ route('customer.details', $item->id) }}"> --}}
+                                <h4 class="pro-hea">{{ $item->customer->name }}</h4>
+                                {{-- </a> --}}
                                 <p>{{ $item->height }} . {{ $item->locations }}/{{ $item->permanent_locations }} . Others
                                 </p>
 
@@ -267,7 +296,7 @@
                                             <path d="m6 13 8.5 8" />
                                             <path d="M6 13h3" />
                                             <path d="M9 13c6.667 0 6.667-10 0-10" />
-                                        </svg> <span>Rs. {{ $item->annual_income }}</span>
+                                        </svg> <span> {{ $item->annual_income }}</span>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -295,7 +324,7 @@
                             <div class="pink-bg-list mt-2">
                                 <ul class="list-none col-li">
                                     <li>
-                                        <a href="{{ route('send.friend.request', $item->id) }}">
+                                        <a href="{{ route('send.friend.request', $item->customer->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -307,7 +336,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('add-to-shortlist', $item->id) }}">
+                                        <a href="{{ route('add-to-shortlist', $item->customer->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -319,7 +348,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('customer.chat') }}">
+                                        <a href="{{ route('chat',$item->customer->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -329,18 +358,35 @@
                                             <span>Chat</span>
                                         </a>
                                     </li>
+                                    <li>
+
+                                        <a href="{{ route('customer.details', $item->id) }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-circle-user-icon lucide-circle-user">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <circle cx="12" cy="10" r="3" />
+                                                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                                            </svg>
+                                            <span>View Profile</span>
+                                        </a>
+                                    </li>
+
                                 </ul>
                             </div>
                         </div>
                     </div>
                 @endforeach
+            </div>
 
-                <!-- Pagination -->
-                <div class="mt-3">
-                    {{ $profiledetails->links() }}
-                </div>
+
+            <!-- Pagination -->
+            <div class="mt-3">
+                {{ $profiledetails->links() }}
             </div>
         </div>
+    </div>
     </div>
 
 
@@ -349,6 +395,46 @@
         <script>
             $('#showProfilesButton').on('click', function() {
                 $('#searchModal').modal('hide');
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                console.log("jQuery is ready!");
+
+                $('.photo-view-btn').on('click', function(e) {
+                    e.preventDefault();
+
+                    console.log("Photo button clicked!");
+
+                    let photoId = $(this).data('id');
+                    let photoLimit = $(this).data('limit');
+                    let img = $(this).find('img');
+                    let counterWrapper = $('.counter-wrapper[data-id="' + photoId + '"]');
+
+                    $.ajax({
+                        url: '{{ route('photo.view.ajax') }}',
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            photo_id: photoId,
+                            photo_limit: photoLimit
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            if (response.success) {
+                                img.removeClass('blur-image');
+                                counterWrapper.find('.viewed').text(response.viewed);
+                                counterWrapper.find('.left').text(response.left);
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            console.log(xhr.responseText);
+                            alert('Something went wrong.');
+                        }
+                    });
+                });
             });
         </script>
     @endpush
