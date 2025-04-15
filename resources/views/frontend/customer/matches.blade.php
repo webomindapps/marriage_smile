@@ -54,6 +54,10 @@
                                                     <a class="nav-link" data-bs-toggle="tab" href="#profileIdTab">Search by
                                                         Profile ID</a>
                                                 </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#nameTab">Search
+                                                        by Name</a>
+                                                </li>
                                             </ul>
                                             <div class="tab-content">
                                                 <!-- Search by Criteria -->
@@ -183,6 +187,21 @@
                                                         <div class="col-md-12">
                                                             <input type="text" class="form-control" id="profileId"
                                                                 name="customer_id" placeholder="Enter Profile ID">
+                                                        </div>
+                                                        <div class="col-12 text-center mt-3">
+                                                            <button type="submit" class="btn bt-register"
+                                                                id="showProfilesButton">Show Me Profiles</button>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                                <div class="tab-pane fade" id="nameTab">
+                                                    <form class="row ne-id-search" method="GET"
+                                                        action="{{ route('customer.matches') }}"
+                                                        id="profileIdSearchForm">
+                                                        <div class="col-md-12">
+                                                            <input type="text" class="form-control" id="profileId"
+                                                                name="name" placeholder="Enter Name to search..">
                                                         </div>
                                                         <div class="col-12 text-center mt-3">
                                                             <button type="submit" class="btn bt-register"

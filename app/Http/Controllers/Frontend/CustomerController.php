@@ -403,6 +403,7 @@ class CustomerController extends Controller
     public function matches(Request $request)
     {
         $profileId = $request->customer_id;
+        $profilename=$request->name;
         $customer = Auth::guard('customer')->user();
         $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
 
@@ -417,6 +418,11 @@ class CustomerController extends Controller
             });
         }
 
+        if (!empty($profilename)) {
+            $query->whereHas('customer', function ($q) use ($profilename) {
+                $q->where('name', $profilename);
+            });
+        }
 
         if ($request->filled('age_from') || $request->filled('age_to')) {
             $ageFrom = (int) ($request->age_from ?? 18); // Default minimum age

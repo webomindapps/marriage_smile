@@ -175,10 +175,18 @@
                                         </div>
                                         {{-- <img src="{{ asset('frontend/assets/images/vishnuwithg.png') }}" class="img-fluid min-imh"> --}}
                                     </div>
-                                    <div class="col-md-10">
+                                    <div class="cont-bg">
+                                        <h4>Go Premium to contact matches </h4>
+                                        <p>Get new profiles email alerts by upgrading to a membership</p>
+                                        <a href="{{ route('pricing') }}">
+                                            <p class="requ-horoscope">Upgrade Now</p>
+                                        </a>
+
+                                    </div>
+                                    {{-- <div class="col-md-10">
                                         <h4 class="pro-hea"> It’s an 93% Match!</h4>
                                         <p class="last-showp">Based on mutual preferences</p>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                                 <div class="boi-dat">
@@ -327,14 +335,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="cont-bg">
-                                    <h4>Go Premium to contact matches </h4>
-                                    <p>Get new profiles email alerts by upgrading to a membership</p>
-                                    <a href="{{ route('pricing') }}">
-                                        <p class="requ-horoscope">Upgrade Now</p>
-                                    </a>
 
-                                </div>
 
                                 <div class="education">
                                     <h4>Career</h4>
@@ -398,7 +399,9 @@
                                             <h4 class="heig-h4"> Siblings {{ $customer->siblings }}</h4>
                                             <p class="heigh-p">
                                                 @foreach ($customer->sibilingdetails as $sibling)
-                                                    {{ $sibling->sibling_age_relation }} ({{ $sibling->sibling_maritial_status }}),
+                                                    {{ $sibling->sibling_age_relation }}
+                                                    ({{ $sibling->sibling_maritial_status }})
+                                                    ,
                                                 @endForEach
                                             </p>
                                         </div>
