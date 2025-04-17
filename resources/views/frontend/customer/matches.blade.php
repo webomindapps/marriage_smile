@@ -227,20 +227,20 @@
                 </div>
                 @if ($subscription)
                     <div class="mb-2 counter-wrapper" data-id="{{ $subscription->id ?? '' }}">
-                        <strong>Photo Views Left:</strong>
+                        {{-- <strong>Photo Views Left:</strong>
                         <span class="left">
                             {{ ($subscription->photo_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->photo_viewable }}
-                        </span> |
+                        </span> | --}}
 
                         <strong>Profile Views Left:</strong>
                         <span>
                             {{ ($subscription->profile_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->profile_viewable }}
-                        </span> |
+                        </span>
 
-                        <strong>Horoscope Views Left:</strong>
+                        {{-- <strong>Horoscope Views Left:</strong>
                         <span>
                             {{ ($subscription->hscop_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->hscop_viewable }}
-                        </span>
+                        </span> --}}
                     </div>
                 @endif
 
@@ -259,22 +259,16 @@
                     </div> --}}
 
                     <div class="row box-j">
-                        @if ($item->documents->isNotEmpty())
-                            <div class="col-lg-4 p0">
-                                <a href="javascript:void(0);" class="photo-view-btn" data-id="{{ $item->id }}"
-                                    data-limit="{{ $item->photo_limit }}">
-                                    <img src="{{ asset('storage/' . $item->documents->first()->image_url) }}"
-                                        class="img-fluid wid-testimoni {{ $subscription->photo_viewable < 1 ? '' : 'blur-image' }}"
-                                        id="photo-{{ $item->id }}" style="cursor: pointer;">
-                                </a>
-                                @if ($item->documents->count() > $item->photo_limit)
-                                    <strong>
-                                        You have reached your photo view limit.
-                                        <a href="{{ route('pricing') }}">Upgrade your plan</a> to see more.
-                                    </strong>
+                        <div class="col-lg-4 p0">
+                            <a href="">
+                                @if ($item->customer && $item->customer->documents->isNotEmpty())
+                                    <img src="{{ asset('storage/' . $item->customer->documents->first()->image_url) }}"
+                                        class="img-fluid wid-testimoni">
+                                @else
+                                    <img src="{{ asset('storage/default/image.jpg') }}" class="img-fluid wid-testimoni">
                                 @endif
-                            </div>
-                        @endif
+                            </a>
+                        </div>
 
 
 
@@ -378,8 +372,37 @@
                                         </a>
                                     </li>
                                     <li>
+                                        @if (!in_array($item->id, $viewedProfileIds) && $subscription->profile_viewable <= 0)
+                                            {{-- Not viewed yet and limit is over --}}
+                                            <a href="javascript:void(0);" onclick="showLimitReachedAlert();">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-circle-user-icon lucide-circle-user">
+                                                    <circle cx="12" cy="12" r="10" />
+                                                    <circle cx="12" cy="10" r="3" />
+                                                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                                                </svg>
+                                                <span>View Profile</span>
+                                            </a>
+                                        @else
+                                            {{-- Already viewed OR can view --}}
+                                            <a href="{{ route('customer.details', $item->id) }}"
+                                                @if (!in_array($item->id, $viewedProfileIds)) onclick="return confirmProfileView(this);" @endif>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-circle-user-icon lucide-circle-user">
+                                                    <circle cx="12" cy="12" r="10" />
+                                                    <circle cx="12" cy="10" r="3" />
+                                                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                                                </svg>
+                                                <span>View Profile</span>
+                                            </a>
+                                        @endif
 
-                                        <a href="{{ route('customer.details', $item->id) }}">
+                                        {{-- <a href="{{ route('customer.details', $item->id) }}"
+                                            @if (!in_array($item->id, $viewedProfileIds)) onclick="return confirmProfileView(this);" @endif>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -389,7 +412,8 @@
                                                 <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
                                             </svg>
                                             <span>View Profile</span>
-                                        </a>
+                                        </a> --}}
+
                                     </li>
 
                                 </ul>
@@ -416,7 +440,7 @@
                 $('#searchModal').modal('hide');
             });
         </script>
-        <script>
+        {{-- <script>
             $(document).ready(function() {
                 console.log("jQuery is ready!");
 
@@ -455,6 +479,36 @@
                     });
                 });
             });
+        </script> --}}
+        <script>
+            function confirmProfileView(el) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "If you view this page, the profile view count will be decreased by one.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, view profile',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = el.href;
+                    }
+                });
+                return false;
+            }
+
+            function showLimitReachedAlert() {
+                Swal.fire({
+                    title: 'Profile View Limit Reached',
+                    text: 'Your profile view count is completed. For better usage, please subscribe.',
+                    icon: 'info',
+                    confirmButtonText: 'Go to Subscription'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('pricing') }}";
+                    }
+                });
+            }
         </script>
     @endpush
 @endsection

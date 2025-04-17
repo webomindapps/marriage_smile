@@ -53,7 +53,6 @@ Route::group(['middleware' => 'customer.auth'], function () {
     Route::post('/customer-details', [CustomerController::class, 'getCustomerById']);
 
     Route::get('/customer/delete/{id}', [CustomerController::class, 'deletecustomer'])->name('customer.delete');
-    Route::post('/photo/view/ajax', [CustomerController::class, 'viewPhoto'])->name('photo.view.ajax');
     Route::get('/download-horoscope/{id}', [CustomerController::class, 'downloadHoroscope'])->name('customer.download.horoscope');
     // Friend Request
     Route::get('/friend-requests', [FriendRequestController::class, 'index'])->name('friend.requests');
