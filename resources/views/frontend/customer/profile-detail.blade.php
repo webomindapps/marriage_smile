@@ -37,7 +37,11 @@
                 <div class="col-lg-7 new-gp">
                     <div class="bg-white0 profile-detail">
                         <div class="pad-intrest">
-                            <h4 class="pro-hea"><i class="fa fa-chevron-left cl-right "></i> Interests</h4>
+                            <a href="{{ route('customer.matches') }}">
+                                <h4 class="pro-hea">
+                                    <i class="fa fa-chevron-left cl-right"></i> Interests
+                                </h4>
+                            </a>
                         </div>
                         @if ($customer->customer && $customer->customer->documents->isNotEmpty())
                             <img src="{{ asset('storage/' . $customer->customer->documents->first()->image_url) }}"
@@ -419,13 +423,25 @@
                                         @endif
                                     </span>
                                     @if ($customer->customer && $customer->customer->documents->isNotEmpty())
-                                        <a href="{{ route('customer.download.horoscope', $customer->id) }}">
-                                            <p class="requ-horoscope">Request Horoscope</p>
-                                        </a>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ asset('storage/' . $customer->image_path) }}" target="_blank">
+                                                <p class="requ-horoscope">View Horoscope</p>
+                                            </a>
+
+                                            <a href="{{ asset('storage/' . $customer->image_path) }}" download>
+                                                <p class="requ-horoscope">Download Horoscope</p>
+                                            </a>
+                                        </div>
                                     @else
                                         <p class="requ-horoscope">Request Horoscope</p>
                                     @endif
-
+                                    {{-- @if ($customer->customer && $customer->customer->documents->isNotEmpty())
+                                        <a href="{{ asset('storage/' . $customer->image_path) }}" target="_blank">
+                                            <p class="requ-horoscope">View Horoscope</p>
+                                        </a>
+                                    @else
+                                        <p class="requ-horoscope">Request Horoscope</p>
+                                    @endif --}}
                                     {{-- <p class="requ-horoscope">Request Horoscope</p> --}}
                                 </div>
 

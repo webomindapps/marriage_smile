@@ -497,7 +497,7 @@ class CustomerController extends Controller
     public function matches(Request $request)
     {
         $profileId = $request->customer_id;
-        $profilename=$request->name;
+        $profilename = $request->name;
         $customer = Auth::guard('customer')->user();
         $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
 
@@ -538,72 +538,28 @@ class CustomerController extends Controller
             // dd($subscription);
             $photoLimit = 0;
 
-            if ($subscription) {
-                // dd($subscription->plan_id);
-                $plan = Plan::with('features')->find($subscription->plan_id);
-                if ($plan) {
-                    $photoLimit = $plan->features()
-                        ->where('feature_id', '1')
-                        ->first()?->pivot?->feature_value ?? 0;
-                }
-            }
-            // dd($photoLimit);
-            $documents = $matchedCustomer->documents;
-            $totalPhotos = $documents->count();
-            $viewable = min($photoLimit, $totalPhotos);
-            $left = max($photoLimit - $viewable, 0);
-
-            $profile->photo_limit = $photoLimit;
-            $profile->photo_viewable = $viewable;
-            $profile->photo_left = $left;
-            $profile->documents = $documents;
         }
         $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
+        $viewedProfileIds = ProfileViewable::where('customer_id', Auth::guard('customer')->id())
+            ->pluck('profile_id')
+            ->toArray();
 
-        return view('frontend.customer.matches', compact('profiledetails', 'subscription'));
-    }
-    public function viewPhoto(Request $request)
-    {
-        $customer = Auth::guard('customer')->user();
-
-        $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
-
-        if (!$subscription) {
-            return response()->json(['success' => false, 'message' => 'Subscription not found.']);
-        }
-
-        if ((int) $subscription->photo_viewable <= 0) {
-            return response()->json(['success' => false, 'message' => 'You’ve reached your photo view limit.']);
-        }
-
-        $subscription->decrement('photo_viewable');
-
-        $photoLimit = $request->photo_limit ?? $subscription->photo_viewable;
-        $viewed = $photoLimit - $subscription->photo_viewable;
-        $left = $subscription->photo_viewable;
-
-        return response()->json([
-            'success' => true,
-            'viewed' => $viewed,
-            'left' => $left
-        ]);
+        return view('frontend.customer.matches', compact('profiledetails', 'subscription', 'viewedProfileIds'));
     }
     public function detail($id)
     {
         $customer = Auth::guard('customer')->user(); // logged-in customer
         $profileId = $id;
         // dd($profileId);
-        // Check if profile already viewed
         $alreadyViewed = ProfileViewable::where('customer_id', $customer->id)
             ->where('profile_id', $profileId)
             ->exists();
         // dd($alreadyViewed);
         if (!$alreadyViewed) {
             $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
-
-            if (!$subscription || $subscription->profile_viewable <= 0) {
-                return redirect()->back()->with('error', 'Profile view limit reached.');
-            }
+            // if (!$subscription || $subscription->profile_viewable <= 0) {
+            //     return redirect()->route('pricing');
+            // }
 
             ProfileViewable::create([
                 'customer_id' => $customer->id,
@@ -618,35 +574,34 @@ class CustomerController extends Controller
 
         $pendingViews = SubscriptionValidation::where('customer_id', $customer->id)->value('profile_viewable');
 
-        // Load profile detail
         $customer = CustomerDetails::with('customer')->findOrFail($profileId);
         // dd($customer);
         return view('frontend.customer.profile-detail', compact('customer', 'pendingViews'));
     }
-    public function downloadHoroscope($id)
-    {
-        $customer = Auth::guard('customer')->user();
+    //     public function downloadHoroscope($id)
+//     {
+//         $customer = Auth::guard('customer')->user();
+// // dd($customer);
+//         $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
 
-        $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
+    //         if (!$subscription || $subscription->hscop_viewable <= 0) {
+//             return redirect()->back()->with('error', 'Horoscope download limit reached.');
+//         }
 
-        if (!$subscription || $subscription->hscop_viewable <= 0) {
-            return redirect()->back()->with('error', 'Horoscope download limit reached.');
-        }
+    //         // Get file path
+//         $customerDetail = CustomerDetails::with('customer')->findOrFail($id);
+//         $filePath = $customerDetail->image_path;
 
-        // Get file path
-        $customerDetail = CustomerDetails::with('customer')->findOrFail($id);
-        $filePath = $customerDetail->image_path;
+    //         if (!Storage::disk('public')->exists($filePath)) {
+//             return redirect()->back()->with('error', 'File not found.');
+//         }
 
-        if (!Storage::disk('public')->exists($filePath)) {
-            return redirect()->back()->with('error', 'File not found.');
-        }
+    //         // Decrease count
+//         $subscription->decrement('hscop_viewable');
 
-        // Decrease count
-        $subscription->decrement('hscop_viewable');
-
-        // Download the file
-        return response()->download(storage_path('app/public/' . $filePath));
-    }
+    //         // Download the file
+//         return response()->download(storage_path('app/public/' . $filePath));
+//     }
 
     public function logout()
     {
