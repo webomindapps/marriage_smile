@@ -206,19 +206,38 @@
                         </div>
                     </div>
                 </div>
+                @if ($subscription)
+                    <div class="mb-2 counter-wrapper" data-id="{{ $subscription->id ?? '' }}">
+                        <strong>Photo Views Left:</strong>
+                        <span class="left">
+                            {{ ($subscription->photo_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->photo_viewable }}
+                        </span> |
+
+                        <strong>Profile Views Left:</strong>
+                        <span>
+                            {{ ($subscription->profile_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->profile_viewable }}
+                        </span> |
+
+                        <strong>Horoscope Views Left:</strong>
+                        <span>
+                            {{ ($subscription->hscop_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->hscop_viewable }}
+                        </span>
+                    </div>
+                @endif
+
 
                 @foreach ($profiledetails as $item)
-                    <div class="mb-2 counter-wrapper" data-id="{{ $item->id }}">
-                        {{-- <strong>Total:</strong> <span class="total">{{ $item->photo_limit }}</span> |
+                    {{-- <div class="mb-2 counter-wrapper" data-id="{{ $item->id }}">
+                        <strong>Total:</strong> <span class="total">{{ $item->photo_limit }}</span> |
                         <strong>Viewed:</strong>
-                        <span class="viewed">{{ $item->photo_limit - $subscription->photo_viewable }}</span> | --}}
+                        <span class="viewed">{{ $item->photo_limit - $subscription->photo_viewable }}</span> |
                         <strong>Photo Views Left:</strong>
                         <span class="left">{{ $subscription->photo_viewable }}</span> |
                         <strong>Profile Views Left:</strong>
-                        <span > {{ $subscription->profile_viewable }}</span> |
+                        <span> {{ $subscription->profile_viewable }}</span> |
                         <strong>Horoscope Views Left:</strong>
-                        <span > {{ $subscription->hscop_viewable }}</span>
-                    </div>
+                        <span> {{ $subscription->hscop_viewable }}</span>
+                    </div> --}}
 
                     <div class="row box-j">
                         @if ($item->documents->isNotEmpty())
@@ -329,7 +348,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('chat',$item->customer->id) }}">
+                                        <a href="{{ route('chat', $item->customer->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
