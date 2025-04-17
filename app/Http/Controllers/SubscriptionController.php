@@ -58,9 +58,9 @@ class SubscriptionController extends Controller
 
         $featureMap = [
             1 => 'photo_viewable',
-            4 => 'hscop_viewable',
-            5 => 'chat_viewable',
-            6 => 'profile_viewable',
+            3 => 'hscop_viewable',
+            4 => 'chat_viewable',
+            2 => 'profile_viewable',
         ];
 
         $featureValues = [
