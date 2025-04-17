@@ -10,7 +10,7 @@
     <table style="width:100%;">
         <tr>
             <td style="width: 25%; background: #ffffff; padding: 10px;">
-                <img style="width: 100%;" src="{{ public_path('frontend/assets/images/logo.png') }}" width="120"
+                <img style="width: 100%;" src="{{ asset('frontend/assets/images/logo.png') }}" width="120"
                     height="113" />
             </td>
         </tr>

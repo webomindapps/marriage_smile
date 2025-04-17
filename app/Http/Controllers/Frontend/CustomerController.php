@@ -497,6 +497,7 @@ class CustomerController extends Controller
     public function matches(Request $request)
     {
         $profileId = $request->customer_id;
+        $profilename=$request->name;
         $customer = Auth::guard('customer')->user();
         $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
 
@@ -506,6 +507,12 @@ class CustomerController extends Controller
         if (!empty($profileId)) {
             $query->whereHas('customer', function ($q) use ($profileId) {
                 $q->where('customer_id', $profileId);
+            });
+        }
+
+        if (!empty($profilename)) {
+            $query->whereHas('customer', function ($q) use ($profilename) {
+                $q->where('name', $profilename);
             });
         }
 
