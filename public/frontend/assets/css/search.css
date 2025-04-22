@@ -576,3 +576,8 @@ hr.lin-profile {
 #profilemodal{
     height:400px;
 }
+#profile-count{
+    border: 2px solid hotpink;
+    padding: 10px 10px 10px 10px;
+    width: 200px;
+}

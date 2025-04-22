@@ -59,7 +59,7 @@
                                                 <ul aria-labelledby="account-dropdown"
                                                     class="dropdown-menu account-dropdown-menu">
                                                     <li class="dropdown-item">
-                                                        <a href="{{ route('customer.profile') }}">
+                                                        <a href="{{ route('customer.matches') }}">
                                                             Dashboard
                                                         </a>
                                                     </li>

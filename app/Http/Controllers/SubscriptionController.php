@@ -55,12 +55,16 @@ class SubscriptionController extends Controller
 
         // Fetch plan features
         $plan = Plan::with('features')->find($planPrice->plan_id);
+        foreach ($plan->features as $plans) {
+            if ($plans->name == 'Photo Access' || $plans->name == 'Horoscope Access' || $plans->name == 'Profiles' || $plans->name == 'Chats With Bride or Groom')
+                $planid = $plans->id;
+        }
 
         $featureMap = [
-            1 => 'photo_viewable',
-            3 => 'hscop_viewable',
-            4 => 'chat_viewable',
-            2 => 'profile_viewable',
+            $planid => 'photo_viewable',
+            $planid  => 'hscop_viewable',
+            $planid  => 'chat_viewable',
+            $planid  => 'profile_viewable',
         ];
 
         $featureValues = [
@@ -94,9 +98,4 @@ class SubscriptionController extends Controller
 
         return redirect()->route('home')->with('success', 'Subscription successful!');
     }
-
-
-
-
-
 }

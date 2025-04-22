@@ -262,9 +262,29 @@
                                     <hr class="lin-profile">
                                     <div class="row ">
                                         <div class="col-md-10">
-                                            <h4 class="heig-h4"> Education</h4>
-                                            <p class="heigh-p">{{ $customer->qualification }}</p>
+                                            <div class="education">
+                                                <h4>Education</h4>
+                                                <img src="{{asset('frontend/assets/images/icon1.png')}}" class="img-fluid code-imwidt"> <span
+                                                    class="educat-head">{{$customer->qualification}}</span>
+                                            </div>
                                         </div>
+                                    </div>
+                                    
+                                    <hr class="lin-profile">
+                                    <div class="row ">
+                                        <div class="education">
+                                            <h4>Career</h4>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <img src="{{asset('frontend/assets/images/career.png')}}" class="img-fluid img-carer">
+                                                </div>
+                                                <div class="col-md-10 acou-profe">
+                                                    <h4 class="carrerh4">{{$customer->designation}}</h4>
+                                                    <p class="careerp">{{$customer->designation}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <hr class="lin-profile">
                                     <div class="row ">
@@ -336,21 +356,6 @@
                                         <div class="col-md-10">
                                             <h4 class="heig-h4">Facebook/Instagram Profile </h4>
                                             <p class="heigh-p">{{ $customer->facebook_profile }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="education">
-                                    <h4>Career</h4>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <img src="{{ asset('frontend/assets/images/career.png') }}"
-                                                class="img-fluid img-carer">
-                                        </div>
-                                        <div class="col-md-10 acou-profe">
-                                            <h4 class="carrerh4">Accounting Professional</h4>
-                                            <p class="careerp">Government/Public Sector</p>
                                         </div>
                                     </div>
                                 </div>

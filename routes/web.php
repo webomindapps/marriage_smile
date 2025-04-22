@@ -22,6 +22,7 @@ Route::get('/', [MarriageController::class, 'index'])->name('home');
 Route::group(['middleware' => 'customer.guest'], function () {
     Route::get('customer/register', [CustomerController::class, 'register'])->name('customer.register');
     Route::post('customer/store', [CustomerController::class, 'storecustomer'])->name('customer.store');
+    Route::get('/matches/search', [MarriageController::class, 'search'])->name('matches.search');
 
     Route::get('customer/login', [CustomerController::class, 'login'])->name('customer.login');
     Route::post('customer/login', [CustomerController::class, 'authenticate']);

@@ -226,7 +226,7 @@
                     </div>
                 </div>
                 @if ($subscription)
-                    <div class="mb-2 counter-wrapper" data-id="{{ $subscription->id ?? '' }}">
+                    <div class="mb-2 counter-wrapper" data-id="{{ $subscription->id ?? '' }}" id="profile-count">
                         {{-- <strong>Photo Views Left:</strong>
                         <span class="left">
                             {{ ($subscription->photo_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->photo_viewable }}
@@ -260,7 +260,7 @@
 
                     <div class="row box-j">
                         <div class="col-lg-4 p0">
-                            <a href="">
+                            <a>
                                 @if ($item->customer && $item->customer->documents->isNotEmpty())
                                     <img src="{{ asset('storage/' . $item->customer->documents->first()->image_url) }}"
                                         class="img-fluid wid-testimoni">
@@ -269,11 +269,6 @@
                                 @endif
                             </a>
                         </div>
-
-
-
-
-
 
                         <div class="col-lg-8 p0">
                             <div class="test-main cls-for-all">
