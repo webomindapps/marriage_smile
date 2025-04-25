@@ -32,7 +32,13 @@
             </div>
         </div>
     @endif
-
+    @if (session('error'))
+        <div class="col-lg-12 mt-2 session-error" id="session-success">
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        </div>
+    @endif
     @yield('main')
     @include('frontend.layouts.footer')
 

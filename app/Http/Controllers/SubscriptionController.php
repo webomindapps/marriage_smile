@@ -8,6 +8,7 @@ use App\Models\PlanPrice;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Mail\SubscriptionMail;
+use App\Models\ProfileViewable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Models\SubscriptionValidation;
@@ -29,11 +30,13 @@ class SubscriptionController extends Controller
 
         $planPrice = PlanPrice::with('priceplans')->findOrFail($request->plan_price_id);
 
-        // Deactivate any existing active subscription
+        // // Deactivate any existing active subscription
+        // Subscription::where('customer_id', $customer->id)
+        //     ->where('status', '1')
+        //     ->update(['status' => '0']);
         Subscription::where('customer_id', $customer->id)
-            ->where('status', '1')
-            ->update(['status' => '0']);
-
+            ->where('status', ['1','0'])
+            ->delete();
         $start_date = now();
         $end_date = $start_date->copy()->addDays($planPrice->duration);
 
@@ -53,25 +56,35 @@ class SubscriptionController extends Controller
             ]
         );
 
-        // Fetch plan features
+
         $plan = Plan::with('features')->find($planPrice->plan_id);
+
+        $featureMap = [];
+
         foreach ($plan->features as $plans) {
-            if ($plans->name == 'Photo Access' || $plans->name == 'Horoscope Access' || $plans->name == 'Profiles' || $plans->name == 'Chats With Bride or Groom')
-                $planid = $plans->id;
+            switch ($plans->name) {
+                case 'Photo Access':
+                    $featureMap[$plans->id] = 'photo_viewable';
+                    break;
+                case 'Horoscope Access':
+                    $featureMap[$plans->id] = 'hscop_viewable';
+                    break;
+                case 'Profiles can Access with all details':
+                    $featureMap[$plans->id] = 'profile_viewable';
+                    break;
+                case 'Chats With Bride or Groom':
+                    $featureMap[$plans->id] = 'chat_viewable';
+                    break;
+            }
         }
 
-        $featureMap = [
-            $planid => 'photo_viewable',
-            $planid  => 'hscop_viewable',
-            $planid  => 'chat_viewable',
-            $planid  => 'profile_viewable',
-        ];
+        // dd($featureMap);
 
         $featureValues = [
             'photo_viewable' => 0,
             'hscop_viewable' => 0,
             'profile_viewable' => 0,
-            'chat_viewable' => null,
+            'chat_viewable' => 0,
         ];
 
         foreach ($plan->features as $feature) {
@@ -81,7 +94,6 @@ class SubscriptionController extends Controller
             }
         }
 
-        // Create or update subscription validation
         SubscriptionValidation::updateOrCreate(
             ['customer_id' => $customer->id],
             [
@@ -93,7 +105,7 @@ class SubscriptionController extends Controller
                 'chat_viewable' => $featureValues['chat_viewable'],
             ]
         );
-
+        ProfileViewable::where('customer_id', $customer->id)->delete();
         // Mail::to($customer->email)->send(new SubscriptionMail($subscription));
 
         return redirect()->route('home')->with('success', 'Subscription successful!');

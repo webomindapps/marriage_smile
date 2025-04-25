@@ -459,41 +459,7 @@ class CustomerController extends Controller
         $customer = Auth::guard('customer')->user();
         return view('frontend.customer.profile', compact('customer'));
     }
-    // public function matches(Request $request)
-    // {
-    //     $profileId = $request->customer_id;
-    //     $customer = Auth::guard('customer')->user();
-    //     $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
-
-
-    //     $query = CustomerDetails::with(['customer.documents'])
-    //         ->where('gender', $oppositeGender);
-
-
-    //     if (!empty($profileId)) {
-    //         $query->whereHas('customer', function ($q) use ($profileId) {
-    //             $q->where('customer_id', $profileId);
-    //         });
-    //     }
-
-
-    //     if ($request->filled('age_from') || $request->filled('age_to')) {
-    //         $ageFrom = (int) ($request->age_from ?? 18); // Default minimum age
-    //         $ageTo = (int) ($request->age_to ?? 100);    // Default maximum age
-    //         $query->whereBetween('age', [$ageFrom, $ageTo]);
-    //     }
-
-
-    //     if ($request->filled('marital_status') && $request->marital_status !== "Doesn't Matter") {
-    //         $query->where('marritialstatus', $request->marital_status);
-    //     }
-
-    //     // Execute the query
-    //     $profiledetails = $query->paginate(10);
-
-    //     return view('frontend.customer.matches', compact('profiledetails'));
-    // }
-
+    
     public function matches(Request $request)
     {
         $profileId = $request->customer_id;
@@ -543,8 +509,9 @@ class CustomerController extends Controller
         $viewedProfileIds = ProfileViewable::where('customer_id', Auth::guard('customer')->id())
             ->pluck('profile_id')
             ->toArray();
+        $duration = Subscription::where('customer_id', $customer->id)->first();
 
-        return view('frontend.customer.matches', compact('profiledetails', 'subscription', 'viewedProfileIds'));
+        return view('frontend.customer.matches', compact('profiledetails', 'subscription', 'viewedProfileIds','duration'));
     }
     public function detail($id)
     {
@@ -557,9 +524,7 @@ class CustomerController extends Controller
         // dd($alreadyViewed);
         if (!$alreadyViewed) {
             $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
-            // if (!$subscription || $subscription->profile_viewable <= 0) {
-            //     return redirect()->route('pricing');
-            // }
+           
 
             ProfileViewable::create([
                 'customer_id' => $customer->id,
@@ -578,42 +543,14 @@ class CustomerController extends Controller
         // dd($customer);
         return view('frontend.customer.profile-detail', compact('customer', 'pendingViews'));
     }
-    //     public function downloadHoroscope($id)
-//     {
-//         $customer = Auth::guard('customer')->user();
-// // dd($customer);
-//         $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
-
-    //         if (!$subscription || $subscription->hscop_viewable <= 0) {
-//             return redirect()->back()->with('error', 'Horoscope download limit reached.');
-//         }
-
-    //         // Get file path
-//         $customerDetail = CustomerDetails::with('customer')->findOrFail($id);
-//         $filePath = $customerDetail->image_path;
-
-    //         if (!Storage::disk('public')->exists($filePath)) {
-//             return redirect()->back()->with('error', 'File not found.');
-//         }
-
-    //         // Decrease count
-//         $subscription->decrement('hscop_viewable');
-
-    //         // Download the file
-//         return response()->download(storage_path('app/public/' . $filePath));
-//     }
-
+    
     public function logout()
     {
         Auth::guard('customer')->logout();
         return redirect()->route('customer.login');
     }
 
-    // public function detail($id)
-    // {
-    //     $customer = CustomerDetails::with('customer')->find($id);
-    //     return view('frontend.customer.profile-detail', compact('customer'));
-    // }
+  
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();

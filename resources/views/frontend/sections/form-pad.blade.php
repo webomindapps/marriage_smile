@@ -7,7 +7,7 @@
                     <form action="{{ url('/') }}" method="GET">
                         <div class="row">
                             <div class="col-lg-2 col-6 pr-0">
-                                <select name="gender" class="form-select form-right" required>
+                                <select name="gender" class="form-select form-right" >
                                     <option value="" disabled selected>Gender</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
@@ -15,7 +15,7 @@
                             </div>
 
                             <div class="col-lg-2 col-6 pr-lg-0 pr-0">
-                                <select name="age_from" class="form-select form-right-noage" required>
+                                <select name="age_from" class="form-select form-right-noage" >
                                     <option value="" disabled selected>Age From</option>
                                     @for ($i = 20; $i <= 30; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
@@ -24,7 +24,7 @@
                             </div>
 
                             <div class="col-lg-2 pr-lg-0 pr-0">
-                                <select name="age_to" class="form-select form-right-noage" required>
+                                <select name="age_to" class="form-select form-right-noage" >
                                     <option value="" disabled selected>Age To</option>
                                     @for ($i = 20; $i <= 30; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
@@ -33,14 +33,14 @@
                             </div>
 
                             <div class="col-lg-2 pr-lg-0 pr-0">
-                                <select name="religion" class="form-select" required>
+                                <select name="religion" class="form-select" >
                                     <option value="" disabled selected>Religion</option>
                                     <option value="hindu">Hindu</option>
                                 </select>
                             </div>
 
                             <div class="col-lg-2 pr-lg-0 pr-0">
-                                <select name="mother_tongue" class="form-select form-right-nobord" required>
+                                <select name="mother_tongue" class="form-select form-right-nobord" >
                                     <option value="" disabled selected>Mother tongue</option>
                                     <option value="kannada">Kannada</option>
                                     <option value="english">English</option>
@@ -88,7 +88,7 @@
                                 <h5 class="card-title">{{ $match->name }}</h5>
                                 <p class="card-text">{{ $match->details->designation }}</p>
                                 <p class="card-text">{{ $match->details->age }}Yrs</p>
-                                <a href="{{ route('customer.matches') }}" onclick="showLimitReachedAlert();"
+                                <a href="{{ route('customer.matches') }}" 
                                     class="btn btn-sm btn-outline-primary">ViewProfile</a>
                             @endif
                         </div>

@@ -28,11 +28,11 @@
                                 <h4>Helpful Links</h4>
                             </div>
                             <ul>
+                                <li><a href="{{ route('pricing') }}">Subscription Plans</a></li>
                                 <li><a href="{{ route('guest.enquiry') }}">Enquiry</a> </li>
                                 <li><a href="">Supports</a></li>
                                 <li><a href="">Terms & Conditon</a></li>
                                 <li><a href="">Privacy Policy</a></li>
-                                <li><a href="{{route('pricing')}}">Pricing</a></li>
 
                             </ul>
                         </div>

@@ -332,16 +332,31 @@
                             <div class="pink-bg-list mt-2">
                                 <ul class="list-none col-li">
                                     <li>
-                                        <a href="{{ route('send.friend.request', $item->customer->id) }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                class="lucide lucide-send">
-                                                <path d="m22 2-7 20-4-9-9-4Z" />
-                                                <path d="M22 2 11 13" />
-                                            </svg>
-                                            <span>Send Request</span>
-                                        </a>
+                                        @if (
+                                            $subscription->chat_viewable === 'Unlimited' ||
+                                                (is_numeric($subscription->chat_viewable) && $subscription->chat_viewable > 0))
+                                            <a href="{{ route('send.friend.request', $item->customer->id) }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-send">
+                                                    <path d="m22 2-7 20-4-9-9-4Z" />
+                                                    <path d="M22 2 11 13" />
+                                                </svg>
+                                                <span>Send Request</span>
+                                            </a>
+                                        @else
+                                            <a href="javascript:void(0);" onclick="redirectToPricing();">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-send">
+                                                    <path d="m22 2-7 20-4-9-9-4Z" />
+                                                    <path d="M22 2 11 13" />
+                                                </svg>
+                                                <span>Send Request</span>
+                                            </a>
+                                        @endif
                                     </li>
                                     <li>
                                         <a href="{{ route('add-to-shortlist', $item->customer->id) }}">
@@ -366,9 +381,9 @@
                                             <span>Chat</span>
                                         </a>
                                     </li>
-                                    <li>
+
+                                    {{-- <li>
                                         @if (!in_array($item->id, $viewedProfileIds) && $subscription->profile_viewable <= 0)
-                                            {{-- Not viewed yet and limit is over --}}
                                             <a href="javascript:void(0);" onclick="showLimitReachedAlert();">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -381,7 +396,6 @@
                                                 <span>View Profile</span>
                                             </a>
                                         @else
-                                            {{-- Already viewed OR can view --}}
                                             <a href="{{ route('customer.details', $item->id) }}"
                                                 @if (!in_array($item->id, $viewedProfileIds)) onclick="return confirmProfileView(this);" @endif>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
@@ -396,20 +410,58 @@
                                             </a>
                                         @endif
 
-                                        {{-- <a href="{{ route('customer.details', $item->id) }}"
-                                            @if (!in_array($item->id, $viewedProfileIds)) onclick="return confirmProfileView(this);" @endif>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                class="lucide lucide-circle-user-icon lucide-circle-user">
-                                                <circle cx="12" cy="12" r="10" />
-                                                <circle cx="12" cy="10" r="3" />
-                                                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                                            </svg>
-                                            <span>View Profile</span>
-                                        </a> --}}
+                                     
 
-                                    </li>
+                                    </li> --}}
+                                    {{-- {{ dd($duration->start_date, $duration->end_date, now()) }} --}}
+                                    @if ($duration->start_date < now() && $duration->end_date > now())
+                                        <li>
+                                            @if (!in_array($item->id, $viewedProfileIds) && $subscription->profile_viewable <= 0)
+                                                {{-- Not viewed yet and profile view limit is over --}}
+                                                <a href="javascript:void(0);" onclick="showLimitReachedAlert();">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="lucide lucide-circle-user-icon lucide-circle-user">
+                                                        <circle cx="12" cy="12" r="10" />
+                                                        <circle cx="12" cy="10" r="3" />
+                                                        <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                                                    </svg>
+                                                    <span>View Profile</span>
+                                                </a>
+                                            @else
+                                                {{-- Already viewed or allowed to view --}}
+                                                <a href="{{ route('customer.details', $item->id) }}"
+                                                    @if (!in_array($item->id, $viewedProfileIds)) onclick="return confirmProfileView(this);" @endif>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="lucide lucide-circle-user-icon lucide-circle-user">
+                                                        <circle cx="12" cy="12" r="10" />
+                                                        <circle cx="12" cy="10" r="3" />
+                                                        <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                                                    </svg>
+                                                    <span>View Profile</span>
+                                                </a>
+                                            @endif
+                                        </li>
+                                    @else
+                                        {{-- Subscription is either not started or expired --}}
+                                        <li>
+                                            <a href="javascript:void(0);" onclick="subscribe();">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-circle-user-icon lucide-circle-user">
+                                                    <circle cx="12" cy="12" r="10" />
+                                                    <circle cx="12" cy="10" r="3" />
+                                                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                                                </svg>
+                                                <span>View Profile</span>
+                                            </a>
+                                        </li>
+                                    @endif
+
 
                                 </ul>
                             </div>
@@ -435,46 +487,7 @@
                 $('#searchModal').modal('hide');
             });
         </script>
-        {{-- <script>
-            $(document).ready(function() {
-                console.log("jQuery is ready!");
 
-                $('.photo-view-btn').on('click', function(e) {
-                    e.preventDefault();
-
-                    console.log("Photo button clicked!");
-
-                    let photoId = $(this).data('id');
-                    let photoLimit = $(this).data('limit');
-                    let img = $(this).find('img');
-                    let counterWrapper = $('.counter-wrapper[data-id="' + photoId + '"]');
-
-                    $.ajax({
-                        url: '{{ route('photo.view.ajax') }}',
-                        method: 'POST',
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            photo_id: photoId,
-                            photo_limit: photoLimit
-                        },
-                        success: function(response) {
-                            console.log(response);
-                            if (response.success) {
-                                img.removeClass('blur-image');
-                                counterWrapper.find('.viewed').text(response.viewed);
-                                counterWrapper.find('.left').text(response.left);
-                            } else {
-                                alert(response.message);
-                            }
-                        },
-                        error: function(xhr) {
-                            console.log(xhr.responseText);
-                            alert('Something went wrong.');
-                        }
-                    });
-                });
-            });
-        </script> --}}
         <script>
             function confirmProfileView(el) {
                 Swal.fire({
@@ -503,6 +516,38 @@
                         window.location.href = "{{ route('pricing') }}";
                     }
                 });
+            }
+
+            function subscribe() {
+                Swal.fire({
+                    title: 'Your Subscription Period as Ended ',
+                    text: 'Please Subscribe,To view Profiles.',
+                    icon: 'info',
+                    confirmButtonText: 'Go to Subscription'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('pricing') }}";
+                    }
+                });
+            }
+            // function confirmProfileView(el) {
+            //     alert('Viewing this profile will decrease your profile view count.');
+            //     window.location.href = el.href;
+            // }
+
+            // function showLimitReachedAlert() {
+            //     alert('Your profile view limit is reached. Please upgrade your plan.');
+            //     window.location.href = "{{ route('pricing') }}";
+            // }
+
+            // function subscribe() {
+            //     alert('Your subscription period has ended. Please subscribe to continue viewing profiles.');
+            //     window.location.href = "{{ route('pricing') }}";
+            // }
+
+            function redirectToPricing() {
+                alert('Please upgrade your plan to send friend requests.');
+                window.location.href = "{{ route('pricing') }}";
             }
         </script>
     @endpush

@@ -15,26 +15,47 @@ class MarriageController extends Controller
 {
     public function index(Request $request)
     {
+        $matches = collect(); // empty by default
 
-        $query = Customer::query();
+        // Check if the user submitted the form with at least one search field
+        if (
+            $request->filled('age_from') ||
+            $request->filled('age_to') ||
+            $request->filled('religion') ||
+            $request->filled('mother_tongue') ||
+            $request->filled('gender')
+        ) {
+            $query = Customer::query();
 
-        $query->whereHas('details', function ($q) use ($request) {
-            $q->whereBetween('age', [$request->age_from, $request->age_to])
-                ->where('religion', $request->religion)
-                ->where('mother_tongue', $request->mother_tongue)
-                ->where('gender', $request->gender);
-        });
+            $query->whereHas('details', function ($q) use ($request) {
+                if ($request->filled('age_from') && $request->filled('age_to')) {
+                    $q->whereBetween('age', [$request->age_from, $request->age_to]);
+                }
 
-        $matches = $query->with('details')->get();
+                if ($request->filled('religion')) {
+                    $q->where('religion', $request->religion);
+                }
+
+                if ($request->filled('mother_tongue')) {
+                    $q->where('mother_tongue', $request->mother_tongue);
+                }
+
+                if ($request->filled('gender')) {
+                    $q->where('gender', $request->gender);
+                }
+            });
+
+            $matches = $query->with('details')->get();
+        }
 
         $testimonials = Testimonials::all();
         $faqs = FAQ::orderBy('position', 'asc')->where('status', true)->get();
+
         return view('frontend.pages.index', compact('testimonials', 'faqs', 'matches'), [
             'isLoggedIn' => Auth::check(),
-
-
         ]);
     }
+
     public function pricingView()
     {
         $plans = Plan::where('status', true)->orderBy('position', 'asc')->with('features', 'prices')->get();

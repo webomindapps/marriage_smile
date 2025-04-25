@@ -60,15 +60,16 @@
                                                     $customer->subscriptions()->latest('id')->first(),
                                                 );
                                                 $activePlanId = $latestSubscription->plan_id ?? null;
-                                                $currentPlanPrice = $plan->prices->first(); // adjust if more than one price per plan
+                                                $currentPlanPrice = $plan->prices->first();
+                                                $startDate = $latestSubscription->start_date ?? null;
+                                                $endDate = $latestSubscription->end_date ?? null;
                                             @endphp
 
                                             <input type="hidden" name="plan_price_id" value="{{ $currentPlanPrice->id }}">
 
-                                            <button type="submit"
-                                                class="btn btn-block 
-                                                {{ $plan->prices->where('price', '>', 0)->isNotEmpty() ? 'bg-success' : 'bg-warning' }} 
-                                                text-white"
+                                            <button type="button"
+                                                class="btn btn-block {{ $plan->prices->where('price', '>', 0)->isNotEmpty() ? 'bg-success' : 'bg-warning' }} text-white"
+                                                onclick="confirmPlanChange({{ $plan->id }}, {{ $activePlanId ?? 'null' }}, '{{ $startDate }}', '{{ $endDate }}')"
                                                 {{ $plan->id === $activePlanId ? 'disabled' : '' }}>
                                                 {{ $plan->id === $activePlanId ? 'Active' : ($plan->prices->where('price', '>', 0)->isNotEmpty() ? 'Buy Now' : 'Contact Us') }}
                                             </button>
@@ -84,4 +85,34 @@
             </div>
         </div>
     </section>
+    @push('scripts')
+        <script>
+            function confirmPlanChange(planId, activePlanId, startDate, endDate) {
+                const today = new Date().toISOString().split('T')[0]; // format: YYYY-MM-DD
+
+                if (activePlanId && planId !== activePlanId && startDate && endDate) {
+                    if (startDate <= today && endDate >= today) {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You already have an active subscription. Proceeding will deactivate your current plan permanently.",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, change plan',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('subscriptionForm_' + planId).submit();
+                            }
+                        });
+                    } else {
+                        // Plan is expired or not active
+                        document.getElementById('subscriptionForm_' + planId).submit();
+                    }
+                } else {
+                    // No active plan or same plan
+                    document.getElementById('subscriptionForm_' + planId).submit();
+                }
+            }
+        </script>
+    @endpush
 @endsection
