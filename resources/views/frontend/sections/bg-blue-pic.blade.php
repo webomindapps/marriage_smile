@@ -12,9 +12,9 @@
                     Smile today and make the right choice!
                 </p>
 
-                <div class="banner-btn">
+                {{-- <div class="banner-btn">
                     <a href="" contenteditable="false" style="cursor: pointer;">Register Now</a>
-                </div>
+                </div> --}}
             </div>
             <div class="col-lg-5 mp-0">
 

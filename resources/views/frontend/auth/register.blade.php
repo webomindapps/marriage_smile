@@ -63,19 +63,39 @@
                             @enderror
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" id="height" name="height"
-                                value="{{ old('height') }}" placeholder="Height in ft" required>
+                            <select class="form-control" id="height" name="height" required>
+                                <option value="">Select height range (in ft)</option>
+                                @for ($i = 4.5; $i < 6.5; $i += 0.5)
+                                    @php
+                                        $next = $i + 0.5;
+                                        $rangeLabel = $i . ' ft - ' . $next . ' ft';
+                                        $rangeValue = $i . '-' . $next;
+                                    @endphp
+                                    <option value="{{ $rangeValue }}"
+                                        {{ old('height') == $rangeValue ? 'selected' : '' }}>
+                                        {{ $rangeLabel }}
+                                    </option>
+                                @endfor
+                            </select>
                             @error('height')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" id="color" name="colour"
-                                value="{{ old('colour') }}" placeholder="Colour" required>
+                            <select class="form-control" id="color" name="colour" required>
+                                <option value="">Select Colour</option>
+                                <option value="Very Fair" {{ old('colour') == 'Very Fair' ? 'selected' : '' }}>Very Fair
+                                </option>
+                                <option value="Fair" {{ old('colour') == 'Fair' ? 'selected' : '' }}>Fair</option>
+                                <option value=" Brown" {{ old('colour') == 'Brown' ? 'selected' : '' }}>
+                                    Brown</option>
+                                <option value="Dark" {{ old('colour') == 'Dark' ? 'selected' : '' }}>Dark</option>
+                            </select>
                             @error('colour')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <div class="col-6">
                             <input type="text" class="form-control" id="name" name="name"
                                 value="{{ old('name') }}" placeholder="Name" required>
@@ -111,19 +131,18 @@
                                 <option value="Others" {{ old('qualification') == 'Others' ? 'selected' : '' }}>Others
                                 </option>
                             </select>
-                            <input type="text" name="qualification" id="other-qualification-field"
-                                class="form-control mt-2" placeholder="Enter Other Qualification"
-                                value="{{ old('qualification') == 'Others' ? old('qualification_value') : '' }}"
-                                style="{{ old('qualification') == 'Others' ? '' : 'display: none;' }}"
-                                {{ old('qualification') == 'Others' ? 'required' : '' }}>
-
-                            <div id="qualificationerror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
-                                Please select Qualification
-                            </div>
-
                             @error('qualification')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
+                        </div>
+                        <input type="text" name="other_qualification" id="other-qualification-field"
+                            class="form-control mt-2" placeholder="Enter Other Qualification"
+                            value="{{ old('other_qualification') == 'Others' ? old('qualification_value') : '' }}"
+                            style="{{ old('other_qualification') == 'Others' ? '' : 'display: none;' }}"
+                            {{ old('other_qualification') == 'Others' ? 'required' : '' }}>
+
+                        <div id="qualificationerror" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
+                            Please select Qualification
                         </div>
 
                         <div class="col-6 position-relative">
@@ -182,7 +201,7 @@
                         </div>
 
                         <div class="col-6">
-                            <input type="text" class="form-control" value="{{ old('caste') }}" placeholder="caste"
+                            <input type="text" class="form-control" value="{{ old('caste') }}" placeholder="Caste"
                                 name="caste" id="caste" required>
                             @error('caste')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
@@ -211,11 +230,7 @@
                         </div>
                         <div class="col-6">
                             <?php
-                            $incomeRanges = [];
-                            for ($start = 1; $start <= 70; $start += 1) {
-                                $end = $start + 1;
-                                $incomeRanges[] = "{$start}-{$end} Lakh";
-                            }
+                            $incomeRanges = ['No Income', 'Below ₹2.5 Lakh', '₹2.5 - ₹5 Lakh', '₹5 - ₹7 Lakh', '₹7 - ₹10 Lakh', '₹10 - ₹15 Lakh', '₹15 - ₹20 Lakh', '₹20 - ₹30 Lakh', '₹30 - ₹50 Lakh', '₹50 - ₹75 Lakh', '₹75 Lakh - ₹1 Crore', 'Above ₹1 Crore'];
                             ?>
 
                             <select name="annual_income" class="form-select" id="annual_income" required>
@@ -228,6 +243,7 @@
                                     </option>
                                 @endforeach
                             </select>
+
                             <div id="annual_income_error" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
                                 Please select annual Income
                             </div>
@@ -235,6 +251,7 @@
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <div class="col-6">
                             <input type="text" class="form-control" id="company_name" name="company_name"
                                 placeholder="Company Name" value="{{ old('company_name') }}" required>
@@ -246,13 +263,6 @@
                             <input type="text" class="form-control" id="designation" name="designation"
                                 placeholder="Designation" value="{{ old('designation') }}">
                             @error('designation')
-                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-6">
-                            <input type="text" class="form-control" id="experience" name="experience"
-                                placeholder="Work Experience" value="{{ old('experience') }}" required>
-                            @error('experience')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
@@ -277,19 +287,27 @@
                             @enderror
                         </div>
 
-                        <div class="col-6">
-                            <input type="text" class="form-control" id="aadhar_no" name="aadhar_no"
+                        <div class="col-5">
+                            <input type="text" class="form-control me-2" id="aadhar_no" name="aadhar_no"
                                 placeholder="AADHAR NO" value="{{ old('aadhar_no') }}" required>
-                            <small id="aadharError" class="text-danger d-none" style="font-size: 13px;">Please enter a
-                                valid Aadhar number.</small>
+
+
+                            <small id="aadharError" class="text-danger d-none" style="font-size: 13px;">
+                                Please enter a valid Aadhar number.
+                            </small>
+
                             @error('aadhar_no')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
-
+                        <div class="col-1">
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="verifyAadharBtn">
+                                Verify
+                            </button>
+                        </div>
                         <div class="col-6 position-relative">
                             <input type="password" class="form-control input-password" id="password" name="password"
-                                placeholder="Enter Password" required>
+                                placeholder="Create Password" required>
                             <span class="login-pass toggle-password">
                                 <i class="bx bx-hide"></i>
                             </span>
@@ -300,7 +318,7 @@
 
                         <div class="col-6 position-relative">
                             <input type="password" class="form-control input-password" id="conf_password"
-                                name="conf_password" placeholder="Enter Confirm Password" required>
+                                name="conf_password" placeholder="Confirm Password" required>
                             <span class="login-pass toggle-password">
                                 <i class="bx bx-hide"></i>
                             </span>
@@ -328,6 +346,13 @@
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="col-12">
+                            <textarea class="form-control" id="inputname" name="expectations" placeholder="Expectations? "
+                                value="{{ old('expectations') }}" required></textarea>
+                            @error('expectations')
+                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="col-12 bi-ftre">
                             <label>Horoscope</label><br />
                             <input type="file" id="image_path" name="image_path" required>
@@ -343,8 +368,9 @@
                         <div class="col-md-12">
                             <select id="marritialstatus" name="marritialstatus" class="form-select" required>
                                 <option value="" disabled selected>Marital Status</option>
-                                <option value="unmarried"{{ old('marritialstatus') == 'unmarried' ? 'selected' : '' }}>Un
-                                    Married
+                                <option
+                                    value="NeverMarried"{{ old('marritialstatus') == 'NeverMarried' ? 'selected' : '' }}>
+                                    NeverMarried
                                 </option>
                                 <option value="divorsed" {{ old('marritialstatus') == 'divorsed' ? 'selected' : '' }}>
                                     Divorsed</option>
@@ -364,7 +390,7 @@
 
                         <div class="col-md-12 mt-3" id="children-details-container" style="display: none;">
                         </div>
-                        <div class="col-md-12">
+                        {{-- <div class="col-md-12">
                             <select id="relationship_manager" name="req_rel_manager" class="form-select" required>
                                 <option value="" disabled {{ old('req_rel_manager') ? '' : 'selected' }}>
                                     Do you need a relationship manager to search on behalf of you?
@@ -377,14 +403,8 @@
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
 
-                        </div>
-                        <div class="col-12">
-                            <textarea class="form-control" id="inputname" name="expectations" placeholder="Expectations? "
-                                value="{{ old('expectations') }}" required></textarea>
-                            @error('expectations')
-                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        </div> --}}
+
                         <h5 class="h5-find pd-2"> <i class="fas fa-users"></i> My Family Details </h5>
 
                         <div class="col-6">
@@ -432,7 +452,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-12" id="present-house-status-container" style="display: none;">
+                        {{-- <div class="col-md-12" id="present-house-status-container" style="display: none;">
                             <select id="present_house_status" name="present_house_status" class="form-select" required>
                                 <option value="" disabled {{ old('present_house_status') ? '' : 'selected' }}>
                                     Select House Status
@@ -445,10 +465,10 @@
                             @error('present_house_status')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> --}}
 
 
-                        <div class="col-12">
+                        {{-- <div class="col-12">
                             <input type="text" class="form-control" id="permanent_locations"
                                 name="permanent_locations" placeholder="Permanent Address"
                                 value="{{ old('permanent_locations') }}" required>
@@ -494,8 +514,8 @@
                             <div id="asset_value_error" class="text-danger ps-0 mb-2 d-none" style="font-size: 13px;">
                                 Please select the Asset Value
                             </div>
-                        </div>
-                        <h5 class="h5-find pd-2"><i class="fas fa-comment-dots"></i> How I Want to Talk to My Matches</h5>
+                        </div> --}}
+                        {{-- <h5 class="h5-find pd-2"><i class="fas fa-comment-dots"></i> How I Want to Talk to My Matches</h5>
                         <div class="col-md-12">
                             <select id="preferreday" name="preferreday" class="form-select" required>
                                 <option value="" disabled {{ old('preferreday') ? '' : 'selected' }}>Preferred Day
@@ -549,7 +569,7 @@
                             @error('contact_related_to')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class="col-12">
                             <input type="checkbox" id="terms" name="terms">
@@ -647,16 +667,16 @@
             }
         });
 
-        document.getElementById("permanent_locations").addEventListener("input", function() {
-            const permanentAddress = this.value.trim();
-            const permanentStatusContainer = document.getElementById("permanent-house-status-container");
+        // document.getElementById("permanent_locations").addEventListener("input", function() {
+        //     const permanentAddress = this.value.trim();
+        //     const permanentStatusContainer = document.getElementById("permanent-house-status-container");
 
-            if (permanentAddress) {
-                permanentStatusContainer.style.display = "block";
-            } else {
-                permanentStatusContainer.style.display = "none";
-            }
-        });
+        //     if (permanentAddress) {
+        //         permanentStatusContainer.style.display = "block";
+        //     } else {
+        //         permanentStatusContainer.style.display = "none";
+        //     }
+        // });
     </script>
     <script>
         document.getElementById("siblings").addEventListener("input", function() {
@@ -708,7 +728,7 @@
         });
     </script>
 
-    <script>
+    {{-- <script>
         const inputState = document.getElementById("preferreday");
         const timingsContainer = document.getElementById("timings-container");
         const timingsInput = document.getElementById("timings");
@@ -722,7 +742,7 @@
                 timingsInput.value = "";
             }
         });
-    </script>
+    </script> --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll("select[required], input[required]").forEach(function(field) {
@@ -889,24 +909,24 @@
                 marritialstatusError.classList.add('d-none');
             }
 
-            const assetvalueSelect = document.getElementById('asset_value');
-            const assetvalueError = document.getElementById('asset_value_error');
-            if (assetvalueSelect.value == "") {
-                assetvalueError.classList.remove('d-none');
-                isValid = false;
-            } else {
-                assetvalueError.classList.add('d-none');
+            // const assetvalueSelect = document.getElementById('asset_value');
+            // const assetvalueError = document.getElementById('asset_value_error');
+            // if (assetvalueSelect.value == "") {
+            //     assetvalueError.classList.remove('d-none');
+            //     isValid = false;
+            // } else {
+            //     assetvalueError.classList.add('d-none');
 
-            }
+            // }
 
-            const contactrelatedtoSelect = document.getElementById('contact_related_to');
-            const contactrelatedtoError = document.getElementById('contact_related_to_error');
-            if (contactrelatedtoSelect.value == "") {
-                contactrelatedtoError.classList.remove('d-none');
-                isValid = false;
-            } else {
-                contactrelatedtoError.classList.add('d-none');
-            }
+            // const contactrelatedtoSelect = document.getElementById('contact_related_to');
+            // const contactrelatedtoError = document.getElementById('contact_related_to_error');
+            // if (contactrelatedtoSelect.value == "") {
+            //     contactrelatedtoError.classList.remove('d-none');
+            //     isValid = false;
+            // } else {
+            //     contactrelatedtoError.classList.add('d-none');
+            // }
             const termsCheckbox = document.getElementById('terms');
             const termsError = document.getElementById('termsError');
             if (!termsCheckbox.checked) {

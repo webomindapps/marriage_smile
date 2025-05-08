@@ -31,14 +31,10 @@
 
                                 @if (is_null($customer))
                                     <li class="menu-item">
-                                        <a href="#" class="menu-link" contenteditable="false"
-                                            style="cursor: pointer;">Browse Profile</a>
+                                        <a href="" class="menu-link" contenteditable="false"
+                                            style="cursor: pointer;">Subscription Plans</a>
                                     </li>
-                                    <li class="menu-item">
-                                        <a href="search.php" class="menu-link" contenteditable="false"
-                                            style="cursor: pointer;">Search</a>
-                                    </li>
-
+                                 
                                     <li class="menu-item">
                                         <a href="{{ route('customer.login') }}" class="header-btns login-btn"
                                             contenteditable="false" style="cursor: pointer;">Login</a>
