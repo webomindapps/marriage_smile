@@ -48,6 +48,9 @@ Route::group(['middleware' => 'customer.auth'], function () {
     Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
     Route::post('customer/{id}/edit', [CustomerController::class, 'update']);
+    Route::get('customer/{id}/download',[CustomerController::class,'downloadpdf'])->name('customer.download');
+    Route::get('horoscope/{id}/delete',[CustomerController::class,'deletehoroscope'])->name('horoscope.delete');
+    Route::get('documents/{id}/delete',[CustomerController::class,'deletedocuments'])->name('documents.delete');
     Route::get('customer/matches', [CustomerController::class, 'matches'])->name('customer.matches');
     Route::get('customer/logout', [CustomerController::class, 'logout'])->name('customer.logout');
     Route::get('customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.details');

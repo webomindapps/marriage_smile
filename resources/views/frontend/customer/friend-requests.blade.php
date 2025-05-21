@@ -18,14 +18,14 @@
                                     <img src="{{ $request->sender->documents->first() ? asset('storage/' . $request->sender->documents->first()->image_url) : asset('frontend/assets/images/default.jpg') }}"
                                         class="img-fluid img-radi" style="width: 60px; height: 60px;" alt="">
                                 </div>
-                                <div class="content col-7">
+                                <div class="content col-5">
                                     <p>{{ $request->sender?->name }}</p>
 
                                 </div>
-                                <div class="col-3">
+                                <div class="col-5">
                                     <div class="d-flex">
                                         <a class="btn btn-sm btn-danger"
-                                            href="{{ route('reject.request', $request->id) }}">Reject</a>
+                                            href="{{ route('reject.request', $request->id) }}">Not At this Moment</a>
                                         <a class="btn btn-sm btn-success ms-2"
                                             href="{{ route('accept.request', $request->id) }}">Accept</a>
                                     </div>

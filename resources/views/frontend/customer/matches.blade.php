@@ -18,15 +18,17 @@
             <div class="col-lg-8 new-gp">
                 <!-- Hamburger Icon -->
                 <div class="row bo-filter">
-                    <div class="col-md-10">
+                    <div class="col-md-9">
                         <h4 class="pro-hea"> Here's what we found!</h4>
                         <p class="last-showp">
-                            Showing {{ $profiledetails->firstItem() }}–{{ $profiledetails->lastItem() }} of
-                            {{ $profiledetails->total() }} matches
+                            Showing {{ $profile_details->firstItem() }}–{{ $profile_details->lastItem() }} of
+                            {{ $profile_details->total() }} matches
                         </p>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
+
                         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#searchModal">
+                            Filters
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 24 24"
                                 fill="currentColor" class=" text-primary-500">
                                 <path
@@ -90,7 +92,7 @@
                                                         <hr>
                                                         <h4 class="heig-h4"> Marital Status</h4>
                                                         <div class="byn">
-                                                            <select name="marital_status" class="form-control">
+                                                            <select name="marritialstatus" class="form-control">
                                                                 <option value=""disable selected>Doesn't Matter
                                                                 </option>
                                                                 <option value="awaiting Divorce">Awaiting Divorce</option>
@@ -188,9 +190,12 @@
 
                                                 <!-- Search by Profile ID -->
                                                 <div class="tab-pane fade" id="profileIdTab">
+                                                    <!-- Search by Profile ID -->
                                                     <form class="row ne-id-search" method="GET"
                                                         action="{{ route('customer.matches') }}"
                                                         id="profileIdSearchForm">
+
+
                                                         <div class="col-md-12">
                                                             <input type="text" class="form-control" id="profileId"
                                                                 name="customer_id" placeholder="Enter Profile ID">
@@ -204,8 +209,8 @@
                                                 </div>
                                                 <div class="tab-pane fade" id="nameTab">
                                                     <form class="row ne-id-search" method="GET"
-                                                        action="{{ route('customer.matches') }}"
-                                                        id="profileIdSearchForm">
+                                                        action="{{ route('customer.matches') }}" id="nameSearchForm">
+
                                                         <div class="col-md-12">
                                                             <input type="text" class="form-control" id="profileId"
                                                                 name="name" placeholder="Enter Name to search..">
@@ -243,10 +248,11 @@
                         </span> --}}
                     </div>
                 @endif
-
-
-                @foreach ($profiledetails as $item)
-                    {{-- <div class="mb-2 counter-wrapper" data-id="{{ $item->id }}">
+                @if ($profile_details->isEmpty())
+                    <p>No profiles found that match your criteria.</p>
+                @else
+                    @foreach ($profile_details as $item)
+                        {{-- <div class="mb-2 counter-wrapper" data-id="{{ $item->id }}">
                         <strong>Total:</strong> <span class="total">{{ $item->photo_limit }}</span> |
                         <strong>Viewed:</strong>
                         <span class="viewed">{{ $item->photo_limit - $subscription->photo_viewable }}</span> |
@@ -258,131 +264,141 @@
                         <span> {{ $subscription->hscop_viewable }}</span>
                     </div> --}}
 
-                    <div class="row box-j">
-                        <div class="col-lg-4 p0">
-                            <a>
-                                @if ($item->customer && $item->customer->documents->isNotEmpty())
-                                    <img src="{{ asset('storage/' . $item->customer->documents->first()->image_url) }}"
-                                        class="img-fluid wid-testimoni">
-                                @else
-                                    <img src="{{ asset('storage/default/image.jpg') }}" class="img-fluid wid-testimoni">
-                                @endif
-                            </a>
-                        </div>
-
-                        <div class="col-lg-8 p0">
-                            <div class="test-main cls-for-all">
-                                <strong>{{ $item->customer->customer_id }}</strong>
-                                <p>Last seen on
-                                    {{ $item->customer->last_login_time ? \Carbon\Carbon::parse($item->customer->last_login_time)->format('d-M-y') : 'N/A' }}
-                                </p>
-                                {{-- <a href="{{ route('customer.details', $item->id) }}"> --}}
-                                <h4 class="pro-hea">{{ $item->customer->name }}</h4>
-                                {{-- </a> --}}
-                                <p>{{ $item->height }} . {{ $item->locations }}/{{ $item->permanent_locations }} . Others
-                                </p>
-
-                                <ul class="list-none">
-                                    <li>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-briefcase-business">
-                                            <path d="M12 12h.01" />
-                                            <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-                                            <path d="M22 13a18.15 18.15 0 0 1-20 0" />
-                                            <rect width="20" height="14" x="2" y="6" rx="2" />
-                                        </svg> <span>{{ $item->designation }}</span>
-                                    </li>
-                                    <li>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-indian-rupee">
-                                            <path d="M6 3h12" />
-                                            <path d="M6 8h12" />
-                                            <path d="m6 13 8.5 8" />
-                                            <path d="M6 13h3" />
-                                            <path d="M9 13c6.667 0 6.667-10 0-10" />
-                                        </svg> <span> {{ $item->annual_income }}</span>
-                                    </li>
-                                    <li>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-graduation-cap">
-                                            <path
-                                                d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
-                                            <path d="M22 10v6" />
-                                            <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
-                                        </svg> <span>{{ $item->qualification }}</span>
-                                    </li>
-                                    <li>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-book-heart">
-                                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-                                            <path
-                                                d="M16 8.2C16 7 15 6 13.8 6c-.8 0-1.4.3-1.8.9-.4-.6-1-.9-1.8-.9C9 6 8 7 8 8.2c0 .6.3 1.2.7 1.6h0C10 11.1 12 13 12 13s2-1.9 3.3-3.1h0c.4-.4.7-1 .7-1.7z" />
-                                        </svg> <span>{{ $item->marritialstatus }}</span>
-                                    </li>
-                                </ul>
+                        <div class="row box-j">
+                            <div class="col-lg-4 p0">
+                                <a>
+                                    @if ($item->customer && $item->customer->documents->isNotEmpty())
+                                        <img src="{{ asset('storage/' . $item->customer->documents->first()->image_url) }}"
+                                            class="img-fluid wid-testimoni">
+                                    @else
+                                        <img src="{{ asset('storage/default/image.jpg') }}"
+                                            class="img-fluid wid-testimoni">
+                                    @endif
+                                </a>
                             </div>
-                            <div class="pink-bg-list mt-2">
-                                <ul class="list-none col-li">
-                                    <li>
-                                        @if (
-                                            $subscription->chat_viewable === 'Unlimited' ||
-                                                (is_numeric($subscription->chat_viewable) && $subscription->chat_viewable > 0))
-                                            <a href="{{ route('send.friend.request', $item->customer->id) }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="lucide lucide-send">
-                                                    <path d="m22 2-7 20-4-9-9-4Z" />
-                                                    <path d="M22 2 11 13" />
-                                                </svg>
-                                                <span>Send Request</span>
-                                            </a>
-                                        @else
-                                            <a href="javascript:void(0);" onclick="redirectToPricing();">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="lucide lucide-send">
-                                                    <path d="m22 2-7 20-4-9-9-4Z" />
-                                                    <path d="M22 2 11 13" />
-                                                </svg>
-                                                <span>Send Request</span>
-                                            </a>
-                                        @endif
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('add-to-shortlist', $item->customer->id) }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                class="lucide lucide-star">
-                                                <polygon
-                                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                                            </svg>
-                                            <span>Shortlist</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('chat', $item->customer->id) }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                class="lucide lucide-message-circle">
-                                                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-                                            </svg>
-                                            <span>Chat</span>
-                                        </a>
-                                    </li>
 
-                                    {{-- <li>
+                            <div class="col-lg-8 p0">
+                                <div class="test-main cls-for-all">
+                                    <strong>{{ $item->customer->customer_id }}</strong>
+                                    <p>Last seen on
+                                        {{ $item->customer->last_login_time ? \Carbon\Carbon::parse($item->customer->last_login_time)->format('d-M-y') : 'N/A' }}
+                                    </p>
+                                    {{-- <a href="{{ route('customer.details', $item->id) }}"> --}}
+                                    <h4 class="pro-hea">{{ $item->customer->name }}</h4>
+                                    {{-- </a> --}}
+                                    <p>{{ $item->height }} . {{ $item->locations }}/{{ $item->permanent_locations }} .
+                                        Others
+                                    </p>
+
+                                    <ul class="list-none">
+                                        <li>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-briefcase-business">
+                                                <path d="M12 12h.01" />
+                                                <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                                                <path d="M22 13a18.15 18.15 0 0 1-20 0" />
+                                                <rect width="20" height="14" x="2" y="6" rx="2" />
+                                            </svg> <span>{{ $item->designation }}</span>
+                                        </li>
+                                        <li>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-indian-rupee">
+                                                <path d="M6 3h12" />
+                                                <path d="M6 8h12" />
+                                                <path d="m6 13 8.5 8" />
+                                                <path d="M6 13h3" />
+                                                <path d="M9 13c6.667 0 6.667-10 0-10" />
+                                            </svg> <span> {{ $item->annual_income }}</span>
+                                        </li>
+                                        <li>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-graduation-cap">
+                                                <path
+                                                    d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+                                                <path d="M22 10v6" />
+                                                <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+                                            </svg> <span>{{ $item->qualification }}</span>
+                                        </li>
+                                        <li>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-book-heart">
+                                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                                                <path
+                                                    d="M16 8.2C16 7 15 6 13.8 6c-.8 0-1.4.3-1.8.9-.4-.6-1-.9-1.8-.9C9 6 8 7 8 8.2c0 .6.3 1.2.7 1.6h0C10 11.1 12 13 12 13s2-1.9 3.3-3.1h0c.4-.4.7-1 .7-1.7z" />
+                                            </svg> <span>{{ $item->marritialstatus }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="pink-bg-list mt-2">
+                                    <ul class="list-none col-li">
+                                        <li>
+                                            @if (
+                                                $subscription->chat_viewable === 'Unlimited' ||
+                                                    (is_numeric($subscription->chat_viewable) && $subscription->chat_viewable > 0))
+                                                <a href="{{ route('send.friend.request', $item->customer->id) }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="lucide lucide-send">
+                                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                                        <path d="M22 2 11 13" />
+                                                    </svg>
+                                                    <span>Send Request</span>
+                                                </a>
+                                            @else
+                                                <a href="javascript:void(0);" onclick="redirectToPricing();">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="lucide lucide-send">
+                                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                                        <path d="M22 2 11 13" />
+                                                    </svg>
+                                                    <span>Send Request</span>
+                                                </a>
+                                            @endif
+                                        </li>
+
+                                        @php
+                                            // Check if the current profile's customer_id is in the shortlisted IDs
+                                            $isShortlisted = in_array($item->customer->id, $shortlistedIds);
+                                        @endphp
+
+                                        <li>
+                                            <a href="{{ route('add-to-shortlist', $item->customer->id) }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                    viewBox="0 0 24 24" fill="{{ $isShortlisted ? '#ec4899' : 'white' }}"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" class="lucide lucide-star">
+                                                    <polygon
+                                                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                                </svg>
+                                                <span>Shortlist</span>
+                                            </a>
+                                        </li>
+
+
+                                        <li>
+                                            <a href="{{ route('chat', $item->customer->id) }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-message-circle">
+                                                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                                </svg>
+                                                <span>Chat</span>
+                                            </a>
+                                        </li>
+
+                                        {{-- <li>
                                         @if (!in_array($item->id, $viewedProfileIds) && $subscription->profile_viewable <= 0)
                                             <a href="javascript:void(0);" onclick="showLimitReachedAlert();">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
@@ -413,12 +429,44 @@
                                      
 
                                     </li> --}}
-                                    {{-- {{ dd($duration->start_date, $duration->end_date, now()) }} --}}
-                                    @if ($duration->start_date < now() && $duration->end_date > now())
-                                        <li>
-                                            @if (!in_array($item->id, $viewedProfileIds) && $subscription->profile_viewable <= 0)
-                                                {{-- Not viewed yet and profile view limit is over --}}
-                                                <a href="javascript:void(0);" onclick="showLimitReachedAlert();">
+                                        {{-- {{ dd($duration->start_date, $duration->end_date, now()) }} --}}
+                                        @if ($duration->start_date < now() && $duration->end_date > now())
+                                            <li>
+                                                @if (!in_array($item->id, $viewedProfileIds) && $subscription->profile_viewable <= 0)
+                                                    {{-- Not viewed yet and profile view limit is over --}}
+                                                    <a href="javascript:void(0);" onclick="showLimitReachedAlert();">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="17"
+                                                            height="17" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round"
+                                                            class="lucide lucide-circle-user-icon lucide-circle-user">
+                                                            <circle cx="12" cy="12" r="10" />
+                                                            <circle cx="12" cy="10" r="3" />
+                                                            <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                                                        </svg>
+                                                        <span>View Profile</span>
+                                                    </a>
+                                                @else
+                                                    {{-- Already viewed or allowed to view --}}
+                                                    <a href="{{ route('customer.details', $item->id) }}"
+                                                        @if (!in_array($item->id, $viewedProfileIds)) onclick="return confirmProfileView(this);" @endif>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="17"
+                                                            height="17" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round"
+                                                            class="lucide lucide-circle-user-icon lucide-circle-user">
+                                                            <circle cx="12" cy="12" r="10" />
+                                                            <circle cx="12" cy="10" r="3" />
+                                                            <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                                                        </svg>
+                                                        <span>View Profile</span>
+                                                    </a>
+                                                @endif
+                                            </li>
+                                        @else
+                                            {{-- Subscription is either not started or expired --}}
+                                            <li>
+                                                <a href="javascript:void(0);" onclick="subscribe();">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -429,58 +477,28 @@
                                                     </svg>
                                                     <span>View Profile</span>
                                                 </a>
-                                            @else
-                                                {{-- Already viewed or allowed to view --}}
-                                                <a href="{{ route('customer.details', $item->id) }}"
-                                                    @if (!in_array($item->id, $viewedProfileIds)) onclick="return confirmProfileView(this);" @endif>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                        class="lucide lucide-circle-user-icon lucide-circle-user">
-                                                        <circle cx="12" cy="12" r="10" />
-                                                        <circle cx="12" cy="10" r="3" />
-                                                        <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                                                    </svg>
-                                                    <span>View Profile</span>
-                                                </a>
-                                            @endif
-                                        </li>
-                                    @else
-                                        {{-- Subscription is either not started or expired --}}
-                                        <li>
-                                            <a href="javascript:void(0);" onclick="subscribe();">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="lucide lucide-circle-user-icon lucide-circle-user">
-                                                    <circle cx="12" cy="12" r="10" />
-                                                    <circle cx="12" cy="10" r="3" />
-                                                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                                                </svg>
-                                                <span>View Profile</span>
-                                            </a>
-                                        </li>
-                                    @endif
+                                            </li>
+                                        @endif
 
 
-                                </ul>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @endif
+
+
             </div>
 
 
             <!-- Pagination -->
-            <div class="mt-3">
-                {{ $profiledetails->links() }}
+            <div class="mt-5">
+                {{ $profile_details->links() }}
             </div>
         </div>
     </div>
     </div>
-
-
-    <!-- JavaScript for Profile ID Search -->
     @push('scripts')
         <script>
             $('#showProfilesButton').on('click', function() {
@@ -551,4 +569,6 @@
             }
         </script>
     @endpush
+
+    <!-- JavaScript for Profile ID Search -->
 @endsection

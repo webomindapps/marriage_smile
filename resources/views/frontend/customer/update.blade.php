@@ -44,12 +44,19 @@
                 </div>
                 <div class="col-lg-8 new-gp ">
                     <div class="profile-edit">
-                        <form class="row g-3" id="registrationForm" action="{{ route('admin.customer.edit', $customer->id) }}"
-                            method="POST" enctype="multipart/form-data">
+                        <div class="col-12 text-end">
+                            <a href="{{ route('customer.download', $customer->id) }}" class="btn btn-primary"
+                                value="downloadpdf">Download
+                                PDF</a>
+                        </div>
+                        <form class="row g-3" id="registrationForm"
+                            action="{{ route('admin.customer.edit', $customer->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             <h5 class="h5-find pd-1"><i class="fas fa-user-circle"></i> Profile Details
                                 <span>(Verified)</span>
                             </h5>
+
                             <div class="col-6">
                                 <select class="form-control" id="nationality" name="nationality">
                                     <option value="" disabled>Select Nationality</option>
@@ -341,14 +348,6 @@
                                 @enderror
                             </div>
                             <div class="col-6">
-                                <input type="text" class="form-control" id="experience" name="experience"
-                                    value="{{ $customer->details->experience }}" placeholder="Working Experience"
-                                    required>
-                                @error('experience')
-                                    <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-6">
                                 <div class="input-group">
                                     <span class="input-group-text" id="country-code">+91</span>
                                     <input type="text" class="form-control" id="phone" name="phone"
@@ -369,10 +368,6 @@
                                 @enderror
                             </div>
 
-                            <div class="col-6">
-                                <input type="text" class="form-control" id="aadhar_no" name="aadhar_no"
-                                    value="{{ $customer->details->aadhar_no }}" placeholder="AADHAR NO" readonly>
-                            </div>
                             <div class="col-6">
                                 <div id="hobbies-container">
                                     <div class="hobby-row">
@@ -396,10 +391,22 @@
                             <div class="col-12">
                                 <div class="bi-ftre">
                                     <label>Horoscope</label><br />
-                                    <input type="file" id="image_path" name="image_path" {{-- If there's an image path, show the old one --}}>
+                                    <input type="file" id="image_path" name="image_path[]" multiple accept="image/*">
                                 </div>
-                                <img src="{{ asset('storage/' . $customer->details->image_path) }}" class="img-thumbnail mt-2"
-                                    width="100" height="100" alt="Uploaded image">
+
+                                @foreach ($customer->horoscope as $horoscopes)
+                                    <div class="image-container">
+                                        <!-- Delete link (adjust route as needed) -->
+                                        <a href="{{route('horoscope.delete',$horoscopes->id)}}" class="delete-link"
+                                            onclick="return confirm('Are you sure you want to delete this image?');">
+                                            &times;
+                                        </a>
+
+                                        <!-- Image -->
+                                        <img src="{{ asset('storage/' . $horoscopes->image_path) }}"
+                                            class="img-thumbnail" width="100" height="100" alt="Uploaded image">
+                                    </div>
+                                @endforeach
                             </div>
 
                             <div class="col-12">
@@ -409,14 +416,21 @@
                                         accept="image/*">
                                     <div id="image-preview-container" class="d-flex mt-3">
                                         {{-- Loop through each document and display images --}}
+
                                         @if ($customer->documents->isNotEmpty())
-                                            @foreach ($customer->documents as $document)
-                                                @if (isset($document->image_url))
-                                                    <img src="{{ asset('storage/' . $document->image_url) }}"
-                                                        class="img-thumbnail" width="100" height="100"
-                                                        alt="Uploaded image">
-                                                @endif
-                                            @endforeach
+                                            <div class="image-container">
+                                                <a href="#" class="delete-link"
+                                                    onclick="return confirm('Are you sure you want to delete this image?');">
+                                                    &times;
+                                                </a>
+                                                @foreach ($customer->documents as $document)
+                                                    @if (isset($document->image_url))
+                                                        <img src="{{ asset('storage/' . $document->image_url) }}"
+                                                            class="img-thumbnail" width="100" height="100"
+                                                            alt="Uploaded image">
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
@@ -454,24 +468,6 @@
                             </div>
                             <div class="col-md-12 mt-3" id="children-details-container" style="display: none;">
                             </div>
-                            <div class="col-md-12">
-                                <select id="relationship_manager" name="req_rel_manager" class="form-select" required>
-                                    <option value="" disabled
-                                        {{ $customer->details->req_rel_manager ? '' : 'selected' }}>
-                                        Do you need a relationship manager to search on behalf of you?
-                                    </option>
-                                    <option value="Yes"
-                                        {{ $customer->details->req_rel_manager == 'Yes' ? 'selected' : '' }}>Yes
-                                    </option>
-                                    <option value="No"
-                                        {{ $customer->details->req_rel_manager == 'No' ? 'selected' : '' }}>No
-                                    </option>
-                                </select>
-                                @error('req_rel_manager')
-                                    <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                                @enderror
-                            </div>
-
                             <div class="col-12">
                                 <textarea class="form-control" id="inputname" name="expectations" placeholder="Expectations?">{{ $customer->details->expectations }}</textarea>
                                 @error('expectations')
@@ -561,7 +557,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-12" id="present-house-status-container"
+                            {{-- <div class="col-md-12" id="present-house-status-container"
                                 style="{{ isset($customer->details->present_house_status) ? '' : 'display: none;' }}">
                                 <select id="present_house_status" name="present_house_status" class="form-select"
                                     required>
@@ -580,9 +576,9 @@
                                 @error('present_house_status')
                                     <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                                 @enderror
-                            </div>
+                            </div> --}}
 
-                            <div class="col-12">
+                            {{-- <div class="col-12">
                                 <input type="text" class="form-control" id="permanent_locations"
                                     name="permanent_locations" placeholder="Permanent Address"
                                     value="{{ $customer->details->permanent_locations ?? old('permanent_locations') }}"
@@ -637,9 +633,9 @@
                                     style="font-size: 13px;">
                                     Please select the Asset Value
                                 </div>
-                            </div>
+                            </div> --}}
 
-                            <h5 class="h5-find pd-2"><i class="fas fa-comment-dots"></i> How I Want to Talk to My Matches
+                            {{-- <h5 class="h5-find pd-2"><i class="fas fa-comment-dots"></i> How I Want to Talk to My Matches
                             </h5>
                             <div class="col-md-12">
                                 <select id="preferreday" name="preferreday" class="form-select" required>
@@ -702,7 +698,7 @@
                                 @error('contact_related_to')
                                     <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                                 @enderror
-                            </div>
+                            </div> --}}
                             <div class="col-12 text-center">
                                 <button type="submit" class="btn bt-register">Update Profile</button>
                             </div>

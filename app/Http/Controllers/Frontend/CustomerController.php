@@ -17,10 +17,14 @@ use App\Models\CustomerDetails;
 use App\Models\ProfileViewable;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\CustomerImage;
+use App\Models\Horoscope;
+use App\Models\Shortlist;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Models\SubscriptionValidation;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
@@ -63,9 +67,10 @@ class CustomerController extends Controller
             'mother_occupation' => 'required|string',
             'siblings' => 'required|string',
             'locations' => 'required|string',
-            'image_path' => 'nullable|image',
             'image_url' => 'nullable|array',
             'image_url.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'image_path' => 'required|array',
+            'image_path.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -99,6 +104,22 @@ class CustomerController extends Controller
                 }
             }
 
+            if ($request->hasFile('image_path')) {
+                $imagepaths = $request->file('image_path'); // This should be an array of file objects
+
+                foreach ($imagepaths as $imagepath) {
+                    // Check if the file is an instance of UploadedFile
+                    if ($imagepath instanceof \Illuminate\Http\UploadedFile) {
+                        $paths = $imagepath->store('documents/horoscope', 'public');
+
+                        $customer->horoscope()->create([
+                            'customer_id' => $customer->id,
+                            'image_path' => $paths,
+                        ]);
+                    }
+                }
+            }
+
             $customerDetailsData = $request->only([
                 'customers_id',
                 'nationality',
@@ -119,7 +140,6 @@ class CustomerController extends Controller
                 'sun_star',
                 'birth_star',
                 'aadhar_no',
-                'image_path',
                 'hobbies',
                 'marritialstatus',
                 'father_name',
@@ -153,10 +173,6 @@ class CustomerController extends Controller
             $customerDetailsData['customers_id'] = $customer->id;
 
             $customer->details()->create($customerDetailsData);
-            if ($request->hasFile('image_path')) {
-                $path = $request->file('image_path')->store('documents/horoscope', 'public');
-                $customer->details()->update(['image_path' => $path]);
-            }
             $i = 1;
             while ($request->has("child_{$i}_gender")) {
                 $childData = [
@@ -194,9 +210,23 @@ class CustomerController extends Controller
             }
             Mail::to($request->email)->send(new CustomerRegister($customer));
 
-            $basicPlan = PlanPrice::whereHas('priceplans', function ($q) {
-                $q->where('name', 'Basic');
-            })->first();
+            //validating the first 3000 customers
+            $customerCount = Customer::count();
+
+
+            if ($customerCount < 3000) {
+
+                $basicPlan = PlanPrice::whereHas('priceplans', function ($q) {
+                    $q->where('name', 'Plan M');
+                })->first();
+            } else {
+                $basicPlan = PlanPrice::whereHas('priceplans', function ($q) {
+                    $q->where('name', 'Basic');
+                })->first();
+            }
+
+
+
 
             if ($basicPlan && $basicPlan->priceplans) {
                 $start_date = now();
@@ -246,7 +276,7 @@ class CustomerController extends Controller
             // dd($subscription);
             Mail::to($customer->email)->send(new SubscriptionMail($subscription));
 
-            return redirect()->route('customer.login')->with('verify', 'Customer registered successfully');
+            return redirect()->back()->with('registration_success', true);
         } catch (Exception $e) {
             DB::rollBack();
             dd($e);
@@ -268,7 +298,8 @@ class CustomerController extends Controller
             'name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|numeric',
-            'image_path' => 'nullable|image',
+            'image_path' => 'required|array',
+            'image_path.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'image_url.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
@@ -281,12 +312,30 @@ class CustomerController extends Controller
 
             // Update documents
             if ($request->hasFile('image_url')) {
-                foreach ($request->file('image_url') as $imageUrl) {
+                $imageUrls = $request->file('image_url');
+                foreach ($imageUrls as $imageUrl) {
                     $path = $imageUrl->store('documents/profiles', 'public');
+
                     $customer->documents()->create([
                         'customers_id' => $customer->id,
                         'image_url' => $path,
                     ]);
+                }
+            }
+
+            if ($request->hasFile('image_path')) {
+                $imagepaths = $request->file('image_path'); // This should be an array of file objects
+
+                foreach ($imagepaths as $imagepath) {
+                    // Check if the file is an instance of UploadedFile
+                    if ($imagepath instanceof \Illuminate\Http\UploadedFile) {
+                        $paths = $imagepath->store('documents/horoscope', 'public');
+
+                        $customer->horoscope()->create([
+                            'customer_id' => $customer->id,
+                            'image_path' => $paths,
+                        ]);
+                    }
                 }
             }
 
@@ -305,7 +354,6 @@ class CustomerController extends Controller
                 'annual_income',
                 'company_name',
                 'designation',
-                'experience',
                 'req_rel_manager',
                 'expectations',
                 'gotra',
@@ -339,10 +387,7 @@ class CustomerController extends Controller
 
             $customerDetails->update($customerDetailsData);
             // Update image_path in customer details
-            if ($request->hasFile('image_path')) {
-                $path = $request->file('image_path')->store('documents/horoscope', 'public');
-                CustomerDetails::where('customers_id', $customer->id)->update(['image_path' => $path]);
-            }
+
 
             // Update customer relations (children and siblings)
             DB::table('customer_relations')->where('customers_id', $customer->id)->delete();
@@ -375,7 +420,7 @@ class CustomerController extends Controller
 
             DB::commit();
 
-            return redirect()->route('customer.profile', $id)->with('success', 'Customer updated successfully');
+            return redirect()->route('customer.matches', $id)->with('success', 'Customer updated successfully');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'An error occurred while updating the customer: ' . $e->getMessage());
@@ -451,27 +496,28 @@ class CustomerController extends Controller
         $customer = Auth::guard('customer')->user();
         return view('frontend.customer.profile', compact('customer'));
     }
-    
+
     public function matches(Request $request)
     {
-        $profileId = $request->customer_id;
-        $profilename = $request->name;
         $customer = Auth::guard('customer')->user();
         $oppositeGender = $customer->details->gender === 'male' ? 'female' : 'male';
 
+        // Start the query
         $query = CustomerDetails::with(['customer.documents'])
-            ->where('gender', $oppositeGender);
-
-        if (!empty($profileId)) {
-            $query->whereHas('customer', function ($q) use ($profileId) {
-                $q->where('customer_id', $profileId);
+            ->where('gender', $oppositeGender)
+            ->whereHas('customer', function ($q) use ($request) {
+                $q->where('status', 1); 
+            });
+        // Check and apply filters
+        if ($request->filled('customer_id')) {
+            $query->whereHas('customer', function ($q) use ($request) {
+                $q->where('customer_id', $request->customer_id); // this filters by customer_id like 'MS003'
             });
         }
 
-        if (!empty($profilename)) {
-            $query->whereHas('customer', function ($q) use ($profilename) {
-                $q->where('name', $profilename);
-            });
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
         }
 
         if ($request->filled('age_from') || $request->filled('age_to')) {
@@ -480,31 +526,40 @@ class CustomerController extends Controller
             $query->whereBetween('age', [$ageFrom, $ageTo]);
         }
 
-        if ($request->filled('marital_status') && $request->marital_status !== "Doesn't Matter") {
-            $query->where('marritialstatus', $request->marital_status);
+        // Make sure the marital status condition is using the correct request key
+        if ($request->filled('marritialstatus') && $request->marritialstatus !== "Doesn't Matter") {
+            $query->where('marritialstatus', $request->marritialstatus);
         }
 
-        $profiledetails = $query->paginate(10);
-        // dd($profiledetails);
-        foreach ($profiledetails as $profile) {
-            $matchedCustomer = Auth::guard('customer')->user();
-            // dd($matchedCustomer);
-            $subscription = Subscription::where('customer_id', $matchedCustomer->id)
-                ->where('status', 1)
-                ->latest()
-                ->first();
-            // dd($subscription);
-            $photoLimit = 0;
-
+        if ($request->filled('height')) {
+            $query->where('height', $request->height);
         }
+
+        if ($request->filled('qualification')) {
+            $query->where('qualification', $request->qualification);
+        }
+
+        // Paginate results
+        $profile_details = $query->paginate(10);
+
+        // Fetch necessary additional data
         $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
         $viewedProfileIds = ProfileViewable::where('customer_id', Auth::guard('customer')->id())
             ->pluck('profile_id')
             ->toArray();
-        $duration = Subscription::where('customer_id', $customer->id)->first();
-
-        return view('frontend.customer.matches', compact('profiledetails', 'subscription', 'viewedProfileIds','duration'));
+        $duration = Subscription::where('customer_id', $customer->id)
+            ->where('status', 1)
+            ->latest()
+            ->first();
+        $shortlistedIds = Shortlist::where('customer_id', Auth::guard('customer')->id())
+            ->pluck('profile_id') // adjust field name if different
+            ->toArray();
+        // Return view with filtered results
+        return view('frontend.customer.matches', compact('profile_details', 'subscription', 'viewedProfileIds', 'duration', 'shortlistedIds'));
     }
+
+
+
     public function detail($id)
     {
         $customer = Auth::guard('customer')->user(); // logged-in customer
@@ -516,7 +571,7 @@ class CustomerController extends Controller
         // dd($alreadyViewed);
         if (!$alreadyViewed) {
             $subscription = SubscriptionValidation::where('customer_id', $customer->id)->first();
-           
+
 
             ProfileViewable::create([
                 'customer_id' => $customer->id,
@@ -535,14 +590,14 @@ class CustomerController extends Controller
         // dd($customer);
         return view('frontend.customer.profile-detail', compact('customer', 'pendingViews'));
     }
-    
+
     public function logout()
     {
         Auth::guard('customer')->logout();
         return redirect()->route('customer.login');
     }
 
-  
+
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
@@ -650,5 +705,24 @@ class CustomerController extends Controller
     {
         $customer = Auth::guard('customer')->user();
         return view('frontend.customer.chat', compact('customer'));
+    }
+    public function downloadPdf($id)
+    {
+        $customers = CustomerDetails::with('customer')->where('customers_id', $id)->first();
+
+        $pdf = Pdf::loadView('frontend.pdf.customer-details', compact('customers'));
+        return $pdf->download('MS-customer-details.pdf');
+    }
+    public function deletehoroscope($id)
+    {
+        $horoscope = Horoscope::find($id);
+        $horoscope->delete();
+        return redirect()->back()->with('success', 'Horoscope Deleted Sucessfully');
+    }
+    public function deletedocuments($id)
+    {
+        $document = CustomerImage::find($id);
+        $document->delete();
+        return redirect()->back()->with('success', 'Documents Deleted Successfully');
     }
 }

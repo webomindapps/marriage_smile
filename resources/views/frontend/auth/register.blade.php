@@ -5,6 +5,49 @@
     @endpush
 
 
+    @if (session('registration_success'))
+        <!-- Registration Success Modal -->
+        <div class="modal fade" id="registrationSuccessModal" tabindex="-1" aria-labelledby="successModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center">
+                    <div class="modal-header border-0 justify-content-center">
+                        <h5 class="modal-title" id="successModalLabel">Registration Successful</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <!-- ✅ Green Tick Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="green"
+                                class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M16 8a8 8 0 1 1-16 0A8 8 0 0 1 16 8zM6.97 10.97l5.5-5.5-1.414-1.414L6.97 8.142 4.943 6.115 3.53 7.53l3.44 3.44z" />
+                            </svg>
+                        </div>
+                        <p>Welcome to <strong>Marriage Smiles</strong>!</p>
+                        <p>Please verify your email to continue logging in.</p>
+                    </div>
+                    <div class="modal-footer justify-content-center border-0">
+                        <button type="button" class="btn btn-primary" id="redirectToLoginBtn">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ✅ Script to show modal and redirect -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var modal = new bootstrap.Modal(document.getElementById('registrationSuccessModal'));
+                modal.show();
+
+                // Redirect on OK button click
+                document.getElementById('redirectToLoginBtn').addEventListener('click', function() {
+                    window.location.href = "{{ route('customer.login') }}";
+                });
+            });
+        </script>
+    @endif
+
+
     <section class="register-f">
         <div class="container">
             <h2 class="register-h">
@@ -113,12 +156,14 @@
                                 <option value="BE" {{ old('qualification') == 'BE' ? 'selected' : '' }}>BE</option>
                                 <option value="B Com" {{ old('qualification') == 'B Com' ? 'selected' : '' }}>B Com
                                 </option>
-                                <option value="B Sc" {{ old('qualification') == 'B Sc' ? 'selected' : '' }}>B Sc</option>
+                                <option value="B Sc" {{ old('qualification') == 'B Sc' ? 'selected' : '' }}>B Sc
+                                </option>
                                 <option value="B Tech" {{ old('qualification') == 'B Tech' ? 'selected' : '' }}>B Tech
                                 </option>
                                 <option value="BBA" {{ old('qualification') == 'BBA' ? 'selected' : '' }}>BBA</option>
                                 <option value="BCA" {{ old('qualification') == 'BCA' ? 'selected' : '' }}>BCA</option>
-                                <option value="M Sc" {{ old('qualification') == 'M Sc' ? 'selected' : '' }}>M Sc</option>
+                                <option value="M Sc" {{ old('qualification') == 'M Sc' ? 'selected' : '' }}>M Sc
+                                </option>
                                 <option value="M Tech" {{ old('qualification') == 'M Tech' ? 'selected' : '' }}>M Tech
                                 </option>
                                 <option value="MBA" {{ old('qualification') == 'MBA' ? 'selected' : '' }}>MBA</option>
@@ -126,8 +171,10 @@
                                 <option value="Diploma" {{ old('qualification') == 'Diploma' ? 'selected' : '' }}>Diploma
                                 </option>
                                 <option value="ITI" {{ old('qualification') == 'ITI' ? 'selected' : '' }}>ITI</option>
-                                <option value="10th" {{ old('qualification') == '10th' ? 'selected' : '' }}>10th</option>
-                                <option value="12th" {{ old('qualification') == '12th' ? 'selected' : '' }}>12th</option>
+                                <option value="10th" {{ old('qualification') == '10th' ? 'selected' : '' }}>10th
+                                </option>
+                                <option value="12th" {{ old('qualification') == '12th' ? 'selected' : '' }}>12th
+                                </option>
                                 <option value="Others" {{ old('qualification') == 'Others' ? 'selected' : '' }}>Others
                                 </option>
                             </select>
@@ -355,15 +402,24 @@
                         </div>
                         <div class="col-12 bi-ftre">
                             <label>Horoscope</label><br />
-                            <input type="file" id="image_path" name="image_path" required>
+                            <input type="file" class="image-file" name="image_path[]" id="image_path" multiple
+                                accept="image/*">
+                            <small id="image-error" class="text-danger"></small>
                         </div>
+                        @error('image_path')
+                            <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                        @enderror
+
 
                         <div class="col-12 bi-ftre">
-                            <label>Upload Photo (Maximium 3 photos required)</label><br />
+                            <label>Upload Photo (Maximium 4 photos required)</label><br />
                             <input type="file" class="image-file" name="image_url[]" id="image_url" multiple
                                 accept="image/*">
                             <div id="image-preview-container" class="d-flex mt-3"></div>
                         </div>
+                        @error('image_url')
+                            <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
+                        @enderror
 
                         <div class="col-md-12">
                             <select id="marritialstatus" name="marritialstatus" class="form-select" required>
@@ -446,11 +502,13 @@
 
                         <div class="col-12">
                             <input type="text" class="form-control" id="locations" name="locations"
-                                placeholder="Present Address" value="{{ old('locations') }}" required>
+                                placeholder="Present Address*" value="{{ old('locations') }}" required>
+
                             @error('locations')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
+
 
                         {{-- <div class="col-md-12" id="present-house-status-container" style="display: none;">
                             <select id="present_house_status" name="present_house_status" class="form-select" required>
@@ -588,6 +646,26 @@
         </div>
     </section>
 
+
+    <script>
+        function initializeAutocomplete() {
+            const input = document.getElementById('locations');
+            const options = {
+                componentRestrictions: {
+                    country: "in"
+                },
+                fields: ["formatted_address"]
+            };
+            const autocomplete = new google.maps.places.Autocomplete(input, options);
+
+            autocomplete.addListener("place_changed", function() {
+                const place = autocomplete.getPlace();
+                input.value = place.formatted_address;
+            });
+        }
+
+        google.maps.event.addDomListener(window, 'load', initializeAutocomplete);
+    </script>
     <script>
         document.getElementById("marritialstatus").addEventListener("change", function() {
             const status = this.value;
@@ -655,7 +733,7 @@
             }
         });
     </script>
-    <script>
+    {{-- <script>
         document.getElementById("locations").addEventListener("input", function() {
             const presentAddress = this.value.trim();
             const presentStatusContainer = document.getElementById("present-house-status-container");
@@ -677,7 +755,7 @@
         //         permanentStatusContainer.style.display = "none";
         //     }
         // });
-    </script>
+    </script> --}}
     <script>
         document.getElementById("siblings").addEventListener("input", function() {
             const count = parseInt(this.value);
@@ -750,6 +828,18 @@
                 if (placeholder && !placeholder.includes("*")) {
                     field.setAttribute("placeholder", placeholder + " *");
                 }
+
+                const style = document.createElement('style');
+                style.textContent = `
+            input::placeholder {
+                color: inherit;
+            }
+            input.red-asterisk::placeholder::after {
+                content: '*';
+                color: red;
+            }
+        `;
+                document.head.appendChild(style);
             });
         });
     </script>
@@ -796,8 +886,17 @@
     <script>
         document.getElementById("image_url").addEventListener("change", function(event) {
             const previewContainer = document.getElementById("image-preview-container");
-            previewContainer.innerHTML = "";
+            previewContainer.innerHTML = ""; // Clear previous previews
+
             const files = event.target.files;
+
+            // Check if more than 4 files are selected
+            if (files.length > 4) {
+                alert("You can only upload a maximum of 4 photos.");
+                // Clear the input
+                event.target.value = "";
+                return;
+            }
 
             Array.from(files).forEach((file, index) => {
                 const reader = new FileReader();
@@ -805,6 +904,7 @@
                     const imageWrapper = document.createElement("div");
                     imageWrapper.style.marginRight = "10px";
                     imageWrapper.style.textAlign = "center";
+
                     const img = document.createElement("img");
                     img.src = e.target.result;
                     img.alt = `Picture ${index + 1}`;
@@ -934,6 +1034,16 @@
                 isValid = false;
             } else {
                 termsError.classList.add('d-none');
+            }
+
+            const fileInput = document.getElementById('image_path');
+            const errorSpan = document.getElementById('image-error');
+
+            if (fileInput.files.length > 2) {
+                e.preventDefault(); // prevent form submission
+                errorSpan.textContent = 'Please upload exactly 2 images.';
+                isValid = false;
+
             }
 
             if (isValid) {

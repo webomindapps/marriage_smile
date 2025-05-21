@@ -48,7 +48,7 @@
                                 class="img-fluid dp-img">
                         @else
                             <img src="{{ asset('frontend/assets/images/profile-detailgirl.jpg') }}"
-                                class="img-fluid dp-img">">
+                                class="img-fluid dp-img">
                         @endif
                         <div class="all-in-o">
                             <div class="pad-int-detail">
@@ -264,23 +264,25 @@
                                         <div class="col-md-10">
                                             <div class="education">
                                                 <h4>Education</h4>
-                                                <img src="{{asset('frontend/assets/images/icon1.png')}}" class="img-fluid code-imwidt"> <span
-                                                    class="educat-head">{{$customer->qualification}}</span>
+                                                <img src="{{ asset('frontend/assets/images/icon1.png') }}"
+                                                    class="img-fluid code-imwidt"> <span
+                                                    class="educat-head">{{ $customer->qualification }}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <hr class="lin-profile">
                                     <div class="row ">
                                         <div class="education">
                                             <h4>Career</h4>
                                             <div class="row">
                                                 <div class="col-md-2">
-                                                    <img src="{{asset('frontend/assets/images/career.png')}}" class="img-fluid img-carer">
+                                                    <img src="{{ asset('frontend/assets/images/career.png') }}"
+                                                        class="img-fluid img-carer">
                                                 </div>
                                                 <div class="col-md-10 acou-profe">
-                                                    <h4 class="carrerh4">{{$customer->designation}}</h4>
-                                                    <p class="careerp">{{$customer->designation}}</p>
+                                                    <h4 class="carrerh4">{{ $customer->designation }}</h4>
+                                                    <p class="careerp">{{ $customer->designation }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -427,16 +429,19 @@
                                             N/A
                                         @endif
                                     </span>
-                                    @if ($customer->customer && $customer->customer->documents->isNotEmpty())
-                                        <div class="d-flex gap-2">
-                                            <a href="{{ asset('storage/' . $customer->image_path) }}" target="_blank">
-                                                <p class="requ-horoscope">View Horoscope</p>
-                                            </a>
+                                    @if ($customer->customer && $customer->customer->horoscope->isNotEmpty())
+                                        @foreach ($customer->customer->horoscope as $horoscope)
+                                            <div class="d-flex gap-2">
+                                                <a href="{{ asset('storage/' . $horoscope->image_path) }}"
+                                                    target="_blank">
+                                                    <p class="requ-horoscope">View Horoscope</p>
+                                                </a>
 
-                                            <a href="{{ asset('storage/' . $customer->image_path) }}" download>
-                                                <p class="requ-horoscope">Download Horoscope</p>
-                                            </a>
-                                        </div>
+                                                <a href="{{ asset('storage/' . $horoscope->image_path) }}" download>
+                                                    <p class="requ-horoscope">Download Horoscope</p>
+                                                </a>
+                                            </div>
+                                        @endforeach
                                     @else
                                         <p class="requ-horoscope">Request Horoscope</p>
                                     @endif

@@ -10,7 +10,10 @@
 
                 <h4 class="pro-hea">Hi {{ explode(' ', $customer->name)[0] }}</h4>
                 <h6 class="profile-des">
-                    {{ $customer->customer_id }}
+                    <strong> Customer Id:-{{ $customer->customer_id }}</strong>
+                </h6>
+
+                <h6 class="profile-des">
                     <a href="{{ route('customer.edit', $customer->id) }}">
                         <span class="co-editprofile">
                             <i class="fas fa-pencil"></i>
@@ -18,7 +21,29 @@
                         </span>
                     </a>
                 </h6>
+
             </div>
+            @php
+                $customerPlans = $customer->subscriptions->pluck('plan')->toArray();
+            @endphp
+            <div class="col-12 mt-4">
+                <div class="border p-3 rounded" style="background-color: #ffffff;">
+                    <h6><strong>Plan:-</strong></h6>
+                    <h6 class="profile-des mb-0 d-flex flex-wrap gap-3">
+                        @foreach ($plans as $plan)
+                            <div class="border rounded px-2 py-2"
+                                style="min-width: 40px;
+                    text-align: center;
+                    background-color: {{ in_array($plan->name, $customerPlans) ? '#f14a93b0' : '#f1f1f1' }};
+                    color: {{ in_array($plan->name, $customerPlans) ? '#000' : '#333' }};
+                    border: 1px solid black;">
+                                {{ $plan->name }}
+                            </div>
+                        @endforeach
+                    </h6>
+                </div>
+            </div>
+
             <div class="col-12">
                 <div class="mt-4">
                     <p class="last-login btn btn-sm btn-outline-secondary w-100">
@@ -54,11 +79,11 @@
                 onclick="return confirm('Are you sure you want to delete this customer?');"> Delete
                 Account</a>
             @if ($customer->status == 1)
-                <a href="{{ route('customer.hold', $customer->id) }}" class="btn btn-info mt-2"
-                    onclick="return confirm('Are you sure to Hold  your profile from displaying ?');">Hold</a>
+                <a href="{{ route('customer.hold', $customer->id) }}" class="btn btn-danger mt-2"
+                    onclick="return confirm('Are you sure to Hold  your profile from displaying ?');">Make Inactive</a>
             @else
-                <a href="{{ route('customer.hold', $customer->id) }}" class="btn btn-info mt-2"
-                    onclick="return confirm('Are you sure ?');">Active</a>
+                <a href="{{ route('customer.hold', $customer->id) }}" class="btn btn-success mt-2"
+                    onclick="return confirm('Are you sure ?');">Activate Profile</a>
             @endif
             <a href="{{ route('customer.logout') }}" class="btn btn-secondary mt-2">Logout</a>
 

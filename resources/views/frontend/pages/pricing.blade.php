@@ -52,7 +52,7 @@
                                             @endforeach
                                         </ul>
 
-                                        <form action="{{ route('subscribe') }}" method="POST">
+                                        <form id="subscriptionForm_{{ $plan->id }}" action="{{ route('subscribe') }}" method="POST">
                                             @csrf
                                             @php
                                                 $customer = Auth::guard('customer')->user();
@@ -88,7 +88,7 @@
     @push('scripts')
         <script>
             function confirmPlanChange(planId, activePlanId, startDate, endDate) {
-                const today = new Date().toISOString().split('T')[0]; // format: YYYY-MM-DD
+                const today = new Date().toISOString().split('T')[0]; 
 
                 if (activePlanId && planId !== activePlanId && startDate && endDate) {
                     if (startDate <= today && endDate >= today) {

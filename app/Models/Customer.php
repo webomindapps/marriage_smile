@@ -26,8 +26,13 @@ class Customer extends Authenticatable
     {
         return $this->hasMany(CustomerImage::class, 'customers_id');
     }
+    public function horoscope()
+    {
+        return $this->hasMany(Horoscope::class, 'customer_id');
+    }
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class, 'customer_id');
     }
+ 
 }
