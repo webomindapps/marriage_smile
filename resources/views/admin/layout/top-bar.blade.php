@@ -8,7 +8,7 @@
     </div>
 </div>
 <div class="col-lg-2 right-area">
-    <h6 class="me-3 pt-2">{{ auth()->user()->name }}</h6>
+    <h6 class="me-3 pt-2">{{ auth('admin')->user()->name }}</h6>
     <div class="profile-icon">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTscz0eljIO4sQ0qkfpLJrgtl6Kvryp-DA-Hw&usqp=CAU"
             alt="">

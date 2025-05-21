@@ -18,7 +18,7 @@ class LoginController extends Controller
             'email' => 'required',
             'password' => 'required'
         ]);
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
+        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
             return to_route('admin.dashboard')->with('success', 'You have successfully logged in.');
         }
         return back()->with('error', 'We did not find any admin with these credentials.');

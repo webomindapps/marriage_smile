@@ -16,7 +16,7 @@ return [
     */
 
     'default' => env('BROADCAST_CONNECTION', 'null'),
-
+    'guards' => ['customer'],
     /*
     |--------------------------------------------------------------------------
     | Broadcast Connections

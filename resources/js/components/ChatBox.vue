@@ -7,11 +7,6 @@
                     <div class="msg-head">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img
-                                    class="img-fluid user_img"
-                                    :src="imageUrl"
-                                    alt="user img"
-                                />
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h3>
@@ -163,9 +158,9 @@ export default {
         };
 
         // Computed property for image URL
-        const imageUrl = computed(() => {
-            return `/storage/${props.receiver.image}`;
-        });
+        // const imageUrl = computed(() => {
+        //     return `/storage/${props.receiver.image}`;
+        // });
 
         onMounted(() => {
             axios.get(`/messages/${props.receiver.id}`).then((response) => {
@@ -176,7 +171,9 @@ export default {
                 conversations.value = response.data;
             });
 
-            Echo.private("chat-app").listen("MessageSent", (response) => {
+            Echo.private("marriage-chat").listen("MessageSent", (response) => {
+                console.log(response);
+                
                 if (response.message) {
                     const messageExists = messages.value.some(
                         (msg) => msg.id === response.message.id
@@ -208,7 +205,6 @@ export default {
             getApproval,
             blockUser,
             toggleDropdown,
-            imageUrl, // Make imageUrl available to the template
         };
     },
 };
