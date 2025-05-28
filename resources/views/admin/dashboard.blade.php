@@ -26,28 +26,40 @@
                 </div>
             </div>
         </div>
+        @php
+            $modules = [
+                'plans' => ['label' => 'Plans', 'route' => route('admin.plans')],
+                'features' => ['label' => 'Features', 'route' => route('admin.features')],
+                'customers' => ['label' => 'Customers', 'route' => route('admin.user')],
+                'pages' => ['label' => 'Pages', 'route' => route('admin.pages')],
+                'testimonials' => ['label' => 'Testimonials', 'route' => route('admin.testimonials')],
+                'faqs' => ['label' => "Faq's", 'route' => route('admin.faq')],
+                'subscriptions' => ['label' => 'Subscriptions', 'route' => route('admin.testimonials')],
+            ];
+        @endphp
 
         <div class="container-fluid">
             <div class="row pb-4 px-1">
                 <div class="dashboard-stats">
                     <div class="row">
                         <h4 class="title_heading">Modules</h4>
-                        <div class="col-lg-3">
-                            <a
-                                href="">
-                                <div class="dashboard-card">
-                                    <div class="title">
-                                        Orders
+
+                        @foreach ($modules as $key => $module)
+                            <div class="col-lg-3">
+                                <a href="{{ $module['route'] }}">
+                                    <div class="dashboard-card">
+                                        <div class="title">{{ $module['label'] }}</div>
+                                        <div class="data">
+                                            {{ $from_date && $to_date ? $stats[$key]['filtered'] : $stats[$key]['total'] }}
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fal fa-box-full"></i>
+                                        </div>
                                     </div>
-                                    <div class="data">
-                                        10
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fal fa-box-full"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        @endforeach
+
                     </div>
                 </div>
             </div>

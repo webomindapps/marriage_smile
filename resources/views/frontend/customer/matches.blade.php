@@ -231,21 +231,20 @@
                     </div>
                 </div>
                 @if ($subscription)
-                    <div class="mb-2 counter-wrapper" data-id="{{ $subscription->id ?? '' }}" id="profile-count">
-                        {{-- <strong>Photo Views Left:</strong>
-                        <span class="left">
-                            {{ ($subscription->photo_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->photo_viewable }}
-                        </span> | --}}
+                    <div class="profile-count-wrapper d-flex gap-2">
+                        <div class="profile-count-box">
+                            <strong>Profile Views Left:</strong>
+                            <span>
+                                {{ ($subscription->profile_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->profile_viewable }}
+                            </span>
+                        </div>
 
-                        <strong>Profile Views Left:</strong>
-                        <span>
-                            {{ ($subscription->profile_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->profile_viewable }}
-                        </span>
-
-                        {{-- <strong>Horoscope Views Left:</strong>
-                        <span>
-                            {{ ($subscription->hscop_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->hscop_viewable }}
-                        </span> --}}
+                        <div class="profile-count-box">
+                            <strong>Friend Request Count Left:</strong>
+                            <span>
+                                {{ ($subscription->chat_viewable ?? 0) === 'unlimited' ? 'Unlimited' : $subscription->chat_viewable }}
+                            </span>
+                        </div>
                     </div>
                 @endif
                 @if ($profile_details->isEmpty())
@@ -339,11 +338,58 @@
                                 </div>
                                 <div class="pink-bg-list mt-2">
                                     <ul class="list-none col-li">
-                                        <li>
-                                            @if (
-                                                $subscription->chat_viewable === 'Unlimited' ||
-                                                    (is_numeric($subscription->chat_viewable) && $subscription->chat_viewable > 0))
-                                                <a href="{{ route('send.friend.request', $item->customer->id) }}">
+                                        @if ($duration->start_date < now() && $duration->end_date > now())
+                                            @php
+                                                $alreadySentOrReceived = \App\Models\FriendRequest::where(function (
+                                                    $query,
+                                                ) use ($item) {
+                                                    $query
+                                                        ->where('sender_id', auth()->id())
+                                                        ->where('receiver_id', $item->customer->id);
+                                                })
+                                                    ->orWhere(function ($query) use ($item) {
+                                                        $query
+                                                            ->where('sender_id', $item->customer->id)
+                                                            ->where('receiver_id', auth()->id());
+                                                    })
+                                                    ->exists();
+                                            @endphp
+
+                                            <li>
+                                                @if (!$alreadySentOrReceived)
+                                                    @if (
+                                                        $subscription->chat_viewable === 'Unlimited' ||
+                                                            (is_numeric($subscription->chat_viewable) && $subscription->chat_viewable > 0))
+                                                        <a href="{{ route('send.friend.request', $item->customer->id) }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="17"
+                                                                height="17" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="1.5"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="lucide lucide-send">
+                                                                <path d="m22 2-7 20-4-9-9-4Z" />
+                                                                <path d="M22 2 11 13" />
+                                                            </svg>
+                                                            <span>Send Request</span>
+                                                        </a>
+                                                    @else
+                                                        <a href="javascript:void(0);" onclick="redirectToPricing();">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="17"
+                                                                height="17" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="1.5"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="lucide lucide-send">
+                                                                <path d="m22 2-7 20-4-9-9-4Z" />
+                                                                <path d="M22 2 11 13" />
+                                                            </svg>
+                                                            <span>Send Request</span>
+                                                        </a>
+                                                    @endif
+                                                @endif
+                                            </li>
+                                        @else
+                                            {{-- Subscription is either not started or expired --}}
+                                            <li>
+                                                <a href="javascript:void(0);" onclick="subscribe();">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
@@ -353,19 +399,9 @@
                                                     </svg>
                                                     <span>Send Request</span>
                                                 </a>
-                                            @else
-                                                <a href="javascript:void(0);" onclick="redirectToPricing();">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                        class="lucide lucide-send">
-                                                        <path d="m22 2-7 20-4-9-9-4Z" />
-                                                        <path d="M22 2 11 13" />
-                                                    </svg>
-                                                    <span>Send Request</span>
-                                                </a>
-                                            @endif
-                                        </li>
+                                            </li>
+                                        @endif
+
 
                                         @php
                                             // Check if the current profile's customer_id is in the shortlisted IDs
@@ -385,18 +421,42 @@
                                             </a>
                                         </li>
 
+                                        @php
+                                            $chatAllowed = \App\Models\FriendRequest::where(function ($query) use (
+                                                $item,
+                                            ) {
+                                                $query
+                                                    ->where(function ($q) use ($item) {
+                                                        $q->where('sender_id', auth()->id())->where(
+                                                            'receiver_id',
+                                                            $item->customer->id,
+                                                        );
+                                                    })
+                                                    ->orWhere(function ($q) use ($item) {
+                                                        $q->where('sender_id', $item->customer->id)->where(
+                                                            'receiver_id',
+                                                            auth()->id(),
+                                                        );
+                                                    });
+                                            })
+                                                ->where('status', 1)
+                                                ->exists();
 
-                                        <li>
-                                            <a href="{{ route('chat', $item->customer->id) }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="lucide lucide-message-circle">
-                                                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-                                                </svg>
-                                                <span>Chat</span>
-                                            </a>
-                                        </li>
+                                        @endphp
+
+                                        @if ($chatAllowed)
+                                            <li>
+                                                <a href="{{ route('chat', $item->customer->id) }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="lucide lucide-message-circle">
+                                                        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                                    </svg>
+                                                    <span>Chat</span>
+                                                </a>
+                                            </li>
+                                        @endif
 
                                         {{-- <li>
                                         @if (!in_array($item->id, $viewedProfileIds) && $subscription->profile_viewable <= 0)

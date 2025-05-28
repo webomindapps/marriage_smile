@@ -88,7 +88,7 @@ class FriendRequestController extends Controller
         }
 
         $receiverCanChat = false;
-        if ($receiverSubscription->chat_viewable === 'Unlimited') {
+        if ($receiverSubscription->chat_viewable >0) {
             $receiverCanChat = true;
         } elseif (is_numeric($receiverSubscription->chat_viewable) && (int) $receiverSubscription->chat_viewable > 0) {
             $receiverCanChat = true;

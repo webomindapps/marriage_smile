@@ -15,12 +15,16 @@ use App\Http\Controllers\Frontend\ChatsController;
 use App\Http\Controllers\Frontend\CustomerController;
 use App\Http\Controllers\Frontend\MarriageController;
 use App\Http\Controllers\Frontend\ShortlistController;
-use App\Http\Controllers\frontend\CustomerPasswordResetController;
+use App\Http\Controllers\Frontend\CustomerPasswordResetController;
+use App\Http\Controllers\Frontend\KycController;
 
 Route::get('/', [MarriageController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'customer.guest'], function () {
     Route::get('customer/register', [CustomerController::class, 'register'])->name('customer.register');
+    Route::post('/kyc/generate', [KycController::class, 'generateOtp'])->name('kyc.generate');
+    Route::post('/kyc/verify', [KycController::class, 'verifyOtp'])->name('kyc.verify');
+
     Route::post('customer/store', [CustomerController::class, 'storecustomer'])->name('customer.store');
     Route::get('/matches/search', [MarriageController::class, 'search'])->name('matches.search');
 
@@ -42,15 +46,16 @@ Route::group(['middleware' => 'customer.guest'], function () {
 
     Route::get('auth/google', [CustomerController::class, 'redirectToGoogle'])->name('google.redirect');
     Route::get('auth/google/callback', [CustomerController::class, 'handleGoogleCallback'])->name('google.callback');
+    Route::get('/pricing', [MarriageController::class, 'pricingView'])->name('pricing');
 });
 
 Route::group(['middleware' => 'customer.auth'], function () {
     Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
     Route::post('customer/{id}/edit', [CustomerController::class, 'update']);
-    Route::get('customer/{id}/download',[CustomerController::class,'downloadpdf'])->name('customer.download');
-    Route::get('horoscope/{id}/delete',[CustomerController::class,'deletehoroscope'])->name('horoscope.delete');
-    Route::get('documents/{id}/delete',[CustomerController::class,'deletedocuments'])->name('documents.delete');
+    Route::get('customer/{id}/download', [CustomerController::class, 'downloadpdf'])->name('customer.download');
+    Route::get('horoscope/{id}/delete', [CustomerController::class, 'deletehoroscope'])->name('horoscope.delete');
+    Route::get('documents/{id}/delete', [CustomerController::class, 'deletedocuments'])->name('documents.delete');
     Route::get('customer/matches', [CustomerController::class, 'matches'])->name('customer.matches');
     Route::get('customer/logout', [CustomerController::class, 'logout'])->name('customer.logout');
     Route::get('customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.details');
@@ -65,7 +70,7 @@ Route::group(['middleware' => 'customer.auth'], function () {
     Route::get('/reject-request/{id}', [FriendRequestController::class, 'reject'])->name('reject.request');
 
     // pricing
-    Route::get('/pricing', [MarriageController::class, 'pricingView'])->name('pricing');
+
     Route::post('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
 
     //shortlist
@@ -76,12 +81,12 @@ Route::group(['middleware' => 'customer.auth'], function () {
 
     // chat
     Route::get('customer/chat', [CustomerController::class, 'chat'])->name('customer.chat');
-    
-    Route::get('/chat/{user}',[ChatsController::class,'chat'])->name('chat');
-    Route::get('/chat/{id}/approve',[ChatsController::class,'approve']);
-    Route::get('/chat/{id}/block',[ChatsController::class,'block']);
-    
-    Route::resource('messages/{user}',ChatsController::class,['only' => ['index', 'store']])->middleware(['customer.auth']);
+
+    Route::get('/chat/{user}', [ChatsController::class, 'chat'])->name('chat');
+    Route::get('/chat/{id}/approve', [ChatsController::class, 'approve']);
+    Route::get('/chat/{id}/block', [ChatsController::class, 'block']);
+
+    Route::resource('messages/{user}', ChatsController::class, ['only' => ['index', 'store']])->middleware(['customer.auth']);
     Route::get('conversations', [ChatsController::class, 'conversations']);
 });
 

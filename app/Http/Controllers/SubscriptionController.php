@@ -35,7 +35,7 @@ class SubscriptionController extends Controller
         //     ->where('status', '1')
         //     ->update(['status' => '0']);
         Subscription::where('customer_id', $customer->id)
-            ->where('status', ['1','0'])
+            ->where('status', ['1', '0'])
             ->delete();
         $start_date = now();
         $end_date = $start_date->copy()->addDays($planPrice->duration);
@@ -72,7 +72,7 @@ class SubscriptionController extends Controller
                 case 'Profiles can Access with all details':
                     $featureMap[$plans->id] = 'profile_viewable';
                     break;
-                case 'Chats With Bride or Groom':
+                case 'Profiles can send request':
                     $featureMap[$plans->id] = 'chat_viewable';
                     break;
             }

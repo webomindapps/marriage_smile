@@ -105,10 +105,10 @@ class CustomerController extends Controller
             }
 
             if ($request->hasFile('image_path')) {
-                $imagepaths = $request->file('image_path'); // This should be an array of file objects
+                $imagepaths = $request->file('image_path');
 
                 foreach ($imagepaths as $imagepath) {
-                    // Check if the file is an instance of UploadedFile
+
                     if ($imagepath instanceof \Illuminate\Http\UploadedFile) {
                         $paths = $imagepath->store('documents/horoscope', 'public');
 
@@ -245,25 +245,29 @@ class CustomerController extends Controller
                 ]);
             }
             $plan = Plan::with('features')->find($basicPlan->plan_id);
-            $featureMap = [
-                1 => 'photo_viewable',
-                4 => 'hscop_viewable',
-                5 => 'chat_viewable',
-                6 => 'profile_viewable',
-            ];
 
             $featureValues = [
                 'photo_viewable' => 0,
-                'hscop_viewable' => 0,
                 'profile_viewable' => 0,
                 'chat_viewable' => null,
             ];
+
             foreach ($plan->features as $feature) {
-                if (array_key_exists($feature->id, $featureMap)) {
-                    $column = $featureMap[$feature->id];
-                    $featureValues[$column] = $feature->pivot->feature_value;
+                switch ($feature->name) {
+                    case 'photo_viewable':
+                        $featureValues['photo_viewable'] = $feature->feature_value ?? 0; // or use $feature->pivot->value
+                        break;
+
+                    case 'profile_viewable':
+                        $featureValues['profile_viewable'] = $feature->feature_value ?? 0;
+                        break;
+
+                    case 'chat_viewable':
+                        $featureValues['chat_viewable'] = $feature->feature_value ?? 0;
+                        break;
                 }
             }
+
             SubscriptionValidation::create([
                 'customer_id' => $customer->id,
                 'plan_id' => $plan->id,
@@ -506,7 +510,7 @@ class CustomerController extends Controller
         $query = CustomerDetails::with(['customer.documents'])
             ->where('gender', $oppositeGender)
             ->whereHas('customer', function ($q) use ($request) {
-                $q->where('status', 1); 
+                $q->where('status', 1);
             });
         // Check and apply filters
         if ($request->filled('customer_id')) {
@@ -517,7 +521,9 @@ class CustomerController extends Controller
 
 
         if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
+            $query->whereHas('customer', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->name . '%');
+            });
         }
 
         if ($request->filled('age_from') || $request->filled('age_to')) {
@@ -708,11 +714,13 @@ class CustomerController extends Controller
     }
     public function downloadPdf($id)
     {
-        $customers = CustomerDetails::with('customer')->where('customers_id', $id)->first();
+        $customers = CustomerDetails::with('customer')->where('customers_id', $id)->firstOrFail();
 
         $pdf = Pdf::loadView('frontend.pdf.customer-details', compact('customers'));
-        return $pdf->download('MS-customer-details.pdf');
+
+        return $pdf->download('MS-customer-details-' . $customers->customer->customer_id . '.pdf');
     }
+
     public function deletehoroscope($id)
     {
         $horoscope = Horoscope::find($id);

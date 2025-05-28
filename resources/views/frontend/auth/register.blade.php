@@ -140,8 +140,8 @@
                         </div>
 
                         <div class="col-6">
-                            <input type="text" class="form-control" id="name" name="name"
-                                value="{{ old('name') }}" placeholder="Name" required>
+                            <input type="text" class="form-control" name="name" value="{{ old('name') }}"
+                                placeholder="Name" required>
                             @error('name')
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
@@ -333,25 +333,40 @@
                                 <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
                             @enderror
                         </div>
-
                         <div class="col-5">
                             <input type="text" class="form-control me-2" id="aadhar_no" name="aadhar_no"
                                 placeholder="AADHAR NO" value="{{ old('aadhar_no') }}" required>
-
-
                             <small id="aadharError" class="text-danger d-none" style="font-size: 13px;">
                                 Please enter a valid Aadhar number.
                             </small>
-
-                            @error('aadhar_no')
-                                <div class="text-danger ps-0 mb-2" style="font-size: 13px;">{{ $message }}</div>
-                            @enderror
+                            <small id="aadharverifyerror" class="text-danger d-none" style="font-size: 13px">
+                                Please verify  Aadhar To register.</small>
                         </div>
                         <div class="col-1">
-                            <button type="button" class="btn btn-sm btn-outline-primary" id="verifyAadharBtn">
-                                Verify
-                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                id="verifyAadharBtn">Verify</button>
                         </div>
+
+                        <!-- Confirmation + Generate OTP UI -->
+                        <div id="aadhaarConfirmSection" class="mt-3 mb-4 d-none">
+                            <div class="mb-2">
+                                <label>Aadhaar Number:</label>
+                                <input type="text" id="confirmedAadhaar" class="form-control" readonly>
+                            </div>
+                            <div class="mb-2">
+                                <label>Name:</label>
+                                <input type="text" id="name" class="form-control" placeholder="Enter your name">
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="consentCheck">
+                                <label class="form-check-label" for="consentCheck">
+                                    I agree to provide my Aadhaar details for verification
+                                </label>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-2" id="generateOtpBtn">Generate OTP</button>
+                        </div>
+
+
                         <div class="col-6 position-relative">
                             <input type="password" class="form-control input-password" id="password" name="password"
                                 placeholder="Create Password" required>
@@ -644,7 +659,145 @@
                 </div>
             </div>
         </div>
+        <!-- OTP Modal -->
+        <div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="verifyOtpForm">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title">Enter OTP</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="request_id" name="request_id">
+                            <div class="mb-3">
+                                <label for="otp" class="form-label">OTP</label>
+                                <input type="text" class="form-control" name="otp" id="otp" required>
+                            </div>
+                            <div id="otpError" class="text-danger d-none">Invalid OTP.</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Verify OTP</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aadhaar Verified Success Message -->
+        <div id="aadharSuccess" class="alert alert-success mt-3 d-none">Aadhaar Verified Successfully!</div>
+
     </section>
+
+    <script>
+        // Show confirmation section after basic Aadhaar validation
+        document.getElementById('verifyAadharBtn').addEventListener('click', function() {
+            const aadhar = document.getElementById('aadhar_no').value;
+
+            if (!/^\d{12}$/.test(aadhar)) {
+                document.getElementById('aadharError').classList.remove('d-none');
+                return;
+            }
+
+            document.getElementById('aadharError').classList.add('d-none');
+
+            // Show next step
+            document.getElementById('aadhaarConfirmSection').classList.remove('d-none');
+            document.getElementById('confirmedAadhaar').value = aadhar;
+        });
+
+        // Generate OTP after consent check
+        document.getElementById('generateOtpBtn').addEventListener('click', function() {
+            const aadhar = document.getElementById('confirmedAadhaar').value;
+            const name = document.getElementById('name').value;
+            const consent = document.getElementById('consentCheck').checked;
+
+            if (!name.trim()) {
+                alert("Please enter your name.");
+                return;
+            }
+
+            if (!consent) {
+                alert("Please provide your consent before proceeding.");
+                return;
+            }
+
+            fetch("{{ route('kyc.generate') }}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        aadhaar: aadhar,
+                        name: name,
+                    })
+
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.status === 'success') {
+                        document.getElementById('request_id').value = data.data.request_id;
+                        const otpModal = new bootstrap.Modal(document.getElementById('otpModal'));
+                        otpModal.show();
+                    } else {
+                        alert('OTP generation failed: ' + data.message);
+                    }
+                })
+
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Verify OTP
+        document.getElementById('verifyOtpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const request_id = document.getElementById('request_id').value;
+            const otp = document.getElementById('otp').value;
+
+            fetch("{{ route('kyc.verify') }}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        request_id: request_id,
+                        otp: otp
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('otpModal'));
+                        modal.hide();
+
+                        document.getElementById('aadharSuccess').classList.remove('d-none');
+                        document.getElementById('aadhaarConfirmSection').classList.add('d-none');
+
+                        const verifyBtn = document.getElementById('verifyAadharBtn');
+                        if (verifyBtn) {
+                            verifyBtn.innerHTML = '✔ Verified';
+                            verifyBtn.classList.remove('btn-outline-primary');
+                            verifyBtn.classList.add('btn', 'btn-success', 'text-white'); // ensures white text
+                            verifyBtn.disabled = true;
+                        }
+
+                    } else {
+                        document.getElementById('otpError').classList.remove('d-none');
+                    }
+                })
+                .catch(error => {
+                    console.error('OTP Verification Error:', error);
+                });
+        });
+    </script>
+
 
 
     <script>
@@ -886,11 +1039,10 @@
     <script>
         document.getElementById("image_url").addEventListener("change", function(event) {
             const previewContainer = document.getElementById("image-preview-container");
-            previewContainer.innerHTML = ""; // Clear previous previews
+            previewContainer.innerHTML = "";
 
             const files = event.target.files;
 
-            // Check if more than 4 files are selected
             if (files.length > 4) {
                 alert("You can only upload a maximum of 4 photos.");
                 // Clear the input
@@ -1009,24 +1161,7 @@
                 marritialstatusError.classList.add('d-none');
             }
 
-            // const assetvalueSelect = document.getElementById('asset_value');
-            // const assetvalueError = document.getElementById('asset_value_error');
-            // if (assetvalueSelect.value == "") {
-            //     assetvalueError.classList.remove('d-none');
-            //     isValid = false;
-            // } else {
-            //     assetvalueError.classList.add('d-none');
 
-            // }
-
-            // const contactrelatedtoSelect = document.getElementById('contact_related_to');
-            // const contactrelatedtoError = document.getElementById('contact_related_to_error');
-            // if (contactrelatedtoSelect.value == "") {
-            //     contactrelatedtoError.classList.remove('d-none');
-            //     isValid = false;
-            // } else {
-            //     contactrelatedtoError.classList.add('d-none');
-            // }
             const termsCheckbox = document.getElementById('terms');
             const termsError = document.getElementById('termsError');
             if (!termsCheckbox.checked) {
@@ -1040,11 +1175,18 @@
             const errorSpan = document.getElementById('image-error');
 
             if (fileInput.files.length > 2) {
-                e.preventDefault(); // prevent form submission
+                e.preventDefault();
                 errorSpan.textContent = 'Please upload exactly 2 images.';
                 isValid = false;
 
             }
+            // Check if Aadhaar is verified
+            const verifyBtn = document.getElementById('verifyAadharBtn');
+            if (verifyBtn && verifyBtn.innerText.trim() !== '✔ Verified') {
+                document.getElementById('aadharverifyerror').classList.remove('d-none');;
+                isValid = false;
+            }
+
 
             if (isValid) {
                 this.submit();

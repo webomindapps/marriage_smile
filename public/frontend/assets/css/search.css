@@ -585,11 +585,21 @@ hr.lin-profile {
     height: 400px;
 }
 
-#profile-count {
-    border: 2px solid hotpink;
-    padding: 10px 10px 10px 10px;
-    width: 200px;
+.profile-count-wrapper {
+    display: flex;
+    gap: 10px;
+    /* spacing between boxes */
+    flex-wrap: wrap;
+    /* allows wrapping on smaller screens */
 }
+
+.profile-count-box {
+    border: 2px solid hotpink;
+    padding: 10px;
+    width: 270px;
+    box-sizing: border-box;
+}
+
 
 .image-container {
     position: relative;

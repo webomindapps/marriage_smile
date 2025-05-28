@@ -52,28 +52,43 @@
                                             @endforeach
                                         </ul>
 
-                                        <form id="subscriptionForm_{{ $plan->id }}" action="{{ route('subscribe') }}" method="POST">
-                                            @csrf
-                                            @php
-                                                $customer = Auth::guard('customer')->user();
+                                        @php
+                                            $customer = Auth::guard('customer')->user();
+                                            $currentPlanPrice = $plan->prices->first();
+                                            $activePlanId = null;
+                                            $startDate = null;
+                                            $endDate = null;
+
+                                            if ($customer) {
                                                 $latestSubscription = optional(
                                                     $customer->subscriptions()->latest('id')->first(),
                                                 );
                                                 $activePlanId = $latestSubscription->plan_id ?? null;
-                                                $currentPlanPrice = $plan->prices->first();
                                                 $startDate = $latestSubscription->start_date ?? null;
                                                 $endDate = $latestSubscription->end_date ?? null;
-                                            @endphp
+                                            }
+                                        @endphp
 
-                                            <input type="hidden" name="plan_price_id" value="{{ $currentPlanPrice->id }}">
+                                        @if ($customer)
+                                            <form id="subscriptionForm_{{ $plan->id }}"
+                                                action="{{ route('subscribe') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="plan_price_id"
+                                                    value="{{ $currentPlanPrice->id }}">
 
-                                            <button type="button"
-                                                class="btn btn-block {{ $plan->prices->where('price', '>', 0)->isNotEmpty() ? 'bg-success' : 'bg-warning' }} text-white"
-                                                onclick="confirmPlanChange({{ $plan->id }}, {{ $activePlanId ?? 'null' }}, '{{ $startDate }}', '{{ $endDate }}')"
-                                                {{ $plan->id === $activePlanId ? 'disabled' : '' }}>
-                                                {{ $plan->id === $activePlanId ? 'Active' : ($plan->prices->where('price', '>', 0)->isNotEmpty() ? 'Buy Now' : 'Contact Us') }}
-                                            </button>
-                                        </form>
+                                                <button type="button"
+                                                    class="btn btn-block {{ $plan->prices->where('price', '>', 0)->isNotEmpty() ? 'bg-success' : 'bg-warning' }} text-white"
+                                                    onclick="confirmPlanChange({{ $plan->id }}, {{ $activePlanId ?? 'null' }}, '{{ $startDate }}', '{{ $endDate }}')"
+                                                    {{ $plan->id === $activePlanId ? 'disabled' : '' }}>
+                                                    {{ $plan->id === $activePlanId ? 'Active' : ($plan->prices->where('price', '>', 0)->isNotEmpty() ? 'Buy Now' : 'Contact Us') }}
+                                                </button>
+                                            </form>
+                                        @else
+                                            <a href="{{ route('customer.login') }}"
+                                                class="btn btn-block bg-warning text-white">
+                                                Login to Subscribe
+                                            </a>
+                                        @endif
 
 
                                     </div>
@@ -88,7 +103,7 @@
     @push('scripts')
         <script>
             function confirmPlanChange(planId, activePlanId, startDate, endDate) {
-                const today = new Date().toISOString().split('T')[0]; 
+                const today = new Date().toISOString().split('T')[0];
 
                 if (activePlanId && planId !== activePlanId && startDate && endDate) {
                     if (startDate <= today && endDate >= today) {

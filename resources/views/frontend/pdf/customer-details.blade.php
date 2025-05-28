@@ -5,7 +5,7 @@
     <div style="text-align: center; margin-bottom: 10px;">
         <img src="{{ public_path('frontend/assets/images/logo.png') }}" alt="Company Logo" style="max-height: 80px;">
     </div>
-    <title>Customer Details</title>
+    <title>Profile details</title>
     <style>
         table {
             width: 100%;
@@ -31,7 +31,7 @@
 
 <body>
 
-    <h2>Customer Details</h2>
+    <h2>Profile Details</h2>
     <table>
         <thead>
 
